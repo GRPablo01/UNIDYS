@@ -1,0 +1,84 @@
+<div class="bg-[#0A092B] py-16 px-4 text-white">
+  <!-- Titre principal -->
+  <h1 class="text-center text-2xl sm:text-3xl lg:text-4xl font-black mb-10">
+    Vos Données Personnelles
+  </h1>
+
+  <!-- Cartes -->
+  <div class="flex flex-col md:flex-row justify-between gap-8 max-w-7xl mx-auto">
+    
+    <!-- Carte 1 -->
+    <div class="bg-[#020118] border-2 border-[#8002FF] rounded-xl p-6 flex-1 shadow-lg">
+      <h2 class="text-xl sm:text-2xl font-bold mb-4">Informations personnelles</h2>
+      <p class="text-lg mb-1">Nom et prénom</p>
+      <p class="text-lg mb-4">Adresse email</p>
+      <button (click)="showModal1 = true"
+        class="bg-[#8002FF] hover:bg-[#3F0255] px-5 py-2 rounded text-white text-lg transition duration-200">
+        Modifier mes informations
+      </button>
+    </div>
+
+    <!-- Carte 2 -->
+    <div class="bg-[#020118] border-2 border-[#8002FF] rounded-xl p-6 flex-1 shadow-lg">
+      <h2 class="text-xl sm:text-2xl font-bold mb-4">
+        Ce qu’on vous demande et pourquoi
+      </h2>
+      <p class="text-lg mb-1">Nom et prénom</p>
+      <p class="text-lg mb-4">Adresse email</p>
+      <button (click)="showModal2 = true"
+        class="bg-[#8002FF] hover:bg-[#3F0255] px-5 py-2 rounded text-white text-lg transition duration-200">
+        En savoir plus
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal 1 : Modifier infos -->
+  <div *ngIf="showModal1" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+    <div class="bg-[#020118] border-4 border-[#8002FF] rounded-xl p-6 w-full max-w-xl shadow-2xl">
+      <h2 class="text-xl sm:text-2xl font-bold mb-6">Modifier vos informations</h2>
+      <form (ngSubmit)="updateProfile()">
+        <input type="text" placeholder="Nom" [(ngModel)]="lastName" name="lastName"
+          class="w-full mb-4 p-3 rounded border-2 border-[#8002FF] bg-transparent text-white placeholder-gray-400" />
+        <input type="text" placeholder="Prénom" [(ngModel)]="firstName" name="firstName"
+          class="w-full mb-4 p-3 rounded border-2 border-[#8002FF] bg-transparent text-white placeholder-gray-400" />
+        <input type="email" placeholder="Adresse email" [(ngModel)]="email" name="email"
+          class="w-full mb-4 p-3 rounded border-2 border-[#8002FF] bg-transparent text-white placeholder-gray-400" />
+
+        <h3 class="text-lg font-semibold mb-2">Changer le mot de passe</h3>
+        <input type="password" placeholder="Ancien mot de passe" [(ngModel)]="oldPassword" name="oldPassword"
+          class="w-full mb-4 p-3 rounded border-2 border-[#8002FF] bg-transparent text-white placeholder-gray-400" />
+        <input type="password" placeholder="Nouveau mot de passe" [(ngModel)]="newPassword" name="newPassword"
+          class="w-full mb-4 p-3 rounded border-2 border-[#8002FF] bg-transparent text-white placeholder-gray-400" />
+
+        <div class="flex justify-end gap-2">
+          <button type="button" (click)="showModal1 = false"
+            class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
+            Annuler
+          </button>
+          <button type="submit"
+            class="bg-[#8002FF] hover:bg-[#3F0255] text-white px-4 py-2 rounded">
+            Enregistrer
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 2 : Pourquoi ces infos -->
+  <div *ngIf="showModal2" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+    <div class="bg-[#020118] border-4 border-[#8002FF] rounded-xl p-6 w-full max-w-xl shadow-2xl">
+      <h2 class="text-xl sm:text-2xl font-bold mb-4">Pourquoi ces informations ?</h2>
+      <p class="mb-6 text-gray-200 leading-relaxed">
+        Nous vous demandons ces informations afin de personnaliser votre expérience, garantir la sécurité
+        de votre compte et vous envoyer des notifications importantes. Ces données ne sont jamais partagées
+        avec des tiers sans votre consentement.
+      </p>
+      <div class="flex justify-end">
+        <button (click)="showModal2 = false"
+          class="bg-[#8002FF] hover:bg-[#3F0255] text-white px-4 py-2 rounded">
+          Fermer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

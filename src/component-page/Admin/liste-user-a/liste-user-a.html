@@ -1,0 +1,143 @@
+<h1 class="mt-10 text-[var(--Blanc)] text-3xl sm:text-4xl text-center font-extrabold mb-12 tracking-wide">
+  Liste des Utilisateurs
+</h1>
+
+<!-- ================= CONTENEUR DOSSIERS ================= -->
+<div class="flex flex-wrap justify-center gap-8 p-6">
+  <div *ngFor="let group of groupedUsersKeys">
+    <!-- Carte dossier -->
+    <div (click)="openGroupModal(group)"
+         class="relative cursor-pointer rounded-2xl overflow-hidden shadow-xl transform transition duration-300 hover:scale-105 flex flex-col items-center justify-center w-64 h-64">
+
+      <!-- Image du dossier (fond stylisé) -->
+      <img src="assets/imageDossier.png" alt="Dossier"
+           class="absolute inset-0">
+
+      <!-- Dégradé foncé -->
+      <div class="absolute inset-0"></div>
+
+      <!-- Overlay texte -->
+      <div class="relative z-10 flex flex-col justify-center items-center text-white text-center px-4">
+        
+        <!-- Nom du groupe (chaque lettre dans un carré) -->
+        <span class="flex gap-1 mb-3">
+          <span *ngFor="let letter of group.split('')"
+                class="w-10 h-10 flex items-center justify-center border-2 border-[var(--Blanc)] rounded-xl text-white font-extrabold text-lg sm:text-xl shadow-md">
+            {{ letter }}
+          </span>
+        </span>
+
+        <!-- Nombre de personnes -->
+        <span class="text-lg font-semibold">
+          <span class="inline-block border-2 border-[var(--Violet)] bg-gradient-to-r from-[var(--Bleu)] via-[var(--Violet)] to-[var(--Violet-Foncé) rounded-xl px-4 py-2 shadow-md">
+            {{ groupedUsers[group].length }} personnes
+          </span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= MODAL GROUPE ================= -->
+<div *ngIf="showGroupModal"
+  class="fixed inset-0 bg-black/40 flex justify-center items-start pt-10 sm:pt-16 z-50">
+  <div class="bg-[var(--Bleu)] border-3 border-[var(--Violet)] text-[var(--Blanc)] rounded-2xl w-full max-w-6xl mx-4 p-6 sm:p-8 shadow-2xl relative">
+    <button (click)="closeGroupModal()"
+      class="absolute top-4 right-4 text-[var(--Blanc)] text-2xl hover:text-[var(--Rouge)] transition">
+      &times;
+    </button>
+
+    <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-center">
+      Groupe <span class="text-[var(--Violet)]">{{ currentGroup }}</span>
+    </h2>
+
+    <!-- Filtre -->
+    <div class="flex justify-center mb-6">
+      <select [(ngModel)]="groupRoleFilter" (change)="applyGroupFilter()"
+        class="border-3 border-[var(--Violet)] rounded-lg px-3 py-2 bg-gradient-to-r from-[var(--Bleu)] via-[var(--Violet)] to-[var(--Violet-Foncé)]  text-[var(--Blanc)] text-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
+        <option value="">Tous les rôles</option>
+        <option value="eleve">Élève</option>
+        <option value="prof">Professeur</option>
+      </select>
+    </div>
+
+    <!-- Grille -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-h-[70vh] overflow-y-auto pr-2">
+      <div *ngFor="let user of groupedUsers[currentGroup] | filterRole:groupRoleFilter"
+        class="bg-[var(--Bleu-Foncé)] border-3 border-[var(--Violet)] rounded-xl shadow-md flex flex-col">
+
+        <!-- Avatar -->
+        <div class="h-32 bg-[var(--Bleu-Foncé)] text-[var(--Violet)] flex items-center justify-center text-4xl font-bold rounded-t-xl">
+          {{ user.prenom.charAt(0) }}{{ user.nom.charAt(0) }}
+        </div>
+
+        <!-- Infos -->
+        <div class=" border-t-3 border-[var(--Violet)] p-4 flex flex-col flex-grow">
+          <h3 class="font-semibold text-[var(--Blanc)] truncate">{{ user.prenom }} {{ user.nom }}</h3>
+          <p class="text-sm text-[var(--Blanc)] mb-2">{{ user.email }}</p>
+          <span class="text-md bg-[var(--Bleu)] border-3 border-[var(--Violet)] text-[var(--Blanc)] pt-1 pb-1 pl-3 pr-3 rounded-md self-start">{{ user.role }}</span>
+        </div>
+
+        <!-- Boutons -->
+        <div class="flex gap-2 p-3 border-t border-slate-700">
+          <button (click)="editUser(user)"
+            class="flex-1 text-xs bg-yellow-500 text-black font-semibold rounded-md py-2 hover:bg-yellow-600 transition">
+            Modifier
+          </button>
+          <button (click)="deleteUser(user._id)"
+            class="flex-1 text-xs bg-red-600 text-white font-semibold rounded-md py-2 hover:bg-red-700 transition">
+            Supprimer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= MODAL EDIT ================= -->
+<div *ngIf="showEditModal"
+  class="fixed inset-0 flex items-center justify-center bg-black/40 z-50 p-4">
+  <div class="bg-[var(--Bleu)] border-3 border-[var(--Violet)] w-full max-w-md rounded-2xl shadow-2xl p-6">
+    <h2 class="text-xl font-bold text-center mb-6 text-[var(--Blanc)]">Modifier l’utilisateur</h2>
+
+    <form>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-[var(--Blanc)] mb-1">Prénom</label>
+        <input [(ngModel)]="selectedUser.prenom" name="prenom"
+          class="w-full border border-[var(--Blanc)] text-[var(--Blanc)] rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500" />
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-[var(--Blanc)] mb-1">Nom</label>
+        <input [(ngModel)]="selectedUser.nom" name="nom"
+          class="w-full border border-[var(--Blanc)] text-[var(--Blanc)] rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500" />
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-[var(--Blanc)] mb-1">Email</label>
+        <input [(ngModel)]="selectedUser.email" name="email"
+          class="w-full border border-[var(--Blanc)] text-[var(--Blanc)] rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500" />
+      </div>
+
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-[var(--Blanc)] mb-1">Rôle</label>
+        <select [(ngModel)]="selectedUser.role" name="role"
+          class="w-full border border-[var(--Blanc)] text-[var(--Blanc)] rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+          <option value="eleve">Élève</option>
+          <option value="prof">Professeur</option>
+        </select>
+      </div>
+
+      <div class="flex justify-end gap-3">
+        <button type="button" (click)="closeModal()"
+          class="px-4 py-2 text-sm  text-[var(--Blanc)] rounded-md hover:bg-gray-500 transition">
+          Annuler
+        </button>
+        <button type="button" (click)="updateUser()"
+          class="border-3 border-[var(--Violet)] px-4 py-2 text-sm text-[var(--Blanc)] bg-gradient-to-r from-[var(--Bleu)] via-[var(--Violet)] to-[var(--Violet-Foncé)] rounded-md transition">
+          Enregistrer
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

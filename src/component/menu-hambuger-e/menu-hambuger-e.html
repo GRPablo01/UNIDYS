@@ -1,0 +1,80 @@
+<app-icon></app-icon>
+
+<!-- Menu utilisateur -->
+<div class="flex items-center gap-3 relative 2xl:-mr-45">
+  <!-- Initiales -->
+  <div
+    class="border-4 border-[var(--Violet)] w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-[var(--Blanc)] font-bold text-sm sm:text-md 2xl:text-lg">
+    {{ userprofil.getInitiales() }}
+  </div>
+
+  <!-- Mon Espace + Flèche (bureau uniquement) -->
+  <div class="hidden md:flex items-center gap-1 cursor-pointer" role="button" tabindex="0" aria-haspopup="true"
+    [attr.aria-expanded]="menuOuvert" (click)="toggleMenu()">
+    <a routerLink="/monespaceE"
+      class="text-[var(--Blanc)] font-black text-sm sm:text-lg xl:text-xl 2xl:text-2xl hover:text-[var(--Violet)]">
+      Mon Espace
+    </a>
+    <svg class="w-4 h-4 sm:w-6 sm:h-6 transition-transform duration-300 text-[var(--Blanc)]"
+      [class.rotate-180]="menuOuvert" fill="none" stroke="currentColor" stroke-width="2"
+      viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+    </svg>
+  </div>
+
+  <!-- Hamburger menu (mobile uniquement) -->
+  <button class="block md:hidden text-[var(--Blanc)] focus:outline-none" (click)="toggleMobileMenu()">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+      viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
+  </button>
+</div>
+
+<!-- Menu déroulant bureau -->
+<div *ngIf="menuOuvert && !mobileMenu"
+     class="absolute right-4 mt-4 bg-[var(--Bleu-Foncé)] border-2 border-[var(--Violet)] text-[var(--Blanc)] rounded-xl shadow-md z-50 w-48 sm:w-56 md:block 2xl:-mr-50 animate-fadeIn">
+  <ul class="flex flex-col gap-1 py-2">
+    <li class="px-4 py-2 hover:bg-[var(--Violet)] cursor-pointer rounded flex items-center gap-2">
+      <i class="fa-solid fa-circle-info"></i>
+      <a routerLink="/InfoE" class="block w-full text-sm sm:text-base">Informations</a>
+    </li>
+    <li class="px-4 py-2 hover:bg-[var(--Violet)] cursor-pointer rounded flex items-center gap-2">
+      <i class="fa-solid fa-power-off"></i>
+      <span (click)="deconnecter()" class="block w-full text-sm cursor-pointer">Déconnexion</span>
+    </li>
+  </ul>
+</div>
+
+<!-- Menu mobile fullscreen -->
+<div *ngIf="mobileMenu"
+     class="fixed inset-0 bg-[var(--Bleu-Foncé)] text-[var(--Blanc)] z-50 flex flex-col items-center justify-center animate-fadeIn">
+  
+  <!-- Bouton fermer -->
+  <button (click)="toggleMobileMenu()"
+          class="absolute top-4 right-6 text-2xl hover:text-[var(--Violet)] transition">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+
+  <!-- Liens -->
+  <ul class="flex flex-col gap-6 text-center text-lg sm:text-xl md:text-2xl font-semibold">
+    <li class="hover:text-[var(--Violet)] transition cursor-pointer">
+      <a routerLink="/accueilE">Accueil</a>
+    </li>
+    <li class="hover:text-[var(--Violet)] transition cursor-pointer">
+      <a routerLink="/coursE">Cours</a>
+    </li>
+    <li class="hover:text-[var(--Violet)] transition cursor-pointer">
+      <a routerLink="/aproposE">À propos</a>
+    </li>
+    <li class="flex items-center justify-center gap-2 hover:text-[var(--Violet)] transition cursor-pointer">
+      <i class="fa-solid fa-circle-info"></i>
+      <a routerLink="/InfoE">Informations</a>
+    </li>
+    <li class="flex items-center justify-center gap-2 hover:text-red-500 transition cursor-pointer">
+      <i class="fa-solid fa-power-off"></i>
+      <span (click)="deconnecter()">Déconnexion</span>
+    </li>
+  </ul>
+</div>

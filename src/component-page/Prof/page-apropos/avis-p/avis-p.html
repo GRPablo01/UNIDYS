@@ -1,0 +1,73 @@
+<!-- <div class="max-w-4xl mx-auto p-6 bg-gray-50 rounded-lg shadow-md">
+  <h2 class="text-3xl font-bold mb-6 text-center">Avis des utilisateurs</h2>
+
+  <!-- Formulaire d'ajout d'avis --
+  <form (submit)="soumettreAvis(); $event.preventDefault()" class="mb-8 space-y-4">
+    <div>
+      <label class="block mb-1 font-semibold" for="nom">Nom</label>
+      <input
+        id="nom"
+        type="text"
+        [(ngModel)]="nouvelAvis.nom"
+        name="nom"
+        class="w-full border border-gray-300 rounded px-3 py-2"
+        placeholder="Votre nom"
+        required
+      />
+    </div>
+
+    <div>
+      <label class="block mb-1 font-semibold" for="prenom">Prénom</label>
+      <input
+        id="prenom"
+        type="text"
+        [(ngModel)]="nouvelAvis.prenom"
+        name="prenom"
+        class="w-full border border-gray-300 rounded px-3 py-2"
+        placeholder="Votre prénom"
+        required
+      />
+    </div>
+
+    <div>
+      <label class="block mb-1 font-semibold" for="message">Message</label>
+      <textarea
+        id="message"
+        [(ngModel)]="nouvelAvis.message"
+        name="message"
+        rows="4"
+        class="w-full border border-gray-300 rounded px-3 py-2"
+        placeholder="Votre avis"
+        required
+      ></textarea>
+    </div>
+
+    <button
+      type="submit"
+      class="bg-purple-700 text-white px-6 py-2 rounded hover:bg-purple-800 transition"
+    >
+      Envoyer mon avis
+    </button>
+  </form>
+
+  <!-- Liste des avis --
+  <div class="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
+    <div
+      *ngFor="let avis of avisList"
+      class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow"
+    >
+      <div class="flex items-center gap-4 mb-4">
+        <div
+          class="w-14 h-14 rounded-full bg-purple-700 text-white flex items-center justify-center text-2xl font-bold shadow-inner"
+        >
+          {{ getInitiales(avis.nom, avis.prenom) }}
+        </div>
+        <div>
+          <p class="font-semibold text-gray-900">{{ avis.prenom }} {{ avis.nom }}</p>
+          <p class="text-sm text-gray-500">{{ avis.date | date: 'dd/MM/yyyy' }}</p>
+        </div>
+      </div>
+      <p class="text-gray-700 italic">“{{ avis.message }}”</p>
+    </div>
+  </div>
+</div> -->

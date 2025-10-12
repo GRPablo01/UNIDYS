@@ -1,0 +1,257 @@
+<!-- ===================== CONTENEUR PRINCIPAL ===================== -->
+<div class="mt-10 pt-10 pb-20 min-h-[150px] bg-[var(--Bleu-Foncé)] font-sans text-[var(--Blanc)]">
+
+  <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10 flex flex-col justify-center items-center">
+
+    <!-- GRID RESPONSIVE -->
+    <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+      <!-- ===================== SECTION COURS ===================== -->
+      <section
+        class="flex flex-col border-2 border-[var(--Violet)] p-4 sm:p-6 rounded-2xl bg-[var(--Bleu)] bg-opacity-95 shadow-lg hover:shadow-2xl transition-shadow duration-300">
+        <h2 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-6 flex items-center gap-3">
+          <span class="w-2 h-6 sm:h-8 bg-[var(--Violet)] rounded-full animate-pulse"></span>
+          <i class="fas fa-book mr-2"></i> Cours
+        </h2>
+
+        <!-- Liste des cours : 2 cartes par ligne -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pb-4">
+          <div *ngFor="let cours of getCoursParPage('Cours :', pageCours)"
+            class="flex flex-col bg-[var(--Bleu)] rounded-2xl shadow-md border-2 border-[var(--Violet)] hover:scale-105 transition-transform duration-300 cursor-pointer">
+
+            <div class="relative">
+              <img [src]="getImageParMatiere(cours.matiere)" alt="Image du cours"
+                class="w-full h-32 sm:h-36 object-cover rounded-t-2xl" />
+              <span
+                class="absolute top-2 left-2 bg-[var(--Violet)] text-[var(--Blanc)] text-[10px] sm:text-xs px-2 py-1 rounded-full">{{
+                cours.niveau }}</span>
+            </div>
+
+            <div class="p-3 sm:p-4 flex flex-col justify-between h-full">
+              <div>
+                <h3 class="text-sm sm:text-base font-semibold mb-1 truncate flex items-center gap-1">
+                  <i class="fas fa-tag text-[var(--Jaune)]"></i> {{ cours.titre }}
+                </h3>
+                <p class="text-xs sm:text-sm mb-1">Matière : <span class="font-medium">{{ cours.matiere }}</span></p>
+                <p class="text-xs sm:text-sm mb-2 flex items-center gap-1">
+                  QCM :
+                  <span *ngIf="cours.qcms?.length" class="text-[var(--Vert)] font-medium flex items-center gap-1">
+                    <i class="fas fa-check-circle"></i> Disponible
+                  </span>
+                  <span *ngIf="!cours.qcms?.length" class="text-[var(--Rouge)] font-medium flex items-center gap-1">
+                    <i class="fas fa-times-circle"></i> Non disponible
+                  </span>
+                </p>
+              </div>
+
+              <!-- boutons alignés -->
+              <div class="flex flex-wrap gap-2 mt-3">
+                <button *ngIf="cours.lienYoutube" (click)="ouvrirLienYoutube(cours.lienYoutube)"
+                  class="flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm rounded-lg bg-gradient-to-r from-red-500 to-red-600 hover:brightness-110 transition">
+                  <i class="fab fa-youtube"></i>
+                  <span>Lire</span>
+                </button>
+
+                <a [routerLink]="['/coursdetail', cours._id]"
+                  class="flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm rounded-lg bg-gradient-to-r from-[var(--Violet)] to-[var(--Violet-Foncé)] hover:brightness-110 transition">
+                  <i class="fas fa-eye"></i>
+                  <span>Voir</span>
+                </a>
+
+                <button *ngIf="cours.fichierPdf" (click)="telechargerFichier(cours.fichierPdf)"
+                  class="flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm rounded-lg bg-red-700 hover:bg-red-800 transition">
+                  <i class="fas fa-file-pdf"></i>
+                  <span>PDF</span>
+                </button>
+
+                <button (click)="ouvrirPopupEdition(cours)"
+                  class="flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm rounded-lg bg-[var(--Bleu-Foncé)] hover:bg-[var(--Bleu)] transition">
+                  <i class="fas fa-edit"></i>
+                  <span>Modifier</span>
+                </button>
+
+                <button (click)="supprimerCours(cours)"
+                  class="flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm rounded-lg bg-[var(--Rouge)] hover:bg-red-700 transition">
+                  <i class="fas fa-trash-alt"></i>
+                  <span>Suppr</span>
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+          
+        </div>
+
+        <!-- pagination -->
+        <div class="flex justify-center gap-4 mt-4 flex-wrap text-sm sm:text-base">
+          <button (click)="pagePrecedente('Cours :')" [disabled]="pageCours === 1"
+            class="px-3 py-1 bg-[var(--Violet)] text-white rounded disabled:opacity-50 hover:brightness-110 transition">Précédent</button>
+          <span class="text-white">Page {{ pageCours }} / {{ Math.max(1, getNombrePages('Cours :')) }}</span>
+          <button (click)="pageSuivante('Cours :')"
+            [disabled]="pageCours === getNombrePages('Cours :') || getNombrePages('Cours :') === 0"
+            class="px-3 py-1 bg-[var(--Violet)] text-white rounded disabled:opacity-50 hover:brightness-110 transition">Suivant</button>
+        </div>
+      </section>
+
+      <!-- ===================== SECTION EXERCICES ===================== -->
+      <section
+        class="flex flex-col border-2 border-[var(--Violet)] p-4 sm:p-6 rounded-2xl bg-[var(--Bleu)] bg-opacity-95 shadow-lg hover:shadow-2xl transition-shadow duration-300">
+        <h2 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-6 flex items-center gap-3">
+          <span
+            class="w-2 h-6 sm:h-8 bg-[var(--Bleu)] border-2 border-[var(--Violet)] rounded-full animate-pulse"></span>
+          <i class="fas fa-pencil-alt mr-2"></i> Exercices
+        </h2>
+
+        <!-- Liste des exercices : 2 cartes par ligne -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pb-4">
+          <div *ngFor="let cours of getCoursParPage('Exercice :', pageExercices)"
+            class="flex flex-col bg-[var(--Bleu)] rounded-2xl shadow-md border-2 border-[var(--Violet)] hover:scale-105 transition-transform duration-300 cursor-pointer">
+
+            <div class="relative">
+              <img [src]="getImageParMatiere(cours.matiere)" alt="Image de l'exercice"
+                class="w-full h-32 sm:h-36 object-cover rounded-t-2xl" />
+              <span
+                class="absolute top-2 left-2 bg-[var(--Bleu)] border-2 border-[var(--Violet)] text-[10px] sm:text-xs text-[var(--Blanc)] px-2 py-1 rounded-full">{{
+                cours.niveau }}</span>
+            </div>
+
+            <div class="p-3 sm:p-4 flex flex-col justify-between h-full">
+              <div>
+                <h3 class="text-sm sm:text-base font-semibold mb-1 truncate flex items-center gap-1">
+                  <i class="fas fa-tag text-[var(--Jaune)]"></i> {{ cours.titre }}
+                </h3>
+                <p class="text-xs sm:text-sm mb-1">Matière : <span class="font-medium">{{ cours.matiere }}</span></p>
+                <p class="text-xs sm:text-sm mb-2 flex items-center gap-1">
+                  QCM :
+                  <span *ngIf="cours.qcms?.length" class="text-[var(--Vert)] font-medium flex items-center gap-1">
+                    <i class="fas fa-check-circle"></i> Disponible
+                  </span>
+                  <span *ngIf="!cours.qcms?.length" class="text-[var(--Rouge)] font-medium flex items-center gap-1">
+                    <i class="fas fa-times-circle"></i> Non disponible
+                  </span>
+                </p>
+              </div>
+
+              <!-- boutons alignés -->
+              <div class="flex flex-wrap gap-2 mt-3">
+                <button *ngIf="cours.lienYoutube" (click)="ouvrirLienYoutube(cours.lienYoutube)"
+                  class="flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm rounded-lg bg-gradient-to-r from-red-500 to-red-600 hover:brightness-110 transition">
+                  <i class="fab fa-youtube"></i>
+                  <span>Lire</span>
+                </button>
+
+                <a [routerLink]="['/coursdetail', cours._id]"
+                  class="flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm rounded-lg bg-gradient-to-r from-[var(--Violet)] to-[var(--Violet-Foncé)] hover:brightness-110 transition">
+                  <i class="fas fa-eye"></i>
+                  <span>Voir</span>
+                </a>
+
+                <button *ngIf="cours.fichierPdf" (click)="telechargerFichier(cours.fichierPdf)"
+                  class="flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm rounded-lg bg-red-700 hover:bg-red-800 transition">
+                  <i class="fas fa-file-pdf"></i>
+                  <span>PDF</span>
+                </button>
+
+                <button (click)="ouvrirPopupEdition(cours)"
+                  class="flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm rounded-lg bg-[var(--Bleu-Foncé)] hover:bg-[var(--Bleu)] transition">
+                  <i class="fas fa-edit"></i>
+                  <span>Modifier</span>
+                </button>
+
+                <button (click)="supprimerCours(cours)"
+                  class="flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm rounded-lg bg-[var(--Rouge)] hover:bg-red-700 transition">
+                  <i class="fas fa-trash-alt"></i>
+                  <span>Suppr</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="getCoursParPage('Exercice :', pageExercices).length === 0"
+              class="flex items-center justify-center text-center text-xl text-[var(--Blanc)] py-6 col-span-full">
+            Aucun exercice trouvé.
+          </div>
+
+        </div>
+
+        <!-- pagination -->
+        <div class="flex justify-center gap-4 mt-4 flex-wrap text-sm sm:text-base">
+          <button (click)="pagePrecedente('Exercice :')" [disabled]="pageExercices === 1"
+            class="px-3 py-1 bg-[var(--Violet)] text-white rounded disabled:opacity-50 hover:brightness-110 transition">Précédent</button>
+          <span class="text-white">Page {{ pageExercices }} / {{ Math.max(1, getNombrePages('Exercice :')) }}</span>
+          <button (click)="pageSuivante('Exercice :')"
+            [disabled]="pageExercices === getNombrePages('Exercice :') || getNombrePages('Exercice :') === 0"
+            class="px-3 py-1 bg-[var(--Violet)] text-white rounded disabled:opacity-50 hover:brightness-110 transition">Suivant</button>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+
+
+  <!-- ===================== POPUP MODIFIER (CENTRE ET RESPONSIVE) ===================== -->
+<div *ngIf="popupEditionVisible" class="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4">
+  <div class="border-3 border-[var(--Violet)] bg-[var(--Bleu)] text-[var(--Blanc)] p-6 rounded-2xl w-full max-w-md mx-auto shadow-2xl">
+    <h3 class="text-lg sm:text-xl font-bold mb-4 text-center flex items-center justify-center gap-2">
+      <i class="fas fa-edit text-[var(--Violet)]"></i> Modifier le cours
+    </h3>
+
+    <!-- préfixe non modifiable + input titre modifiable avec icône alignée -->
+    <div class="mb-3 flex items-center gap-3">
+      <!-- Préfixe non modifiable -->
+      <span class="px-3 py-2 rounded bg-[var(--Bleu-Foncé)] border border-[var(--Violet)] text-sm flex items-center gap-1">
+        <i class="fas fa-book"></i> {{ prefixeTitre }}
+      </span>
+
+      <!-- Conteneur input avec icône -->
+      <div class="relative flex-1">
+        <i class="fa-solid fa-pen absolute left-2 top-1/2 -translate-y-1/2 text-[var(--Violet)]"></i>
+        <input type="text" [(ngModel)]="titreSansPrefix" name="titreSansPrefix" placeholder="Titre (sans préfixe)"
+              class="w-full pl-9 p-2 rounded bg-[var(--Bleu-Foncé)] border border-[var(--Violet)] text-white text-sm sm:text-base" />
+      </div>
+    </div>
+
+
+    <form (ngSubmit)="validerModificationCours()" class="space-y-3">
+      <!-- Champ Matière désactivé (disabled) -->
+      <div class="relative flex items-center">
+        <i class="fas fa-book absolute left-2 text-[var(--Violet)]"></i>
+        <input type="text" [(ngModel)]="coursAModifier.matiere" name="matiere"
+          class="w-full pl-9 p-2 rounded bg-[var(--Bleu-Foncé)] border border-[var(--Violet)] text-[var(--Gris)] text-sm sm:text-base"
+          placeholder="Matière" disabled />
+      </div>
+
+
+    
+      <!-- Champ YouTube -->
+      <div class="relative flex items-center">
+        <i class="fab fa-youtube absolute left-2 text-[var(--Rouge)]"></i>
+        <input type="text" [(ngModel)]="lienYoutubeModifie" name="youtube" placeholder="Lien YouTube"
+          class="w-full pl-9 p-2 rounded bg-[var(--Bleu-Foncé)] border border-[var(--Violet)] text-[var(--Blanc)] text-sm sm:text-base" />
+      </div>
+    
+      <!-- Champ Fichier -->
+      <div class="relative flex items-center">
+        <i class="fas fa-file-upload absolute left-2 text-[var(--Violet)]"></i>
+        <input type="file" (change)="onFileSelected($event)"
+          class="w-full pl-9 p-2 rounded bg-[var(--Bleu-Foncé)] border border-[var(--Violet)] text-sm sm:text-base" />
+      </div>
+    
+      <!-- Bouton Enregistrer -->
+      <button type="submit"
+        class="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-[var(--Blanc)] border-3 border-[var(--Violet)] font-medium bg-gradient-to-r from-[var(--Bleu)] via-[var(--Violet)] to-[var(--Violet-Foncé)] hover:from-[var(--Violet-Foncé)] hover:via-[var(--Violet-Foncé)] hover:to-[var(--Violet-Foncé)]">
+        <i class="fas fa-save"></i> Enregistrer
+      </button>
+    </form>
+    
+
+    <button (click)="fermerPopupEdition()"
+      class="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2 bg-[var(--Violet)] hover:bg-[var(--Violet-Foncé)] rounded-lg text-[var(--Blanc)] font-medium">
+      <i class="fas fa-times"></i> Fermer
+    </button>
+  </div>
+</div>
+
+</div>

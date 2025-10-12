@@ -1,0 +1,77 @@
+<h1 class="mt-10 text-[var(--Blanc)] text-3xl sm:text-4xl text-center font-extrabold mb-8">
+  Liste des Cours par Professeur
+</h1>
+
+<!-- Conteneur centré -->
+<div class="flex flex-wrap justify-center gap-8 p-6">
+  <div *ngFor="let prof of Object.keys(coursGroupedByProf)">
+    <!-- Carte dossier -->
+    <div (click)="openProfModal(prof)"
+         class="relative cursor-pointer rounded-2xl overflow-hidden shadow-xl transform transition duration-300 hover:scale-105 flex flex-col items-center justify-center w-64 h-64">
+
+      <!-- Image du dossier (fond stylisé) -->
+      <img src="assets/imageDossier.png" alt="Dossier"
+           class="absolute inset-0">
+
+      <!-- Dégradé foncé par-dessus l’image -->
+      <div class="absolute inset-0 bg-black/5"></div>
+
+      <!-- Overlay texte -->
+      <div class="relative z-10 flex flex-col justify-center items-center text-white text-center px-4">
+        <!-- Nom du professeur -->
+        <span class="font-extrabold text-xl mb-2 tracking-tight drop-shadow-lg">
+          {{ prof }}
+        </span>
+
+        <!-- Nombre de cours dans un badge stylisé -->
+        <span class="text-lg font-semibold">
+          <span class="inline-block border-2 border-[var(--Blanc)] bg-black/50 rounded-xl px-4 py-2 shadow-md">
+            {{ coursGroupedByProf[prof].length }} cours
+          </span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal des dossiers (agrandi, hover visible entièrement) -->
+<div *ngIf="modalProfOuvert" class="fixed inset-0 bg-black/50 flex justify-center items-start pt-12 z-50">
+  <div class="bg-[#0A092B] text-white rounded-2xl w-full sm:w-11/12 md:w-4/5 lg:w-3/4 p-8 shadow-lg relative">
+    <button (click)="closeProfModal()" class="absolute top-3 right-3 text-white text-2xl font-bold">&times;</button>
+    <h2 class="text-3xl font-bold mb-6">{{ profSelectionneModal }}</h2>
+    
+    <!-- Grille améliorée : 1 sur mobile, 2 sur petit écran, 3 à partir de md -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-h-[80vh] overflow-y-auto">
+      <div *ngFor="let c of coursGroupedByProf[profSelectionneModal]" 
+           class="flex flex-col bg-gradient-to-br from-purple-700/90 to-indigo-800/90 text-white rounded-2xl shadow-lg transform transition hover:scale-105">
+
+        <!-- Image -->
+        <div class="h-40 w-full overflow-hidden rounded-t-2xl">
+          <img [src]="c.imageMatiere" alt="{{c.matiere}}" class="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-110">
+        </div>
+
+        <!-- Contenu -->
+        <div class="flex flex-col flex-grow p-4">
+          <h3 class="text-md font-bold truncate hover:underline cursor-pointer">{{ c.titre }}</h3>
+          <p class="text-sm text-gray-200 line-clamp-3 mt-2 flex-grow">{{ c.description }}</p>
+          <div class="flex flex-wrap gap-2 mt-3">
+            <span class="text-xs bg-purple-600/90 px-2 py-1 rounded-full shadow-sm">{{ c.niveau }}</span>
+            <span class="text-xs bg-indigo-600/90 px-2 py-1 rounded-full shadow-sm">{{ c.matiere }}</span>
+          </div>
+        </div>
+
+        <!-- Boutons -->
+        <div class="flex justify-between gap-3 p-3 border-t border-white/20">
+          <button (click)="editCours(c)" class="flex-1 flex items-center justify-center gap-1 px-2 py-1 bg-yellow-400 text-black font-semibold rounded-lg hover:bg-yellow-500 text-xs">
+            <i class="fa-solid fa-pen-to-square"></i> Modifier
+          </button>
+          <button (click)="deleteCours(c._id)" class="flex-1 flex items-center justify-center gap-1 px-2 py-1 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 text-xs">
+            <i class="fa-solid fa-trash"></i> Supprimer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,102 @@
+<!-- -------------------- BARRE / SECTION UTILISATEUR -------------------- -->
+<div class="mb-6 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <app-icon></app-icon>
+  <div class="flex flex-col sm:flex-row flex-wrap items-center justify-between gap-4 px-4 py-6
+              border-4 border-[var(--Violet)] bg-[var(--Bleu-Foncé)] text-white rounded-xl shadow-lg">
+
+    <!-- Initiales -->
+    <div class="flex items-center justify-center border-2 border-[#8002FF] rounded-full font-black
+                w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 text-lg sm:text-xl lg:text-2xl flex-shrink-0">
+      {{ getInitiales() }}
+    </div>
+
+    <!-- Bonjour + nom -->
+    <div class="pb-2 mr-99 font-bold text-lg sm:text-xl lg:text-2xl text-center sm:text-left flex-1 min-w-[150px] border-b-4 border-[var(--Violet)]">
+      Bonjour {{ getNomComplet() }}
+    </div>
+
+    <!-- Boutons -->
+    <div class="flex flex-wrap gap-3 justify-center w-full sm:w-auto">
+      <a routerLink="/classementE" class="w-full sm:w-auto">
+        <button
+          class="flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-3 text-white text-sm sm:text-base font-semibold rounded-2xl
+          border-4 border-[var(--Violet)]
+          bg-gradient-to-r from-[var(--Bleu)] via-[var(--Violet)] to-[var(--Violet-Foncé)]
+          hover:from-[var(--Violet-Foncé)] hover:via-[var(--Violet-Foncé)] hover:to-[var(--Violet-Foncé)]
+                hover:scale-105 transition-transform duration-300 relative overflow-hidden w-full sm:w-auto">
+          <i class="fas fa-trophy text-lg"></i> Voir ton classement
+          <span class="absolute inset-0 bg-white opacity-10 rounded-xl pointer-events-none"></span>
+        </button>
+      </a>
+
+      <button (click)="ouvrirPopup()" class="flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 sm:py-3 text-white text-sm sm:text-base font-semibold rounded-2xl
+          border-4 border-[var(--Violet)]
+          bg-gradient-to-r from-[var(--Bleu)] via-[var(--Violet)] to-[var(--Violet-Foncé)]
+          hover:from-[var(--Violet-Foncé)] hover:via-[var(--Violet-Foncé)] hover:to-[var(--Violet-Foncé)]
+            hover:scale-105 transition-transform duration-300 relative overflow-hidden w-full sm:w-auto">
+        <i class="fas fa-comment-dots text-lg"></i> Laisser un avis
+        <span class="absolute inset-0 bg-white opacity-10 rounded-xl pointer-events-none"></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- -------------------- POPUP AVIS -------------------- -->
+<div *ngIf="popupOuvert" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+  <div class="relative bg-[#020118] text-white border-4 border-[#8002FF] rounded-2xl shadow-2xl
+              w-full max-w-4xl p-6 sm:p-8 flex flex-col md:flex-row gap-6 md:gap-10 max-h-[90vh] overflow-y-auto animate-fadeIn">
+
+    <!-- Bouton fermer -->
+    <button (click)="fermerPopup()"
+            class="absolute top-3 right-4 text-[var(--Violet)] hover:text-[var(--Violet-Foncé)] transition-colors duration-200 text-3xl leading-none z-50"
+            title="Fermer">
+      <i class="fas fa-times-circle"></i>
+    </button>
+
+    <!-- Logo -->
+    <div class="flex items-center justify-center md:w-1/2">
+      <img src="/assets/LOGO.png" alt="Logo UniDys" 
+           class="max-w-[160px] sm:max-w-[200px] h-auto drop-shadow-lg hover:scale-105 transition-transform duration-300" />
+    </div>
+
+    <!-- Formulaire avis -->
+    <div class="md:w-1/2 flex flex-col">
+      <h2 class="text-2xl sm:text-3xl font-extrabold mb-4 sm:mb-6 text-center md:text-left flex items-center gap-3">
+        <i class="fas fa-comment-dots text-[#8002FF]"></i> Laisser un avis
+      </h2>
+
+      <!-- Prénom -->
+      <div class="flex items-center border-2 border-[#8002FF] rounded-lg bg-transparent px-3 mb-3 sm:mb-4">
+        <i class="fas fa-user text-[#8002FF] mr-2"></i>
+        <input type="text" [(ngModel)]="prenom" placeholder="Prénom"
+              class="w-full p-3 bg-transparent text-[var(--Gris)] focus:outline-none"
+              readonly />
+      </div>
+
+      <!-- Nom -->
+      <div class="flex items-center border-2 border-[#8002FF] rounded-lg bg-transparent px-3 mb-3 sm:mb-4">
+        <i class="fas fa-id-card text-[#8002FF] mr-2"></i>
+        <input type="text" [(ngModel)]="nom" placeholder="Nom"
+              class="w-full p-3 bg-transparent text-[var(--Gris)] focus:outline-none"
+              readonly />
+      </div>
+
+
+      <!-- Message -->
+      <div class="flex items-start border-2 border-[#8002FF] rounded-lg bg-transparent px-3 mb-3 sm:mb-4">
+        <i class="fas fa-pen-fancy text-[#8002FF] mt-3 mr-2"></i>
+        <textarea [(ngModel)]="avisMessage" placeholder="Votre message" rows="4"
+                  class="w-full p-3 bg-transparent text-white placeholder-white resize-none focus:outline-none"></textarea>
+      </div>
+
+      <!-- Bouton valider -->
+      <div class="flex justify-end mt-2">
+        <button (click)="validerAvis()"
+                class="flex items-center gap-2 bg-[#8002FF] px-5 py-2 rounded-lg font-semibold shadow-lg hover:bg-[#3F0255] hover:scale-105 transition duration-300">
+          <i class="fas fa-paper-plane"></i> Valider
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

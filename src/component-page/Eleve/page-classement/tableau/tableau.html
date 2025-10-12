@@ -1,0 +1,74 @@
+<div class="border-4 border-[var(--Violet)] mt-20 mb-20 mx-auto max-w-6xl rounded-3xl bg-gradient-to-b from-[var(--Bleu)] to-[var(--Violet-Foncé)]  shadow-2xl p-6 sm:p-10">
+
+  <!-- Titre -->
+  <h2 class="text-white text-3xl sm:text-4xl font-bold text-center mb-10 tracking-tight">
+    Classement des élèves
+  </h2>
+
+  <!-- Tableau -->
+  <div class="overflow-x-auto rounded-2xl bg-slate-900/50 border-4 border-[var(--Violet)]">
+    <table class="w-full text-left text-sm sm:text-base text-white">
+      <thead>
+        <tr class="bg-gradient-to-r from-[var(--Bleu)] via-[var(--Violet)] to-[var(--Violet-Foncé)] text-white uppercase text-xs sm:text-sm tracking-wide">
+          <th class="px-4 py-3 text-center">Rang</th>
+          <th class="px-4 py-3">Nom</th>
+          <th class="px-4 py-3 text-center">XP</th>
+          <th class="px-4 py-3 text-center">Level</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let eleve of eleves; let i = index"
+            [class]="eleve._id === currentUserId
+              ? 'bg-green-700/30 border-l-4 border-green-400'
+              : 'bg-slate-800/60 hover:bg-[var(--Violet)]'"
+            class="border-b border-slate-700 transition-colors">
+
+          <!-- Rang avec icons Font Awesome amélioré -->
+          <td class="px-4 py-4 text-center font-semibold">
+            <!-- 1er Rang -->
+            <span *ngIf="i === 0" class="text-yellow-400 text-3xl drop-shadow-lg">
+              <i class="fas fa-trophy"></i>
+            </span>
+
+            <!-- 2ème Rang -->
+            <span *ngIf="i === 1" class="text-gray-400 text-3xl drop-shadow-md">
+              <i class="fas fa-trophy"></i>
+            </span>
+
+            <!-- 3ème Rang -->
+            <span *ngIf="i === 2" class="text-orange-600 text-3xl drop-shadow-sm">
+              <i class="fas fa-trophy"></i>
+            </span>
+
+            <!-- Rangs >3 -->
+            <span *ngIf="i > 2" class="text-slate-300 text-3xl font-bold">#{{ i + 1 }}</span>
+          </td>
+
+
+
+          <!-- Nom -->
+          <td class="px-4 py-4 font-medium text-slate-100">
+            {{ eleve.nom }} {{ eleve.prenom?.charAt(0) }}.
+          </td>
+
+          <!-- XP -->
+          <td class="px-4 py-4 text-center font-bold text-[var(--Blanc)]">
+            {{ eleve.xp }}
+          </td>
+
+          <!-- Niveau -->
+          <td class="px-4 py-4 text-center">
+            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-[var(--Bleu-Foncé)] border-3 border-[var(--Violet)] text-white">
+              Level . {{ eleve.level }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Message motivant -->
+  <div class="border-4 border-[var(--Violet)] mt-8 text-center text-slate-200 text-sm sm:text-base italic bg-gradient-to-r from-[var(--Bleu)] via-[var(--Violet)] to-[var(--Violet-Foncé)] rounded-xl p-4">
+  Pas de panique si tu n’as pas beaucoup d’XP pour l’instant ! Chaque progrès compte, continue à apprendre à ton rythme.
+  </div>
+</div>

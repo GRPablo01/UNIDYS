@@ -1,0 +1,66 @@
+<app-header-p></app-header-p>
+
+<div class="max-w-4xl mx-auto p-6 bg-[#0A092B] text-white rounded-lg shadow-lg mt-8 border-4 border-[#8002FF]">
+  <h2 class="text-4xl font-bold mb-8 text-center text-[#8002FF]">Détail du cours</h2>
+
+  <!-- Contenu du cours -->
+  <section *ngIf="contenuHtml; else loading" [innerHTML]="contenuHtml" class="prose prose-invert max-w-none
+                  [&_img]:mx-auto [&_img]:my-4 [&_img]:rounded-lg [&_img]:shadow-md
+                  [&_p]:text-justify [&_h1]:text-2xl [&_h2]:text-xl [&_ul]:list-disc [&_ul]:pl-6"
+    aria-label="Contenu du cours">
+  </section>
+
+  <ng-template #loading>
+    <p class="text-center text-lg italic mt-8" role="status" aria-live="polite">Chargement du contenu...</p>
+  </ng-template>
+
+  <section *ngIf="(qcm?.length ?? 0) > 0" class="mt-12 p-6 bg-[#1C1B3A] rounded-lg shadow-xl border-4 border-[#8002FF]"
+    aria-label="Questionnaire à choix multiple">
+    <h3 class="text-2xl font-semibold text-center mb-4 text-[#8002FF]">QCM associé</h3>
+
+    <form (ngSubmit)="validerQCM()" #qcmForm="ngForm" novalidate class="space-y-6">
+
+      <fieldset *ngFor="let question of qcm; let i = index" [ngClass]="{
+      'bg-green-100 border-l-4 border-green-500 shadow-md': resultat !== null && questionEstJuste(i),
+      'bg-red-100 border-l-4 border-red-500 shadow-md': resultat !== null && !questionEstJuste(i),
+      'bg-[#0A092B] border border-[#8002FF]': resultat === null
+    }" class="rounded-xl p-6 transition-all duration-300">
+
+        <legend class="text-xl font-bold text-white mb-4">
+          Question {{ i + 1 }} :
+          <span class="text-[#00FFC2]">{{ question.question || 'Question sans titre' }}</span>
+        </legend>
+
+        <ul class="space-y-3">
+          <li *ngFor="let reponse of question.reponses; let j = index">
+            <label class="flex items-center gap-3 px-4 py-2 rounded-lg transition-colors duration-300 cursor-pointer"
+              [ngClass]="{
+            'bg-green-300 text-green-900 font-semibold': questionEstJuste(i) && isBonneReponse(question, j),
+            'bg-red-300 text-red-900 line-through': resultat !== null && !questionEstJuste(i) && estCoche(i, j) && !isBonneReponse(question, j),
+            'bg-white/10 text-white hover:bg-white/20': !(questionEstJuste(i) && isBonneReponse(question, j)) && !(resultat !== null && !questionEstJuste(i) && estCoche(i, j) && !isBonneReponse(question, j))
+          }">
+              <input type="radio" class="form-radio text-[#8002FF] focus:ring-[#8002FF]" name="question-{{ i }}"
+                [value]="j" [(ngModel)]="reponsesChoisies[i]" [disabled]="resultat !== null" />
+              <span>{{ reponse }}</span>
+            </label>
+          </li>
+        </ul>
+      </fieldset>
+
+      <!-- <div class="text-center mt-6">
+        <button type="submit" [disabled]="resultat !== null"
+          class="px-6 py-3 bg-[#8002FF] text-white font-semibold rounded-full shadow-lg hover:bg-[#5d02b4] transition duration-300 disabled:opacity-50">
+          Valider mes réponses
+        </button>
+      </div> -->
+
+    </form>
+
+
+    <div *ngIf="resultat !== null" class="mt-6 text-center text-xl font-semibold text-[#00FFC2]" aria-live="polite"
+      role="status">
+      Résultat : {{ resultat }} / {{ qcm.length }} bonne{{ resultat > 1 ? 's' : '' }} réponse{{ resultat > 1 ? 's' : ''
+      }} !
+    </div>
+  </section>
+</div>

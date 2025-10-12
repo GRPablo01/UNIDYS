@@ -1,0 +1,54 @@
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.course-card:hover {
+  transform: scale(1.03);
+  transition: transform 0.3s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+
+
+
+/* scrollbar personnalisée
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thumb-purple-600::-webkit-scrollbar-thumb {
+  background-color: #7c3aed;
+  border-radius: 9999px;
+}
+
+.scrollbar-track-gray-800::-webkit-scrollbar-track {
+  background-color: #1f2937;
+}
+
+/* transition hover plus douce sur les boutons 
+button {
+  transition: background-color 0.3s ease;
+}
+
+/* focus visible pour accessibilité clavier 
+button:focus {
+  outline: 2px solid #a78bfa;
+  outline-offset: 2px;
+}
+
+
+.pdf-viewer {
+  width: 100%;
+  height: 70vh;
+  margin: 0 auto;
+  border: none;
+} */

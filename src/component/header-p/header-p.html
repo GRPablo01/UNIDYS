@@ -1,0 +1,38 @@
+<div class="bg-[#0A092B] py-3 px-4 relative z-10">
+  <div class="max-w-screen-2xl mx-auto flex items-center justify-between relative">
+
+    <app-logo></app-logo>
+
+    
+    <!-- NAVIGATION centrée absolument -->
+    <nav class="absolute left-1/2 transform -translate-x-1/2 hidden md:block">
+      <ul class="flex gap-6 items-center">
+        <li>
+          <a routerLink="/accueilP"
+            class="text-white font-black relative pb-1 text-sm sm:text-lg xl:text-xl 2xl:text-2xl
+            after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-0 after:bg-[#8002FF]
+            after:transition-all after:duration-300 hover:after:w-full">
+            Accueil
+          </a>
+        </li>
+        <li>
+          <a routerLink="/coursP"
+            class="text-white font-black relative pb-1 text-sm sm:text-lg xl:text-xl 2xl:text-2xl
+            after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-0 after:bg-[#8002FF]
+            after:transition-all after:duration-300 hover:after:w-full">
+            Cours
+          </a>
+        </li>
+        <li>
+          <a routerLink="/aproposP"
+            class="text-white font-black relative pb-1 text-sm sm:text-lg xl:text-xl 2xl:text-2xl
+            after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-0 after:bg-[#8002FF]
+            after:transition-all after:duration-300 hover:after:w-full">
+            À propos
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <app-menu-hambuger-p></app-menu-hambuger-p>
+  </div>
+</div>

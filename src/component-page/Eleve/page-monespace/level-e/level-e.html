@@ -1,0 +1,123 @@
+<!-- ================== LEVEL DASHBOARD ================== -->
+<div class="flex justify-center mt-12 px-4 sm:px-8" *ngIf="!isLoading && user">
+  <div class="relative group w-full max-w-6xl">
+    
+    <!-- Background animated gradient -->
+    <div class="absolute -inset-0.5
+                rounded-3xl blur-xl opacity-75 group-hover:opacity-100 transition duration-1000 
+                group-hover:duration-200 animate-gradient-xy"></div>
+    
+    <div class="relative flex flex-col sm:flex-row items-center justify-center gap-10
+               backdrop-blur-xl border-4 border-[var(--Violet)]
+                rounded-3xl shadow-2xl p-6 sm:p-12 overflow-hidden">
+      
+      
+
+      <!-- Badge Niveau avec effet 3D -->
+      <div class="relative flex-shrink-0 z-10">
+        <div class="relative">
+          <div class="absolute inset-0 rounded-full animate-pulse"></div>
+          <div class="absolute inset-4 rounded-full animate-pulse animation-delay-1000"></div>
+          
+          <div class="relative transform transition-all duration-500">
+            <img [src]="'assets/Level-' + level + '.png'" [alt]="'Level ' + level"
+                 class="w-64 h-64 sm:w-72 sm:h-72 object-contain select-none">
+          </div>
+        </div>
+      </div>
+
+      <!-- XP Section -->
+      <div class="flex flex-col items-center flex-1 text-center mx-4 w-full relative z-10">
+        
+        <!-- XP Counter -->
+        <div class="relative mb-6">
+          <div class="text-white text-4xl sm:text-6xl font-black tracking-tight">
+            <span class="bg-[var(--Violet)] bg-clip-text text-transparent animate-gradient-x">
+              {{ animatedXP }}
+            </span>
+            <span class="text-2xl sm:text-3xl ml-2 font-black">XP</span>
+          </div>
+        </div>
+
+        <!-- Level badge interactif -->
+        <button class="group/level relative px-8 py-4 mb-8">
+          <div class="absolute inset-0 rounded-full blur-md group-hover/level:blur-xl transition-all duration-300"></div>
+          <div class="relative flex items-center space-x-3 bg-gradient-to-r from-[var(--Bleu)] via-[var(--Violet)] to-[var(--Violet-Foncé)] backdrop-blur-sm px-8 py-3 rounded-2xl border-4 border-[var(--Violet)] transition-all duration-300 group-hover/level:scale-105">
+            <span class="text-[var(--Blanc)] text-xl font-bold">Level</span>
+            <span class="text-3xl font-black text-[var(--Blanc)]">{{ level }}</span>
+          </div>
+        </button>
+
+        <!-- Progress bar -->
+        <div class="w-full max-w-md">
+          <div class="flex justify-between text-sm text-gray-400 mb-2">
+            <span>Progression</span>
+            <span class="font-bold text-purple-300">{{ progression | number:'1.0-0' }}%</span>
+          </div>
+          <div class="relative">
+            <div class="w-full border-4 border-[var(--Violet)] rounded-full h-8 overflow-hidden backdrop-blur-sm">
+              
+              <div class="relative h-full rounded-full overflow-hidden transition-all duration-1000" [style.width.%]="progression">
+                <div class="absolute inset-0 bg-gradient-to-r from-[var(--Bleu)] via-[var(--Violet)] to-[var(--Violet-Foncé)]"></div>
+              </div>
+            </div>
+            <div class="absolute top-0 left-0 w-full h-full flex justify-between items-center px-1">
+              <div *ngFor="let milestone of [25,50,75]" class="w-0.5 h-6 bg-[var(--Violet)]" [class.bg-purple-400]="progression >= milestone"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Next goal -->
+      <div class="flex flex-col items-center justify-center flex-shrink-0 mt-6 sm:mt-0 relative z-10">
+        <div class="text-center">
+          <p class="text-[var(--Violet)] text-sm mb-2">Prochain objectif</p>
+          <div class="relative">
+            <p class="text-2xl sm:text-3xl font-bold text-[var(--Blanc)]">
+              {{ xpRestant | number:'1.0-0' }} XP
+            </p>
+            <p class="text-[var(--Blanc)] text-sm mt-1">pour <span class="text-[var(--Violet)] font-black"> Level {{ level + 1 }}</span> </p>
+          </div>
+          <div class="mt-4 p-3 bg-[var(--Violet-Foncé)] rounded-lg backdrop-blur-sm border border-[var(--Violet)]">
+            <p class="text-[var(--Blanc)] text-xs italic">"{{ motivationalMessage }}"</p>
+          </div>
+        </div>
+        <div class="mt-4 w-20 h-20 relative">
+          <svg class="w-20 h-20 transform -rotate-90">
+            <circle cx="40" cy="40" r="35" stroke="currentColor" stroke-width="4" fill="transparent" class="text-gray-700/50"/>
+            <circle cx="40" cy="40" r="35" stroke="currentColor" stroke-width="4" fill="transparent"
+                    [attr.stroke-dasharray]="220" [attr.stroke-dashoffset]="220-(progression*2.2)"
+                    class="text-[var(--Violet)] transition-all duration-1000"/>
+          </svg>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span class="text-xs font-bold text-[var(--Blanc)]">{{ progression | number:'1.0-0' }}%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading fallback -->
+<div *ngIf="isLoading" class="flex items-center justify-center mt-20">
+  <div class="text-white text-xl animate-pulse">Chargement du profil...</div>
+</div>
+
+<style>
+/* Animations */
+@keyframes gradient-xy {0%,100%{transform:translateX(0) translateY(0);}25%{transform:translateX(-5px) translateY(-5px);}50%{transform:translateX(5px) translateY(-5px);}75%{transform:translateX(-5px) translateY(5px);}}
+@keyframes gradient-x {0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
+@keyframes shimmer {0%{transform:translateX(-100%);}100%{transform:translateX(100%);}}
+@keyframes fade-out {0%{opacity:1;transform:translateY(0) scale(1);}100%{opacity:0;transform:translateY(-20px) scale(0.8);}}
+
+.animate-gradient-xy{animation:gradient-xy 15s ease infinite;}
+.animate-gradient-x{background-size:200% 200%;animation:gradient-x 3s ease infinite;}
+.animate-shimmer{animation:shimmer 2s infinite;}
+.fade-out{animation:fade-out 2s forwards;}
+.animation-delay-100{animation-delay:100ms;}
+.animation-delay-300{animation-delay:300ms;}
+.animation-delay-1000{animation-delay:1s;}
+.animation-delay-2000{animation-delay:2s;}
+
+
+</style>

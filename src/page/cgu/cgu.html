@@ -1,0 +1,24 @@
+<!-- En-tête : Logo et bouton retour -->
+<div class="flex items-center justify-between 2xl:ml-1 mt-4 px-4 sm:px-6 lg:px-8">
+
+    <!-- Logo UniDys -->
+    <a routerLink="" class="flex-shrink-0">
+      <img src="assets/LOGO.png" alt="Logo UniDys"
+        class="w-28 sm:w-32 xl:w-36 2xl:w-40 hover:scale-105 transition-transform duration-300"
+      />
+    </a>
+  
+    <!-- Bouton retour -->
+    <a routerLink="/inscription" class="flex items-center gap-2 text-[var(--Blanc)] hover:text-[var(--Blanc)] transition-colors font-medium bg-[var(--Violet)] hover:bg-[var(--Violet-Foncé)] px-3 py-2 rounded-xl shadow-md">
+      <!-- Icon flèche (inline SVG) -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+      <span class="text-sm sm:text-base">Retour à l’inscription</span>
+    </a>
+  
+  </div>
+  
+  <!-- Contenu CGU -->
+  <app-cgu-texte></app-cgu-texte>
+  

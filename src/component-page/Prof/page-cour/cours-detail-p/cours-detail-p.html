@@ -1,0 +1,112 @@
+<!-- ✅ Version complète avec QCM désactivé pour le prof -->
+<app-header-p></app-header-p>
+
+<div class="max-w-5xl mx-auto p-6 bg-[#0A092B] text-white rounded-2xl shadow-2xl mt-8 border border-[#8002FF]">
+  <h2 class="text-4xl font-extrabold mb-8 text-center text-[#8002FF] drop-shadow-lg">
+    📚 Détail du cours
+  </h2>
+
+  <!-- Contenu HTML du cours -->
+  @if (contenuHtml) {
+    <section [innerHTML]="contenuHtml"
+             class="prose prose-invert max-w-none leading-relaxed
+                    [&_img]:mx-auto [&_img]:my-4 [&_img]:rounded-xl [&_img]:shadow-md
+                    [&_p]:text-justify [&_h1]:text-3xl [&_h2]:text-2xl [&_ul]:list-disc [&_ul]:pl-6"
+             aria-label="Contenu du cours">
+    </section>
+  } @else if (loading) {
+    <div class="flex justify-center items-center p-8">
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+      <span class="ml-3 text-white">Chargement du contenu...</span>
+    </div>
+  } @else {
+    <div class="text-center p-8 text-gray-400">
+      Aucun contenu disponible
+    </div>
+  }
+
+  <!-- Section QCM -->
+  @if ((qcm?.length ?? 0) > 0) {
+    <section class="mt-12 p-6 bg-[#1C1B3A] rounded-xl shadow-xl border border-[#8002FF] transition-all duration-300"
+             aria-label="Questionnaire à choix multiple">
+
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-semibold text-[#FFD700]">📝 QCM associé</h3>
+        <span class="text-[#FFD700] font-semibold text-lg">
+          XP total : {{ xptotal }} XP
+        </span>
+      </div>
+
+      <form (ngSubmit)="validerQCM()" #qcmForm="ngForm" novalidate class="space-y-6">
+        @for (question of qcm; track questionIndex; let questionIndex = $index) {
+          <fieldset [ngClass]="{
+                    'bg-green-900/20 border-l-4 border-green-500 shadow-md': resultat !== null && questionEstJuste(questionIndex),
+                    'bg-red-900/20 border-l-4 border-red-500 shadow-md': resultat !== null && !questionEstJuste(questionIndex),
+                    'bg-[#0A092B] border border-[#8002FF]/40': resultat === null
+                  }"
+                  class="rounded-xl p-6 transition-all duration-300 hover:scale-[1.01]">
+
+            <legend class="text-lg font-bold text-white mb-4 flex justify-between items-center">
+              <div class="flex items-center gap-2">
+                <span class="px-3 py-1 bg-[#8002FF] rounded-full text-sm font-medium">
+                  {{ questionIndex + 1 }}/{{ qcm.length }}
+                </span>
+                <span class="text-[#00FFC2]">{{ question.question || 'Question sans titre' }}</span>
+              </div>
+              <!-- XP au coin droit -->
+              <span class="absolute text-[#FFD410] font-semibold text-2xl whitespace-nowrap ml-214 -mr-190 rotate-30">
+                {{ question.xp || 0 }} XP
+              </span>
+            </legend>
+
+            <!-- ✅ Liste des réponses avec désactivation pour le prof -->
+            <ul class="space-y-3">
+              @for (reponse of question.reponses; track reponseIndex; let reponseIndex = $index) {
+              <li>
+                <label class="flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-200 cursor-pointer"
+                       [ngClass]="{
+                         'bg-green-400/80 text-green-900 font-semibold':
+                           resultat !== null && isBonneReponse(question, reponseIndex),
+                         'bg-red-400/80 text-red-900 line-through':
+                           resultat !== null && !questionEstJuste(questionIndex) && estCoche(questionIndex, reponseIndex) && !isBonneReponse(question, reponseIndex),
+                         'bg-white/10 text-white hover:bg-white/20':
+                           !(resultat !== null && isBonneReponse(question, reponseIndex)) &&
+                           !(resultat !== null && !questionEstJuste(questionIndex) && estCoche(questionIndex, reponseIndex) && !isBonneReponse(question, reponseIndex))
+                       }">
+                  <input type="radio" 
+                         name="qcm_{{ questionIndex }}" 
+                         [value]="reponseIndex"
+                         [(ngModel)]="reponsesUtilisateur[questionIndex]" 
+                         [disabled]="resultat !== null || isProf" />
+                  <span>{{ reponse }}</span>
+                </label>
+              </li>
+              }
+            </ul>
+          </fieldset>
+        }
+      </form>
+
+      <!-- Résultat inline -->
+      @if (resultat !== null) {
+        <div class="mt-8 p-6 bg-[#0A092B] border border-[#8002FF] rounded-xl text-center animate-fadeIn" aria-live="polite">
+          <p class="mb-2 text-2xl font-bold" [ngClass]="{
+            'text-green-400': resultat === (qcm?.length ?? 0),
+            'text-yellow-400': resultat > 0 && resultat < (qcm?.length ?? 0),
+            'text-red-400': resultat === 0
+          }">
+            {{ message }}
+          </p>
+          <p class="text-[#00FFC2] text-lg">
+            📊 Résultat :
+            <strong>{{ resultat }} / {{ qcm?.length }}</strong>
+            bonne{{ resultat > 1 ? 's' : '' }} réponse{{ resultat > 1 ? 's' : '' }}.
+          </p>
+          <p class="text-[#FFD700] text-lg mt-2 font-medium">
+            Tu gagnes <strong>{{ xp }}</strong> XP !
+          </p>
+        </div>
+      }
+    </section>
+  }
+</div>

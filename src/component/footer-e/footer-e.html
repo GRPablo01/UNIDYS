@@ -1,0 +1,84 @@
+<app-icon></app-icon>
+
+<footer class="bg-[var(--Bleu-Foncé)] text-[var(--Blanc)] border-t-4 border-[var(--Violet)] pt-8 pb-5">
+  <div class="container mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16">
+    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 items-start">
+
+      <!-- Colonne 1 -->
+      <div>
+        <img src="assets/LOGO.png" alt="Logo UniDys" class="w-20 sm:w-24 md:w-28 lg:w-32 xl:w-36 2xl:w-40 mb-4" />
+        <p class="font-bold text-[var(--Blanc)] text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl">
+          Plateforme éducative adaptée<br />pour les personnes DYS
+        </p>
+      </div>
+
+      <!-- Colonne 2 -->
+      <div>
+        <h3 class="font-bold text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl mb-2">Navigation</h3>
+        <ul class="space-y-2 text-sm sm:text-base md:text-lg">
+          <li>
+            <a routerLink="/accueilE" class="text-[var(--Blanc)] font-bold hover:text-[var(--Violet)] transition">Accueil</a>
+          </li>
+          <li>
+            <a routerLink="/coursE" class="text-[var(--Blanc)] font-bold hover:text-[var(--Violet)] transition">Cours</a>
+          </li>
+          <li>
+            <a routerLink="/aproposE" class="text-[var(--Blanc)] font-bold hover:text-[var(--Violet)] transition">À propos</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Colonne 3 -->
+      <div>
+        <h3 class="font-bold text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl mb-2">Newsletter</h3>
+        <p class="text-[var(--Blanc)] font-medium text-sm sm:text-base md:text-lg xl:text-xl mb-3">
+          Restez informé de nos dernières actualités
+        </p>
+
+        <div class="flex flex-wrap sm:flex-nowrap items-center gap-2">
+          <button (click)="enregistrerEmail()" [disabled]="inscrit()" 
+            class="border-2 border-[var(--Violet)] bg-gradient-to-r from-[var(--Bleu)] via-[var(--Violet)] to-[var(--Violet-Foncé)]
+                  hover:from-[var(--Violet-Foncé)] hover:via-[var(--Violet-Foncé)] hover:to-[var(--Violet-Foncé)]
+                   text-[var(--Blanc)] rounded-xl hover:scale-105 hover:shadow-[var(--Blanc)] 
+                   transition-transform duration-300
+                   px-3 sm:px-4 md:px-5 py-2 
+                   text-xs sm:text-sm md:text-base lg:text-lg" 
+            [class.opacity-50]="inscrit()" [class.cursor-not-allowed]="inscrit()" aria-label="Envoyer">
+
+            @if (!inscrit()) {
+              <div class="flex items-center gap-2">
+                <i class="fas fa-arrow-right"></i>
+                <span class="font-black">Rejoindre la newsletter</span>
+              </div>
+            } @else {
+              <span class="flex items-center gap-2 text-[var(--Vert-Claire)]">
+                <i class="fas fa-check-circle"></i>
+                Vous êtes déjà inscrit
+              </span>
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <hr class="my-6 border-[var(--Blanc)]" />
+
+    <div class="flex flex-col sm:flex-row justify-between items-center text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl">
+      <p class="font-black text-center sm:text-left mb-4 sm:mb-0">©2025 UniDys. Tous droits réservés</p>
+      <div class="flex gap-4">
+        <a href="#" aria-label="Instagram" class="hover:text-[var(--Violet)]">
+          <i class="fab fa-instagram text-lg sm:text-xl md:text-2xl"></i>
+        </a>
+        <a href="#" aria-label="Facebook" class="hover:text-[var(--Violet)]">
+          <i class="fab fa-facebook text-lg sm:text-xl md:text-2xl"></i>
+        </a>
+        <a href="#" aria-label="LinkedIn" class="hover:text-[var(--Violet)]">
+          <i class="fab fa-linkedin text-lg sm:text-xl md:text-2xl"></i>
+        </a>
+        <a href="#" aria-label="Twitter" class="hover:text-[var(--Violet)]">
+          <i class="fab fa-twitter text-lg sm:text-xl md:text-2xl"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>

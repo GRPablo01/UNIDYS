@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+/* ✅ Chrome, Edge, Safari, Opera */
+::-webkit-scrollbar {
+    width: 60px;               /* Largeur verticale */
+    height: 60px;              /* Hauteur horizontale si scroll horizontal */
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #0A092B;       /* Couleur du fond */
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #8002FF; /* Couleur de la poignée */
+    border-radius: 20px;
+    border: 10px solid #0A092B; /* Pour donner un effet “espacé” dans le track */
+  }
+  
+  /* ✅ Firefox */
+  * {
+    scrollbar-width: auto; /* 'thin' serait trop fin ici */
+    scrollbar-color: #8002FF #0A092B;
+  }
+  
+  :root {
+    /* Palette principale */
+    --Violet: #8002FF;
+    --Violet-Foncé: #3F0255;
+    --Violet-Foncé2: #1A012B;
+    --Bleu-Foncé: #020118;
+    --Bleu: #0A092B;
+    --Bleu-Claire: #1c197f;
+    --Blanc: #FFFF;
+    --Rouge: #8d0202;
+    -Vert-Foncé: #054f01;
+    --Vert: #0da405;
+    --Vert-Claire:#50d749;
+    --Jaune: #ffd000;
+    --Gris: #444343;
+
+  }
+  

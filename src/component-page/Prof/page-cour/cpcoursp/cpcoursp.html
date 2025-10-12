@@ -1,0 +1,135 @@
+<div class="bg-[var(--Bleu)] min-h-screen pt-6">
+
+  <!-- Switch Cours / Exercices -->
+  <div class="flex justify-center gap-6 mt-6">
+    <button 
+      (click)="changerMode('cours')" 
+      [ngClass]="modeAffichage === 'cours' 
+        ? 'bg-gradient-to-r from-[var(--Bleu)] to-[var(--Violet)] border-3 border-[var(--Violet)]  shadow-xl scale-110' 
+        : 'bg-[var(--Bleu-Claire)] hover:bg-[var(--Violet-Foncé)] opacity-80 hover:opacity-100'"
+      class="px-7 py-2.5 rounded-2xl font-bold text-white transition-all duration-300 backdrop-blur-md flex items-center">
+      <i class="fa-solid fa-book-open text-xl mr-3"></i>
+      Cours
+    </button>
+    <button 
+      (click)="changerMode('exercices')" 
+      [ngClass]="modeAffichage === 'exercices' 
+        ? 'bg-gradient-to-r from-[var(--Bleu)] to-[var(--Violet)] border-3 border-[var(--Violet)] shadow-xl scale-110' 
+        : 'bg-[var(--Bleu-Claire)] hover:bg-[var(--Violet-Foncé)] opacity-80 hover:opacity-100'"
+      class="px-7 py-2.5 rounded-2xl font-bold text-white transition-all duration-300 backdrop-blur-md flex items-center">
+      <i class="fa-solid fa-pencil-alt text-xl mr-3"></i>
+      Exercices
+    </button>
+  </div>
+
+  <!-- Barre de recherche + Filtres -->
+  <div
+    class="mt-10 flex flex-col md:flex-row md:items-center md:justify-between gap-5 
+           bg-[var(--Bleu-Foncé)] border-3 border-[var(--Violet)] rounded-2xl px-6 py-4 
+           shadow-lg w-full max-w-6xl mx-auto">
+
+    <!-- Recherche -->
+    <div class="flex items-center gap-3 w-full md:w-1/3 bg-gradient-to-r from-[var(--Bleu)] to-[var(--Violet)] border-2 border-[var(--Violet)] rounded-xl px-4 py-2">
+      <i class="fa-solid fa-search text-[var(--Violet)]"></i>
+      <input type="text" [(ngModel)]="recherche" (ngModelChange)="filtrerCours()" placeholder="Rechercher une matière..."
+        class="bg-transparent text-[var(--Blanc)] placeholder-[var(--Blanc)] focus:outline-none w-full">
+    </div>
+
+    <!-- Filtres -->
+    <div class="flex flex-wrap gap-3 w-full md:w-auto">
+      <button 
+        *ngFor="let niveau of niveaux"
+        (click)="filtrerParNiveau(niveau)"
+        [ngClass]="niveauActif === niveau 
+          ? 'bg-gradient-to-r from-[var(--Bleu)] to-[var(--Violet)] border-2 border-[var(--Violet)] shadow-lg text-[var(--Blanc)] scale-105' 
+          : 'bg-[var(--Bleu-Claire)] hover:bg-[var(--Violet-Foncé)] opacity-90 hover:opacity-100 text-[var(--Blanc)]'"
+        class="px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 flex items-center">
+        <i class="fa-solid fa-layer-group mr-2"></i>
+        {{ niveau }}
+      </button>
+      <button 
+        (click)="reinitialiserFiltre()"
+        [ngClass]="!niveauActif 
+          ? 'bg-gradient-to-r from-[var(--Bleu)] to-[var(--Violet)] border-2 border-[var(--Violet)] shadow-lg text-[var(--Blanc)] scale-105' 
+          : 'bg-[var(--Bleu-Claire)] hover:bg-[var(--Violet-Foncé)] opacity-90 hover:opacity-100 text-[var(--Blanc)]'"
+        class="px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 flex items-center">
+        <i class="fa-solid fa-list mr-2"></i>
+        Tous
+      </button>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="flex justify-center items-center gap-5 mb-10 mt-6">
+    <button (click)="pagePrecedente()" [disabled]="currentPage === 1"
+      class="px-4 py-2 rounded-full bg-[var(--Bleu)] border-3 border-[var(--Violet)] text-[var(--Blanc)]
+             disabled:opacity-40 hover:bg-[var(--Violet)] transition flex items-center justify-center">
+      <i class="fa-solid fa-angle-left"></i>
+    </button>
+    <span class="text-[var(--Blanc)] font-bold tracking-wide">Page {{currentPage}} / {{totalPages}}</span>
+    <button (click)="pageSuivante()" [disabled]="currentPage === totalPages"
+      class="px-4 py-2 rounded-full bg-[var(--Bleu)] border-3 border-[var(--Violet)] text-[var(--Blanc)] 
+             disabled:opacity-40 hover:bg-[var(--Violet)] transition flex items-center justify-center">
+      <i class="fa-solid fa-angle-right"></i>
+    </button>
+  </div>
+
+  <!-- Liste des cours -->
+  <div class="flex flex-wrap justify-center gap-7 mt-10 px-4 w-full max-w-7xl mx-auto pb-20">
+    <div *ngIf="coursFiltres.length === 0" 
+         class="w-full text-center text-[var(--Blanc)] text-lg font-medium py-20">
+      <i class="fa-regular fa-face-frown-open text-3xl text-[var(--Violet)] mb-3"></i>
+      <br>
+      Aucun {{ modeAffichage === 'cours' ? 'Cours' : 'Exercice' }} disponible 
+      <span *ngIf="niveauActif" class="text-[var(--Violet)] font-semibold">({{niveauActif}})</span>.
+    </div>
+
+    <div *ngFor="let cours of getCoursPage()" 
+      class="bg-gradient-to-b from-[var(--Bleu)] via-[var(--Violet)] to-[var(--Violet-Foncé)]
+             rounded-3xl p-6 shadow-md border-3 border-[var(--Violet)]
+             cursor-pointer flex-shrink-0 w-full sm:w-[47%] md:w-[30%] lg:w-[22%]">
+      <div class="relative">
+        <img [src]="getImageParMatiere(cours.matiere)" alt="{{ cours.matiere }}"
+          class="w-full h-40 object-cover rounded-2xl border-2 border-[var(--Violet-Foncé)] shadow-sm" />
+        <div class="absolute top-2 left-2 border-3 border-[var(--Violet)] bg-gradient-to-r from-[var(--Bleu)] to-[var(--Violet)] 
+                    text-xs px-2 py-1 rounded-md text-[var(--Blanc)] font-semibold shadow flex items-center">
+          <i class="fa-solid fa-graduation-cap mr-1"></i> {{ cours.niveau }}
+        </div>
+      </div>
+      <h3 class="text-md font-bold mt-3 mb-1 text-[var(--Blanc)] truncate flex items-center">
+        <i [ngClass]="modeAffichage === 'cours' ? 'fa-solid fa-book-open mr-2' : 'fa-solid fa-pencil-alt mr-2'"></i>
+        {{ cours.titre }}
+      </h3>
+      <p class="text-xs text-gray-300 mb-1 truncate">
+        <i class="fa-solid fa-book text-[var(--Blanc)] mr-1"></i>
+        <span class="font-semibold text-[var(--Blanc)]">Matière : {{ cours.matiere }}</span>
+      </p>
+      <p class="text-xs sm:text-sm mb-2">
+        <span class="text-[var(--Blanc)] mr-2">QCM :</span>
+        <span *ngIf="cours.qcms?.length" class="text-[var(--Vert)] font-medium">
+          <i class="fas fa-check-circle mr-1"></i>Disponible
+        </span>
+        <span *ngIf="!cours.qcms?.length" class="text-[var(--Rouge)] font-medium">
+          <i class="fas fa-times-circle mr-1"></i>Non disponible
+        </span>
+      </p>
+      <div class="flex flex-wrap gap-2 mt-3 justify-center">
+        <button *ngIf="cours.lienYoutube" (click)="ouvrirLienYoutube(cours.lienYoutube)"
+          class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-[var(--Blanc)] 
+          bg-gradient-to-r from-[var(--Bleu)] to-[var(--Violet)] hover:from-[var(--Violet-Foncé)] hover:to-[var(--Violet-Foncé)] border border-[var(--Violet)] transition">
+          <i class="fa-brands fa-youtube text-lg"></i> Lire
+        </button>
+        <a [routerLink]="['/coursdetail', cours._id]"
+          class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-[var(--Blanc)]
+          bg-gradient-to-r from-[var(--Bleu)] to-[var(--Violet)] hover:from-[var(--Violet-Foncé)] hover:to-[var(--Violet-Foncé)] border border-[var(--Violet)] transition">
+          <i class="fa-solid fa-eye text-lg"></i> Voir
+        </a>
+        <button *ngIf="cours.fichierPdf" (click)="telechargerFichier(cours.fichierPdf)"
+          class="cursor-pointer flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-[var(--Blanc)] 
+                 bg-gradient-to-r from-[var(--Bleu)] to-[var(--Violet)] hover:from-[var(--Violet-Foncé)] hover:to-[var(--Violet-Foncé)] border border-[var(--Violet)] transition">
+          <i class="fa-solid fa-download text-lg"></i> Télécharger
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
