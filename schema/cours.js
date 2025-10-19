@@ -26,10 +26,3 @@ const coursSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('Cours', coursSchema);
-
-
-
-
-
-
-

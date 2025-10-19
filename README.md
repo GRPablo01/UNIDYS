@@ -1,4 +1,4 @@
-# UNIDYS
+<!-- # UniDys
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.4.
 
@@ -56,4 +56,60 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 
 ## Additional Resources
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page. -->
+
+
+# Projet UniDys
+
+# 1 Page :
+0 => connexion
+0 => inscription
+
+# 2 Page Élève :
+=> Accueil
+=> A propos
+// Classe CP
+=> Cours
+// Info
+=> Mon espace
+
+# 3 Page Prof :
+=> Accueil
+=> A propos
+// Classe CP
+=> Cours
+// Info
+// Mon espace
+
+# 4 Page Admin :
+///
+
+# 5 Schema :
+=> avis.js
+=> cours.js
+=> newletter.js
+=> user.js
+
+# 6 Model :
+=> avis.ts
+=> cours.ts
+=> coursUser.ts
+=> newletter.ts
+=> user.ts
+
+
+
+
+# 7 Controller :
+=> auth.controller.js
+// avis.controller.js
+=> cours.controller.js
+=> newsletter.controller.js
+=> user.controller.js
+
+
+
+//
+//
+//
+...
