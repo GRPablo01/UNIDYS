@@ -1,0 +1,31 @@
+/* Empêche tout scroll global */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;           /* PAS DE SCROLL */
+    overscroll-behavior: none;  /* empêche le rebond sur mobile */
+  }
+  
+  /* Conteneur principal du composant */
+  :host {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;   /* toute la hauteur écran */
+    overflow: hidden; /* aucune possibilité de scroll */
+  }
+  
+  /* Zone actus : tout bloqué */
+  .actus-container {
+    flex: 1 1 auto;
+    overflow: hidden;  /* empêche tout scroll */
+    height: 100%;      /* occupe toute la zone */
+  }
+  
+  /* Spécial mobile pour s'assurer que le fond couvre tout l'écran */
+  @media (max-width: 640px) {
+    :host, .actus-container {
+      height: 100dvh;  /* hauteur exacte de l'écran sur mobile */
+    }
+  }
+  

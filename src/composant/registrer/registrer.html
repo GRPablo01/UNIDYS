@@ -1,0 +1,408 @@
+<!-- 🌟 CONTAINER INSCRIPTION -->
+<div class="inscription-container fixed inset-0 w-full h-full flex flex-col justify-center items-center overflow-hidden
+            bg-gradient-to-br from-[var(--Black)] via-[var(--Gris)] to-[var(--Black)]
+            dark:from-[var(--Noir)] dark:via-[var(--Gris)] dark:to-[var(--Noir)]
+            transition-colors duration-700 px-4 sm:px-6">
+
+  <app-icon></app-icon>
+
+  <!-- 🌄 Background -->
+  <div class="absolute inset-0 flex items-center justify-center overflow-hidden">
+    <div
+      class="absolute inset-0 bg-cover bg-center scale-105 blur-[1px] brightness-[0.4] transition-transform duration-700"
+      style="background-image: url('/assets/bg1.jpg');"></div>
+    <div
+      class="absolute inset-0 bg-gradient-to-br from-black/80 via-[var(--Black)]/60 to-[var(--Rouge)]/20 backdrop-blur-sm">
+    </div>
+  </div>
+
+  <!-- 🧩 Form -->
+  <form (ngSubmit)="valider()" #inscriptionForm="ngForm"
+    class="relative z-10 w-full max-w-md sm:max-w-lg md:max-w-xl px-4 sm:px-6 py-6 sm:py-8
+           bg-white/10 backdrop-blur-2xl rounded-2xl sm:rounded-3xl border border-[var(--Vert-Clair)] shadow-2xl
+           space-y-5 sm:space-y-6 transform hover:scale-[1.01] transition-all duration-500 ease-out animate-fade-in-up">
+
+    <!-- ✅ Alert -->
+    <div *ngIf="message" role="alert" aria-live="polite"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" (click)="message = null"></div>
+      <div class="relative z-10 w-full max-w-sm p-4 sm:p-6 rounded-2xl bg-gradient-to-br from-[var(--Bleu)] to-[var(--Vert)]
+               text-white text-center shadow-[var(--Bleu)] border border-[var(--vivid-pink)]/30 animate-fade-in-up">
+        <p class="text-sm sm:text-base font-medium">{{ message }}</p>
+        <button (click)="message = null"
+          class="mt-3 sm:mt-4 px-3 py-2 bg-white/20 text-white rounded-lg hover:bg-white/40 transition text-sm sm:text-base">
+          Fermer
+        </button>
+      </div>
+    </div>
+
+    <!-- 🧠 Header -->
+    <div class="text-center mb-4 sm:mb-6">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight">
+        Inscription - Étape {{ etape }}
+      </h2>
+      <p class="text-white/80 text-xs sm:text-sm mt-1 sm:mt-2">
+        {{ stepDescription() }}
+      </p>
+    </div>
+
+    <!-- ========= STEP 1 ========= -->
+    <ng-container *ngIf="etape === 1" class="space-y-4">
+      <div class="flex flex-col sm:flex-row gap-3">
+        <div class="flex-1 space-y-1">
+          <label for="nom" class="block text-sm font-semibold text-white flex items-center gap-2">
+            <i class="fas fa-user text-[var(--vivid-pink)]"></i> Nom
+          </label>
+          <input type="text" id="nom" name="nom" required [(ngModel)]="inscriptionData.nom" placeholder="Votre nom"
+            class="w-full px-3 py-3 rounded-xl bg-white/10 text-white placeholder-white/60
+                   border border-white/20 focus:border-[var(--electric-violet)] focus:ring-2 focus:ring-[var(--electric-violet)]/50
+                   hover:border-[var(--vivid-pink)]/50 transition-all duration-300 text-sm sm:text-base" />
+        </div>
+        <div class="flex-1 space-y-1">
+          <label for="prenom" class="block text-sm font-semibold text-white flex items-center gap-2">
+            <i class="fas fa-user-tag text-[var(--vivid-pink)]"></i> Prénom
+          </label>
+          <input type="text" id="prenom" name="prenom" required [(ngModel)]="inscriptionData.prenom"
+            placeholder="Votre prénom" class="w-full px-3 py-3 rounded-xl bg-white/10 text-white placeholder-white/60
+                   border border-white/20 focus:border-[var(--electric-violet)] focus:ring-2 focus:ring-[var(--electric-violet)]/50
+                   hover:border-[var(--vivid-pink)]/50 transition-all duration-300 text-sm sm:text-base" />
+        </div>
+      </div>
+
+      <div class="space-y-1">
+        <label for="email" class="block text-sm font-semibold text-white flex items-center gap-2">
+          <i class="fas fa-envelope text-[var(--vivid-pink)]"></i> E-mail
+        </label>
+        <input type="email" id="email" name="email" required [(ngModel)]="inscriptionData.email"
+          placeholder="Votre adresse e-mail" class="w-full px-3 py-3 rounded-xl bg-white/10 text-white placeholder-white/60
+                 border border-white/20 focus:border-[var(--electric-violet)] focus:ring-2 focus:ring-[var(--electric-violet)]/50
+                 hover:border-[var(--vivid-pink)]/50 transition-all duration-300 text-sm sm:text-base" />
+      </div>
+
+      <button type="button" (click)="etape = 2"
+        class="w-full py-3 rounded-xl font-bold text-white tracking-wide
+               bg-gradient-to-r from-[var(--Vert)] to-[var(--Bleu)] hover:from-[var(--Vert)] hover:to-[var(--Vert)]
+               active:scale-95 transition-all duration-500 ease-in-out shadow-lg shadow-[var(--bright-blue)]/30 text-sm sm:text-base">
+        Suivant
+      </button>
+    </ng-container>
+
+    <!-- ========= STEP 2 ========= -->
+    <ng-container *ngIf="etape === 2" class="space-y-4">
+      <div class="relative">
+        <input [type]="passwordVisible ? 'text' : 'password'" name="password" required minlength="6"
+          [(ngModel)]="inscriptionData.password" placeholder="Mot de passe" class="w-full px-3 py-3 pr-12 rounded-xl bg-white/10 text-white placeholder-white/60
+                 border border-white/20 focus:border-[var(--electric-violet)] focus:ring-2
+                 focus:ring-[var(--electric-violet)]/50 hover:border-[var(--vivid-pink)]/50
+                 transition-all duration-300 text-sm sm:text-base" />
+        <button type="button" (click)="togglePasswordVisibility()"
+          class="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-[var(--Vert)] transition">
+          <i class="fas" [ngClass]="passwordVisible ? 'fa-eye-slash' : 'fa-eye'"></i>
+        </button>
+      </div>
+
+      <div class="relative">
+        <input [type]="passwordVisible2 ? 'text' : 'password'" name="confirmPassword" required minlength="6"
+          [(ngModel)]="inscriptionData.confirmPassword" [ngClass]="{
+             'border-green-500 focus:ring-green-500': passwordsMatch() && inscriptionData.confirmPassword,
+             'border-red-500 focus:ring-red-500': !passwordsMatch() && inscriptionData.confirmPassword
+           }" placeholder="Confirmez le mot de passe" class="w-full px-3 py-3 pr-12 rounded-xl bg-white/10 text-white placeholder-white/60
+                 border border-white/20 transition-all duration-300 text-sm sm:text-base" />
+        <button type="button" (click)="togglePasswordVisibility2()"
+          class="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-[var(--Vert)] transition">
+          <i class="fas" [ngClass]="passwordVisible2 ? 'fa-eye-slash' : 'fa-eye'"></i>
+        </button>
+      </div>
+
+      <p *ngIf="inscriptionData.confirmPassword && !passwordsMatch()" class="text-red-400 text-sm font-semibold">
+        Les mots de passe ne correspondent pas.
+      </p>
+
+      <div class="flex justify-between gap-3">
+        <button type="button" (click)="etape = 1"
+          class="flex-1 py-3 rounded-xl font-bold text-white/70 bg-white/10 hover:bg-white/20 transition text-sm sm:text-base">
+          Retour
+        </button>
+
+        <button type="button" [disabled]="!passwordsMatch()" (click)="etape = 3" class="flex-1 py-3 rounded-xl font-bold text-white tracking-wide
+               bg-gradient-to-r from-[var(--Vert)] to-[var(--Bleu)] hover:from-[var(--Vert)] hover:to-[var(--Vert)]
+               active:scale-95 transition-all duration-500 ease-in-out
+               shadow-lg shadow-[var(--bright-blue)]/30 text-sm sm:text-base
+               disabled:opacity-40 disabled:cursor-not-allowed">
+          Suivant
+        </button>
+      </div>
+    </ng-container>
+
+    <!-- ========= STEP 3A ========= -->
+    <ng-container *ngIf="etape === 3">
+      <section class="grid gap-6 sm:gap-8">
+
+        <!-- 1. Thème avec style moderne - pleine largeur -->
+        <div class="grid gap-2 w-full">
+          <label for="theme" class="text-sm font-semibold text-white tracking-wide">
+            Thème
+          </label>
+          <div class="relative w-full">
+            <select id="theme" name="theme" [(ngModel)]="theme" class="w-full px-3 py-3 pr-12 rounded-xl bg-white/10 text-white placeholder-white/60
+                          border border-white/20 focus:border-[var(--electric-violet)] focus:ring-2
+                          focus:ring-[var(--electric-violet)]/50 hover:border-[var(--vivid-pink)]/50
+                          transition-all duration-300 text-sm sm:text-base appearance-none">
+              <option *ngFor="let t of themesList" [value]="t">{{ t | titlecase }}</option>
+            </select>
+
+            <!-- flèche custom / icône à droite -->
+            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 pointer-events-none">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </span>
+          </div>
+        </div>
+
+
+        <!-- 2. Police + Aperçu - pleine largeur -->
+        <div class="grid gap-4 sm:grid-cols-2 sm:items-end w-full">
+
+          <!-- Police -->
+          <div class="grid gap-2 w-full">
+            <label for="font" class="text-sm font-semibold text-white tracking-wide">
+              Police du texte
+            </label>
+            <div class="relative w-full">
+              <select id="font" name="font" [(ngModel)]="font" (change)="changeFont(font)" class="w-full px-3 py-3 pr-12 rounded-xl bg-white/10 text-white placeholder-white/60
+                            border border-white/20 focus:border-[var(--electric-violet)] focus:ring-2
+                            focus:ring-[var(--electric-violet)]/50 hover:border-[var(--vivid-pink)]/50
+                            transition-all duration-300 text-sm sm:text-base appearance-none">
+                <option *ngFor="let f of fontsList" [value]="f">{{ f }}</option>
+              </select>
+
+              <!-- flèche custom / icône à droite -->
+              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 pointer-events-none">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </span>
+            </div>
+          </div>
+
+          <!-- Aperçu -->
+          <div *ngIf="font" class="flex h-12 items-center justify-between rounded-xl bg-white/10 px-4
+                      border border-white/20 text-white text-sm sm:text-base
+                      backdrop-blur-sm shadow-md transition-all duration-300
+                      hover:border-[var(--vivid-pink)]/50 focus:border-[var(--electric-violet)]
+                      focus:ring-2 focus:ring-[var(--electric-violet)]/50 w-full" [style.font-family]="font">
+            <span class="text-lg font-bold">Aa</span>
+            <span class="text-xs">Aperçu</span>
+          </div>
+
+        </div>
+
+
+        <!-- 3. Luminosité - pleine largeur -->
+        <div class="grid gap-2 w-full">
+
+          <div class="flex items-center justify-between">
+            <label for="luminosite" class="text-sm font-semibold text-gray-100 tracking-wide">
+              Luminosité
+            </label>
+            <output for="luminosite" class="rounded-full bg-cyan-400/20 px-2 py-0.5 text-xs font-bold text-cyan-300">
+              {{ luminosite }}%
+            </output>
+          </div>
+
+          <div class="relative w-full">
+            <input type="range" id="luminosite" name="luminosite" [(ngModel)]="luminosite"
+              (input)="changeLuminosite(luminosite)" min="50" max="100" class="w-full h-2 appearance-none cursor-pointer rounded-full
+                          bg-gradient-to-r from-emerald-400 via-cyan-500 to-cyan-700
+                          shadow-inner focus:outline-none
+                          [&::-webkit-slider-thumb]:w-5
+                          [&::-webkit-slider-thumb]:h-5
+                          [&::-webkit-slider-thumb]:appearance-none
+                          [&::-webkit-slider-thumb]:rounded-full
+                          [&::-webkit-slider-thumb]:bg-white
+                          [&::-webkit-slider-thumb]:shadow
+                          [&::-webkit-slider-thumb]:transition
+                          [&::-webkit-slider-thumb]:hover:scale-110" />
+          </div>
+
+        </div>
+
+
+        <!-- 4. CTA - pleine largeur -->
+        <div class="flex flex-col sm:flex-row justify-between gap-3 w-full">
+
+          <button type="button" (click)="etape = 2" class="w-full sm:flex-1 py-3 rounded-xl font-bold text-white/70 bg-white/10 hover:bg-white/20
+                        transition text-sm sm:text-base">
+            Retour
+          </button>
+
+          <button type="button" [disabled]="!passwordsMatch()" (click)="etape = 3.5" class="w-full sm:flex-1 py-3 rounded-xl font-bold text-white tracking-wide
+                        bg-gradient-to-r from-[var(--Vert)] to-[var(--Bleu)] hover:from-[var(--Vert)] hover:to-[var(--Vert)]
+                        active:scale-95 transition-all duration-500 ease-in-out
+                        shadow-lg shadow-[var(--bright-blue)]/30 text-sm sm:text-base
+                        disabled:opacity-40 disabled:cursor-not-allowed">
+            Suivant
+          </button>
+
+        </div>
+      </section>
+    </ng-container>
+
+
+    <!-- ========= STEP 3B ========= -->
+    <ng-container *ngIf="etape === 3.5" class="space-y-4 w-full">
+
+      <!-- Photo de profil -->
+      <label for="photo-input" class="group flex items-center gap-4 px-3 py-3 rounded-xl bg-white/10 border border-white/20
+            hover:bg-white/15 hover:border-[var(--electric-violet)] transition cursor-pointer w-full">
+        <input id="photo-input" type="file" accept="image/*" (change)="onPhotoSelected($event)" class="sr-only" />
+        <div
+          class="w-14 h-14 rounded-full bg-white/10 border border-white/30 flex items-center justify-center overflow-hidden">
+          <img *ngIf="photoPreview" [src]="photoPreview" class="w-full h-full object-cover" />
+          <i *ngIf="!photoPreview" class="fas fa-camera text-white/60 text-xl"></i>
+        </div>
+        <div class="text-sm text-white/80 group-hover:text-white">
+          Photo de profil • <span class="text-white/60">cliquer pour changer</span>
+        </div>
+      </label>
+
+      <!-- Choix du rôle -->
+      <div class="flex justify-center gap-3 flex-wrap w-full">
+        <button *ngFor="let role of roles" type="button" (click)="choisirRole(role)" [ngClass]="{
+            'bg-[var(--Vert)] ': actif === role,
+            'bg-gray-400/20 ': actif !== role
+          }"
+          class="px-4 py-2 rounded-lg font-semibold text-[var(--Blanc)] transition hover:scale-105 text-sm w-full sm:w-auto">
+          {{ role | titlecase }}
+        </button>
+      </div>
+
+
+      <!-- Types de dys pour les élèves -->
+      <div *ngIf="actif==='eleve'" class="w-full">
+        <label class="text-white text-sm block mb-2">Types de dys :</label>
+        <div class="grid grid-cols-2 gap-2 text-white text-xs w-full">
+          <label *ngFor="let dys of dysList" class="flex gap-2 items-center">
+            <input type="checkbox" [value]="dys" (change)="toggleDys($event)" class="accent-[var(--electric-violet)]">
+            {{ dys | titlecase }}
+          </label>
+        </div>
+        <p *ngIf="dysSelectionnes.length > 0" class="text-white/80 text-xs mt-2">
+          <strong>Types de dys sélectionnés :</strong> {{ dysSelectionnes.join(', ') }}
+        </p>
+      </div>
+
+      <!-- CODE ROLE -->
+      <div *ngIf="actif === 'prof' || actif === 'parent'" class="relative w-full">
+        <input 
+          [type]="passwordVisible ? 'text' : 'password'" 
+          [placeholder]="actif === 'prof' ? 'Code professeur' : 'Code parent'"
+          [ngModel]="actif === 'prof' ? inscriptionData.codeProf : inscriptionData.codeParent"
+          (ngModelChange)="onCodeRoleChange($event)"
+          [ngModelOptions]="{standalone: true}"
+          class="w-full pl-9 pr-10 py-3 rounded-xl bg-white/10 text-white border border-white/20"
+        />
+        <button type="button" (click)="togglePasswordVisibility()"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-[var(--Vert)] transition">
+          <i class="fas" [ngClass]="passwordVisible ? 'fa-eye-slash' : 'fa-eye'"></i>
+        </button>
+      </div>
+      
+      
+
+
+
+      <!-- CGU et RGPD -->
+      <div class="flex items-center gap-2 w-full">
+        <input type="checkbox" id="cgu" (change)="onCguChange($event)" [checked]="cguAccepte"
+          class="accent-[var(--electric-violet)]">
+        <label for="cgu" class="flex flex-wrap items-center gap-2 text-white text-sm">
+          J’accepte les
+          <a href="/cgu" class="bg-[var(--Vert)] text-white px-3 py-1 rounded hover:bg-[var(--Vert-Foncé)] transition">
+            CGU
+          </a>
+          et la
+          <a href="/rgpd" class="bg-[var(--Vert)] text-white px-3 py-1 rounded hover:bg-[var(--Vert-Foncé)] transition">
+            politique RGPD
+          </a>
+        </label>
+      </div>
+
+
+      <!-- Boutons Retour / Suivant -->
+      <div class="flex flex-col sm:flex-row justify-between gap-3 w-full">
+        <button type="button" (click)="etape = 3"
+          class="w-full sm:flex-1 py-3 rounded-xl font-bold text-white/70 bg-white/10 hover:bg-white/20 transition text-sm sm:text-base">
+          Retour
+        </button>
+        <button type="button" (click)="etape = 4"
+          class="w-full sm:flex-1 py-3 rounded-xl font-bold text-white tracking-wide
+                      bg-gradient-to-r from-[var(--Vert)] to-[var(--Bleu)] hover:from-[var(--Vert)] hover:to-[var(--Vert)]
+                      active:scale-95 transition-all duration-500 ease-in-out shadow-lg shadow-[var(--bright-blue)]/30 text-sm sm:text-base">
+          Suivant
+        </button>
+      </div>
+
+    </ng-container>
+
+
+    <!-- ========= STEP 4 ========= -->
+    <ng-container *ngIf="etape === 4" class="space-y-4 w-full">
+
+      <h3 class="text-white text-lg font-semibold text-center w-full">Vérifiez vos informations</h3>
+
+      <ul class="text-white/80 text-sm space-y-2 w-full">
+        <!-- <li *ngIf="imagePreview">
+          <strong>Photo :</strong><br>
+          <img [src]="imagePreview"
+               alt="Photo de profil"
+               class="w-24 h-24 rounded-full object-cover mt-2 border border-white/20 shadow-md">
+        </li> -->
+
+        <li><strong>Nom :</strong> {{ inscriptionData.nom }}</li>
+        <li><strong>Prénom :</strong> {{ inscriptionData.prenom }}</li>
+        <li><strong>Email :</strong> {{ inscriptionData.email }}</li>
+        <li *ngIf="actif==='eleve' && dysSelectionnes.length > 0"><strong>Dys :</strong> {{ dysSelectionnes.join(', ')
+          }}</li>
+        <li><strong>Rôle :</strong> {{ actif | titlecase }}</li>
+        <li><strong>Thème :</strong> {{ theme }}</li>
+        <li><strong>Police :</strong> {{ font }}</li>
+        <li><strong>Luminosité :</strong> {{ luminosite }}%</li>
+      </ul>
+
+      <div class="flex flex-col sm:flex-row justify-between gap-3 w-full">
+        <button type="button" (click)="etape = 3.5" class="w-full sm:flex-1 py-3 rounded-xl font-bold text-white/70 bg-white/10 hover:bg-white/20
+                      transition text-sm sm:text-base">
+          Retour
+        </button>
+
+        <button type="submit" [disabled]="!formulaireValide()" class="w-full sm:flex-1 py-3 rounded-xl font-bold text-white tracking-wide
+                bg-gradient-to-r from-[var(--Vert)] to-[var(--Bleu)]
+                hover:from-[var(--Vert)] hover:to-[var(--Vert)]
+                active:scale-95 transition-all duration-500 ease-in-out
+                shadow-lg shadow-[var(--bright-blue)]/30
+                text-sm sm:text-base
+                disabled:opacity-50 disabled:cursor-not-allowed">
+          Créer mon compte
+        </button>
+
+      </div>
+
+    </ng-container>
+
+
+    <!-- 🧾 Lien connecter -->
+    <div class="text-center mt-8 pt-5 border-t border-[var(--Vert)]">
+      <p class="text-white/80 text-sm">
+        Déjà inscrit ?
+        <a routerLink="/connexion" class="inline-block ml-2 px-4 py-2 bg-[var(--Bleu-Foncé)]/90 text-white font-semibold rounded-lg 
+                  hover:bg-[var(--Vert-Foncé)] hover:text-white hover:scale-105 active:scale-95
+                  transition-all duration-300">
+          Connectez-vous
+        </a>
+      </p>
+    </div>
+
+  </form>
+</div>
