@@ -16,6 +16,13 @@ export const ProfSchema = new Schema({
         required: true,
         unique: true,
     },
+
+    // 🖼️ Avatar de l’élève
+    avatar: {
+        type: String,
+        default: '',
+    },
+    
     codeProf: { type: String, unique: true },
     matieres: [{ type: String }],
     coursCrees: [{ type: Schema.Types.ObjectId, ref: 'Cours' }],

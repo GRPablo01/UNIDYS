@@ -16,6 +16,13 @@ export const EleveSchema = new Schema({
         required: true,
         unique: true,
     },
+
+    // 🖼️ Avatar de l’élève
+    avatar: {
+        type: String,
+        default: '',
+    },
+    
     dysListe: [{ type: String }],
     xp: { type: Number, default: 0 },
     cours: [{ type: Schema.Types.ObjectId, ref: 'Cours' }],

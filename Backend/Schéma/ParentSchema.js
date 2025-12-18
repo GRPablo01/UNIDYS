@@ -16,6 +16,13 @@ export const ParentSchema = new Schema({
         required: true,
         unique: true,
     },
+
+    // 🖼️ Avatar de l’élève
+    avatar: {
+        type: String,
+        default: '',
+    },
+    
     codeParent: { type: String, unique: true },
     enfants: [{ type: Schema.Types.ObjectId, ref: 'Eleve' }],
     suivi: [{ userId: { type: Schema.Types.ObjectId, ref: 'User' }, role: { type: String, enum: ['eleve','prof'] }, dateDebut: { type: Date, default: Date.now } }],

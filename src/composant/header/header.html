@@ -1,0 +1,302 @@
+<app-icon></app-icon>
+
+<header class=" z-[10000] sticky top-0 w-full backdrop-blur-xl border-b-2 shadow-md" [ngStyle]="{ 
+    'font-family': font, 
+    'background': background,
+    'border-bottom': '3px solid ' + bleu, 
+    'color': text 
+  }">
+
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 xl:px-8">
+    <div class="flex h-16 items-center justify-between">
+
+      <!-- NAV GAUCHE DESKTOP -->
+      <nav class="hidden xl:flex xl:gap-2 -ml-8">
+        <div *ngFor="let menu of mobileMenus.slice(0,3)" class="relative flex items-center group">
+
+          <!-- Lien principal -->
+          <a [routerLink]="menu.link || menu.items[0]?.link"
+            class="flex items-center gap-2 px-4 py-3 rounded-xl font-semibold text-base whitespace-nowrap transition-all duration-300"
+            (mouseenter)="menuHover = menu.title" (mouseleave)="menuHover = ''" [ngStyle]="{
+            'background': menuHover === menu.title ? hoverBg : 'transparent',
+            'color': menuHover === menu.title ? hoverText : text
+          }">
+
+            <!-- Initiales -->
+            <ng-container *ngIf="menu.initiales; else iconLeft">
+              <div
+                class="w-8 h-8 rounded-full font-bold text-sm flex items-center justify-center transition-colors duration-300"
+                [ngStyle]="{
+                'background-color': menuHover === menu.title ? hoverText : 'var(--rouge)',
+                'color': menuHover === menu.title ? 'white' : text
+              }">
+                {{ menu.initiales }}
+              </div>
+            </ng-container>
+
+            <!-- Icône -->
+            <ng-template #iconLeft>
+              <i [class]="menu.icon" class="transition-colors duration-300" [ngStyle]="{
+                'color': menuHover === menu.title ? hoverText : text
+              }">
+              </i>
+            </ng-template>
+
+            <span>{{ menu.title }}</span>
+          </a>
+
+
+
+
+          <!-- Dropdown button -->
+          <button *ngIf="menu.items.length" (click)="toggleDropdown(menu.title, $event)"
+            class="ml-1 p-2 rounded-xl flex items-center justify-center transition-all duration-300" [ngStyle]="{
+                    'background': menuHoverBtn === menu.title ? hoverBg : background,
+                    'color': menuHoverBtn === menu.title ? hoverText : text
+                  }" (mouseenter)="menuHoverBtn = menu.title" (mouseleave)="menuHoverBtn = ''">
+
+            <i class="fas fa-chevron-down transform transition-transform duration-300"
+              [class.-rotate-180]="activeDropdown === menu.title"></i>
+          </button>
+
+          <!-- Dropdown menu -->
+          <div *ngIf="activeDropdown === menu.title"
+            class="absolute left-0 top-full mt-2 w-64 rounded-2xl p-3 animate-fade-in-up z-[1100]" [ngStyle]="{
+                 'background': background,
+                 'border': '3px solid ' + bleu
+               }">
+
+            <!-- Flèche (à gauche) -->
+            <div class="absolute -top-2 left-6 w-4 h-4 rotate-45" [ngStyle]="{
+                   'background': background2,
+                   'border-left': '3px solid ' + bleu,
+                   'border-top': '3px solid ' + bleu
+                 }">
+            </div>
+
+            <!-- Items du menu -->
+            <a *ngFor="let item of menu.items" [routerLink]="item.link"
+              class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition-all duration-300"
+              (mouseenter)="itemHover = item.title" (mouseleave)="itemHover = ''" [ngStyle]="{
+              'background': itemHover === item.title ? hoverBg : 'transparent',
+              'color': itemHover === item.title ? hoverText : text
+            }">
+
+              <ng-container *ngIf="item.initiales; else itemIconLeft">
+                <div
+                  class="w-6 h-6 rounded-full font-bold text-xs flex items-center justify-center transition-colors duration-300"
+                  [ngStyle]="{
+                    'background-color': itemHover === item.title ? hoverText : 'var(--rouge)',
+                    'color': itemHover === item.title ? 'white' : 'var(--Blanc)'
+                  }">
+                  {{ item.initiales }}
+                </div>
+              </ng-container>
+
+              <ng-template #itemIconLeft>
+                <i [class]="item.icon" class="transition-colors duration-300"
+                  [ngStyle]="{'color': itemHover === item.title ? hoverText : text}">
+                </i>
+              </ng-template>
+
+              <span>{{ item.title }}</span>
+            </a>
+
+          </div>
+        </div>
+      </nav>
+
+
+
+      <!-- LOGO CENTRÉ -->
+      <div class="absolute left-1/2 transform -translate-x-1/2 flex justify-center w-auto">
+        <a routerLink="/accueil">
+          <img [src]="Logo" alt="Accueil"
+            class="h-34 w-34 sm:h-34 sm:w-34 object-contain hover:scale-110 transition-transform duration-300 drop-shadow-md">
+        </a>
+      </div>
+
+
+      <!-- PROFIL MOBILE -->
+      <a class="flex flex-col items-center gap-1 block xl:hidden"[ngStyle]="{ 
+        'color': text,
+      }"
+      >
+        <div [ngStyle]="{ 
+          'color': text,
+          'border': '2px solid ' + bleu 
+        }" class="w-12 h-12 rounded-full font-semibold text-lg flex items-center justify-center shadow-md
+                    bg-gradient-to-br from-[var(--vertFonce)] to-[var(--bleu)]
+                    border border-white/40 transition-all">
+          {{ connectedUser?.initiales }}
+        </div>
+      </a>
+
+
+
+      <!-- NAV DROITE DESKTOP -->
+      <div class="hidden xl:flex xl:items-center xl:gap-2 -mr-6">
+        <nav class="flex xl:gap-2 items-center">
+          <div *ngFor="let menu of mobileMenus.slice(3,6)" class="relative flex items-center group">
+
+            <!-- Lien principal -->
+            <a [routerLink]="menu.link || menu.items[0]?.link"
+              class="flex items-center gap-2 px-4 py-3 rounded-xl font-semibold text-base relative transition-all duration-300"
+              [ngStyle]="{
+                 'background': menuHover === menu.title ? hoverBg : 'transparent',
+                 'color': menuHover === menu.title ? hoverText : text
+               }" (mouseenter)="menuHover = menu.title" (mouseleave)="menuHover = ''">
+
+              <ng-container *ngIf="menu.initiales; else iconRight">
+                <div
+                  class="w-8 h-8 rounded-full font-bold text-sm flex items-center justify-center transition-colors duration-300"
+                  [ngStyle]="{
+                       'background-color': menuHover === menu.title ? hoverText : 'var(--rouge)',
+                       'color': menuHover === menu.title ? 'white' : 'var(--Black)'
+                     }">
+                  {{ menu.initiales }}
+                </div>
+              </ng-container>
+
+              <ng-template #iconRight>
+                <i [class]="menu.icon" class="transition-colors duration-300"
+                  [ngStyle]="{'color': menuHover === menu.title ? hoverText : text}">
+                </i>
+              </ng-template>
+
+              <span>{{ menu.title }}</span>
+
+              <!-- Badge Messages -->
+              <span *ngIf="menu.title === 'Messages' && unreadMessages > 0" class="absolute -top-1 -right-1 min-w-[20px] h-5 flex items-center justify-center text-xs font-bold text-white
+                           bg-gradient-to-r from-[var(--rouge)] to-[var(--rougeClair)]
+                           rounded-full border-2 border-[var(--Blanc)]">
+                {{ unreadMessages }}
+              </span>
+            </a>
+
+
+            <!-- Dropdown button -->
+            <button *ngIf="menu.items.length" (click)="toggleDropdown(menu.title, $event)"
+              class="ml-1 p-2 rounded-xl flex items-center justify-center transition-all duration-300" [ngStyle]="{
+                      'background': menuHoverBtn === menu.title ? hoverBg : background,
+                      'color': menuHoverBtn === menu.title ? hoverText : text
+                    }" (mouseenter)="menuHoverBtn = menu.title" (mouseleave)="menuHoverBtn = ''">
+
+              <i class="fas fa-chevron-down transform transition-transform duration-300"
+                [class.-rotate-180]="activeDropdown === menu.title"></i>
+            </button>
+
+
+            <!-- Dropdown inversé -->
+            <div *ngIf="activeDropdown === menu.title"
+              class="absolute left-0 top-full mt-2 w-64 rounded-2xl shadow-xl p-3 animate-fade-in-up z-[1100]"
+              [ngStyle]="{
+                   'background': background,
+                   'border': '3px solid ' + bleu
+                 }">
+
+              <!-- Flèche gauche -->
+              <div class="absolute -top-2 left-6 w-4 h-4 rotate-45" [ngStyle]="{
+                'background': background3,
+                'border-left': '3px solid ' + bleu,
+                'border-top': '3px solid ' + bleu
+              }">
+              </div>
+
+
+
+              <!-- Items -->
+              <a *ngFor="let item of menu.items" [routerLink]="item.link"
+                class="flex items-center gap-3 rounded-xl hover:bg-[var(Bleu)] px-4 py-3 text-sm transition-all duration-300"
+                [ngStyle]="{
+                   'color': itemHover === item.title ? hoverText : text,
+                   'background-color': itemHover === item.title ? hoverBg : 'transparent'
+                 }" (mouseenter)="itemHover = item.title" (mouseleave)="itemHover = ''">
+
+                <ng-container *ngIf="item.initiales; else itemIconRight2">
+                  <div
+                    class="w-6 h-6 rounded-full font-bold text-xs flex items-center justify-center transition-colors duration-300"
+                    [ngStyle]="{
+                         'background-color': itemHover === item.title ? hoverText : 'var(--rouge)',
+                         'color': itemHover === item.title ? 'white' : 'var(--Blanc)'
+                       }">
+                    {{ item.initiales }}
+                  </div>
+                </ng-container>
+
+                <ng-template #itemIconRight2>
+                  <i [class]="item.icon" class="transition-colors duration-300"
+                    [ngStyle]="{'color': itemHover === item.title ? hoverText : text}">
+                  </i>
+                </ng-template>
+
+                <span>{{ item.title }}</span>
+
+              </a>
+
+            </div>
+
+          </div>
+        </nav>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+<!-- NAV MOBILE -->
+<nav class="fixed bottom-0 inset-x-0 z-[10000] xl:hidden backdrop-blur-xl"
+     [ngStyle]="{ 
+       'font-family': font, 
+       'border-top': '3px solid ' + bleu, 
+       'color': text 
+     }">
+
+  <ul class="flex justify-around items-stretch py-2 px-1 ">
+    <li *ngFor="let menu of mobileMenus.slice(0,6)" class="flex-1">
+
+      <a [routerLink]="menu.link || menu.items[0]?.link"
+         routerLinkActive="text-blue-900 font-semibold"
+         class="group flex flex-col items-center justify-between
+                transition-all duration-300 rounded-lg px-1 py-2 h-full">
+
+        <div class="flex flex-col items-center gap-1 flex-1 justify-center mb-2">
+          
+          <!-- ICÔNE AVEC HOVER -->
+          <i [class]="menu.icon"
+             class="text-xl transition-all duration-300
+                    group-hover:scale-125 group-hover:text-blue-400">
+          </i>
+
+        </div>
+
+        <!-- TEXTE AVEC HOVER -->
+        <span class="text-[11px] leading-none text-center transition-all duration-300
+                     group-hover:text-blue-400 group-hover:-translate-y-0.5">
+          {{ menu.title }}
+        </span>
+
+      </a>
+
+    </li>
+  </ul>
+</nav>
+
+
+<style>
+  @keyframes fade-in-up {
+    0% {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+</style>

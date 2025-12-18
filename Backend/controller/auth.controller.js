@@ -37,11 +37,11 @@ exports.login = async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(401).json({ message: 'Mot de passe incorrect' });
 
-    // ⚡ Création du token JWT (optionnel, pour future utilisation)
+    // ⚡ Création du token JWT (optionnel)
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '7d' });
 
     // ==============================
-    // 🎯 Construction dynamique selon le rôle
+    // 🎯 Construction de l'objet utilisateur
     // ==============================
     const baseUser = {
       _id: user._id,
@@ -50,18 +50,20 @@ exports.login = async (req, res) => {
       email: user.email,
       role: user.role,
       initiale: user.initiale || `${(user.prenom?.[0] || '').toUpperCase()}${(user.nom?.[0] || '').toUpperCase()}`,
-      photoProfil: user.photoProfil || '',
+      avatar: user.avatar || user.photoProfil || '',
+      Key: user.Key || '',
       theme: user.theme || 'sombre',
       font: user.font || 'Roboto',
       luminosite: user.luminosite ?? 50,
-      cookie: user.cookie ?? '',
+      cookie: user.cookie ?? false,
       cguValide: user.cguValide ?? false,
+      isActive: user.isActive ?? true,
     };
 
     // 🔹 Données spécifiques selon le rôle
     if (user.role === 'eleve') {
       const eleveData = await Eleve.findOne({ userId: user._id });
-      baseUser.eleveKey = eleveData?.Key || null;
+      baseUser.eleveKey = eleveData?.Key || user.Key || '';
       baseUser.codeProf = eleveData?.codeProf || '';
       baseUser.dysListe = eleveData?.dysListe || [];
       baseUser.eleveRelations = eleveData?.eleveRelations || [];
@@ -74,7 +76,7 @@ exports.login = async (req, res) => {
 
     if (user.role === 'prof') {
       const profData = await Prof.findOne({ userId: user._id });
-      baseUser.profKey = profData?.Key || null;
+      baseUser.profKey = profData?.Key || user.Key || '';
       baseUser.codeProf = profData?.codeProf || '';
       baseUser.cours = profData?.coursCrees || [];
       baseUser.qcm = profData?.qcmCrees || [];
@@ -84,14 +86,14 @@ exports.login = async (req, res) => {
 
     if (user.role === 'parent') {
       const parentData = await Parent.findOne({ userId: user._id });
-      baseUser.parentKey = parentData?.Key || null;
+      baseUser.parentKey = parentData?.Key || user.Key || '';
       baseUser.codeParent = parentData?.codeParent || '';
       baseUser.eleveRelations = parentData?.enfants || [];
       baseUser.suivi = parentData?.suivi || [];
       baseUser.abonnement = parentData?.abonnement || [];
     }
 
-    // ⚡ On renvoie l'utilisateur complet + éventuellement token si besoin
+    // ⚡ Retour de l'utilisateur complet + token
     return res.status(200).json({ user: baseUser, token });
 
   } catch (error) {
@@ -105,16 +107,14 @@ exports.login = async (req, res) => {
 // ==============================
 exports.authenticate = async (req, res, next) => {
   try {
-    // On peut utiliser x-user-key pour l'authentification
     const key = req.headers['x-user-key'];
     if (!key) return res.status(401).json({ message: 'Key manquante' });
 
     const user = await User.findOne({ Key: key });
     if (!user) return res.status(401).json({ message: 'Utilisateur non trouvé pour cette Key' });
 
-    // On stocke l'id dans req pour getCurrentUser
     req.userId = user._id;
-    req.user = user; // optionnel pour les routes
+    req.user = user;
     next();
   } catch (err) {
     console.error('Erreur authenticate via Key :', err);
@@ -139,18 +139,19 @@ exports.getCurrentUser = async (req, res) => {
       email: user.email,
       role: user.role,
       initiale: user.initiale || `${(user.prenom?.[0] || '').toUpperCase()}${(user.nom?.[0] || '').toUpperCase()}`,
-      photoProfil: user.photoProfil || '',
+      avatar: user.avatar || user.photoProfil || '',
+      Key: user.Key || '',
       theme: user.theme || 'sombre',
       font: user.font || 'Roboto',
       luminosite: user.luminosite ?? 50,
-      cookie: user.cookie ?? '',
+      cookie: user.cookie ?? false,
       cguValide: user.cguValide ?? false,
+      isActive: user.isActive ?? true,
     };
 
-    // 🔹 Données spécifiques selon le rôle
     if (user.role === 'eleve') {
       const eleveData = await Eleve.findOne({ userId: user._id });
-      baseUser.eleveKey = eleveData?.Key || null;
+      baseUser.eleveKey = eleveData?.Key || user.Key || '';
       baseUser.codeProf = eleveData?.codeProf || '';
       baseUser.dysListe = eleveData?.dysListe || [];
       baseUser.eleveRelations = eleveData?.eleveRelations || [];
@@ -163,7 +164,7 @@ exports.getCurrentUser = async (req, res) => {
 
     if (user.role === 'prof') {
       const profData = await Prof.findOne({ userId: user._id });
-      baseUser.profKey = profData?.Key || null;
+      baseUser.profKey = profData?.Key || user.Key || '';
       baseUser.codeProf = profData?.codeProf || '';
       baseUser.cours = profData?.coursCrees || [];
       baseUser.qcm = profData?.qcmCrees || [];
@@ -173,7 +174,7 @@ exports.getCurrentUser = async (req, res) => {
 
     if (user.role === 'parent') {
       const parentData = await Parent.findOne({ userId: user._id });
-      baseUser.parentKey = parentData?.Key || null;
+      baseUser.parentKey = parentData?.Key || user.Key || '';
       baseUser.codeParent = parentData?.codeParent || '';
       baseUser.eleveRelations = parentData?.enfants || [];
       baseUser.suivi = parentData?.suivi || [];

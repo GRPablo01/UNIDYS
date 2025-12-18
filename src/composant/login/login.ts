@@ -63,7 +63,7 @@ export class Login {
     private router: Router,
     private http: HttpClient,
     private authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const savedLogin = localStorage.getItem('loginData');
@@ -89,80 +89,87 @@ export class Login {
   }
 
   private saveUserSession(user: any): void {
+
+
     // -------------------------------
     // 🔹 Infos communes à tous les utilisateurs
     // -------------------------------
     const sessionUser: any = {
-      nom: user.nom || '',
-      prenom: user.prenom || '',
-      email: user.email || '',
-      role: (user.role || 'eleve').trim().toLowerCase(),
-      initiale: user.initiales || ((user.prenom?.[0] ?? '').toUpperCase() + (user.nom?.[0] ?? '').toUpperCase()),
-      avatar: user.avatar 
-         ? `http://localhost:3000${user.avatar}`
-         : user.photoProfil
-           ? `http://localhost:3000${user.photoProfil}`
-           : user.roleData?.avatar
-             ? `http://localhost:3000${user.roleData.avatar}`
-             : '',
-
-      cguValide: user.cguValide ?? false,
-      isActive: user.isActive ?? true,
+      nom: user.nom || user.roleData?.nom || '',
+      prenom: user.prenom || user.roleData?.prenom || '',
+      email: user.email || user.roleData?.email || '',
+      role: (user.role || user.roleData?.role || 'eleve').trim().toLowerCase(),
+      initiale: user.initiales
+        || ((user.prenom?.[0] ?? '').toUpperCase() + (user.nom?.[0] ?? '').toUpperCase())
+        || ((user.roleData?.prenom?.[0] ?? '').toUpperCase() + (user.roleData?.nom?.[0] ?? '').toUpperCase()),
+      avatar: user.avatar
+        ? `http://localhost:3000${user.avatar}`
+        : user.photoProfil
+          ? `http://localhost:3000${user.photoProfil}`
+          : user.roleData?.avatar
+            ? `http://localhost:3000${user.roleData.avatar}`
+            : '',
       Key: user.Key || user.roleData?.Key || '',
-      theme: user.theme || 'sombre',
-      luminosite: user.luminosite ?? 100,
-      police: user.police || 'Roboto',
-      cookie: user.cookie ?? false,
+      theme: user.theme || user.roleData?.theme || 'sombre',
+      luminosite: user.luminosite ?? user.roleData?.luminosite ?? 100,
+      police: user.police || user.roleData?.police || 'Roboto',
     };
-  
+
+
+
     // -------------------------------
     // 🔹 Infos spécifiques selon le rôle
     // -------------------------------
-    if (user.roleData) {
+    if (user.roleData || sessionUser.role) {
       switch (sessionUser.role) {
         case 'eleve':
-          sessionUser.eleveKey = user.roleData.Key || user.Key || '';
-          sessionUser.dysListe = user.roleData.dysListe || [];
-          sessionUser.xp = user.roleData.xp || 0;
-          sessionUser.cours = user.roleData.cours || [];
-          sessionUser.qcm = user.roleData.qcm || [];
-          sessionUser.suivi = user.roleData.suivi || [];
-          sessionUser.abonnement = user.roleData.abonnement || [];
+          sessionUser.dysListe = user.roleData?.dysListe || user.dysListe || [];
+          sessionUser.xp = user.roleData?.xp || user.xp || 0;
+          sessionUser.cours = user.roleData?.cours || user.cours || [];
+          sessionUser.qcm = user.roleData?.qcm || user.qcm || [];
+          sessionUser.suivi = user.roleData?.suivi || user.suivi || [];
+          sessionUser.abonnement = user.roleData?.abonnement || user.abonnement || [];
+          console.log('✅ Infos spécifiques ELEVE:', sessionUser);
           break;
-  
+
         case 'prof':
-          sessionUser.profKey = user.roleData.Key || user.Key || '';
-          sessionUser.codeProf = user.roleData.codeProf || '';
-          sessionUser.coursCrees = user.roleData.coursCrees || [];
-          sessionUser.qcmCrees = user.roleData.qcmCrees || [];
-          sessionUser.suivi = user.roleData.suivi || [];
-          sessionUser.abonnement = user.roleData.abonnement || [];
+          sessionUser.codeProf = user.roleData?.codeProf || user.codeProf || '';
+          sessionUser.coursCrees = user.roleData?.coursCrees || user.coursCrees || [];
+          sessionUser.qcmCrees = user.roleData?.qcmCrees || user.qcmCrees || [];
+          sessionUser.suivi = user.roleData?.suivi || user.suivi || [];
+          sessionUser.abonnement = user.roleData?.abonnement || user.abonnement || [];
+          console.log('✅ Infos spécifiques PROF:', sessionUser);
           break;
-  
+
         case 'parent':
-          sessionUser.parentKey = user.roleData.Key || user.Key || '';
-          sessionUser.codeParent = user.roleData.codeParent || '';
-          sessionUser.enfants = user.roleData.enfants || [];
-          sessionUser.suivi = user.roleData.suivi || [];
-          sessionUser.abonnement = user.roleData.abonnement || [];
+          sessionUser.codeParent = user.roleData?.codeParent || user.codeParent || '';
+          sessionUser.enfants = user.roleData?.enfants || user.enfants || [];
+          sessionUser.suivi = user.roleData?.suivi || user.suivi || [];
+          sessionUser.abonnement = user.roleData?.abonnement || user.abonnement || [];
+          console.log('✅ Infos spécifiques PARENT:', sessionUser);
           break;
       }
     }
-  
+
+
     // -------------------------------
     // 🔒 Stockage dans le localStorage
     // -------------------------------
     localStorage.setItem('utilisateur', JSON.stringify(sessionUser));
-  
+
+
     // -------------------------------
     // 🔄 Mise à jour du AuthService
     // -------------------------------
     this.authService.setUser(sessionUser);
-  
-    // 🔹 Log pour vérification (à supprimer en production)
-    console.log('Utilisateur filtré pour la session :', sessionUser);
+
+
+    // 🔹 Log final pour vérification
+    //console.log('🎯 Utilisateur filtré pour la session :', sessionUser);
   }
-  
+
+
+
 
   valider(): void {
     this.formSubmitted = true;

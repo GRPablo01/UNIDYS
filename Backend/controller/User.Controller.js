@@ -139,7 +139,7 @@ const registerUser = async (req, res) => {
         theme,
         police,
         luminosite,
-        cookie: false, // vide à la création
+        cookie: false,
       });
 
       await newUser.save();
@@ -149,8 +149,10 @@ const registerUser = async (req, res) => {
       switch (role) {
         case 'eleve':
           roleData = new Eleve({
-            name: `${nom} ${prenom}`,   // Nom complet
-            Key: userKey,               // Clé unique
+            userId: newUser._id,
+            name: `${nom} ${prenom}`,
+            Key: userKey,
+            avatar,
             dysListe: Array.isArray(dysListe) ? dysListe : [],
             xp: 0,
             cours: [],
@@ -163,26 +165,30 @@ const registerUser = async (req, res) => {
 
         case 'prof':
           roleData = new Prof({
-            name: `${nom} ${prenom}`,   // Nom complet
-            Key: userKey,               // Clé unique
+            userId: newUser._id,
+            name: `${nom} ${prenom}`,
+            Key: userKey,
+            avatar,
             codeProf: codeProf || generateKey(),
             matieres: [],
             coursCrees: [],
             qcmCrees: [],
-            suivi: [],                  // Si tu veux suivre des élèves ou parents
-            abonnement: []              // Si tu veux stocker des abonnements
+            suivi: [],
+            abonnement: []
           });
           await roleData.save();
           break;
 
         case 'parent':
           roleData = new Parent({
-            name: `${nom} ${prenom}`,   // Nom complet
-            Key: userKey,               // Clé unique
+            userId: newUser._id,
+            name: `${nom} ${prenom}`,
+            Key: userKey,
+            avatar,
             codeParent: codeParent || generateKey(),
             enfants: [],
-            suivi: [],                  // Si tu veux suivre des élèves
-            abonnement: []              // Si tu veux stocker des abonnements
+            suivi: [],
+            abonnement: []
           });
           await roleData.save();
           break;
@@ -191,19 +197,18 @@ const registerUser = async (req, res) => {
           return res.status(400).json({ message: 'Rôle invalide' });
       }
 
-
       res.status(201).json({
         message: 'Utilisateur créé avec succès',
         user: newUser,
         roleData
       });
+
     } catch (error) {
       console.error('❌ Erreur registerUser :', error);
       res.status(500).json({ message: 'Erreur serveur interne', error: error.message });
     }
   });
 };
-
 
 // ==============================
 // 🔍 RÉCUPÉRER UN UTILISATEUR PAR EMAIL
