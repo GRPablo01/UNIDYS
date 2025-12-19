@@ -1,0 +1,51 @@
+version: "3.9"
+
+services:
+
+  # Front-end Angular
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    image: unidys-web:dev
+    container_name: unidys_web_dev
+    ports:
+      - "4200:4200"
+    environment:
+      WATCHPACK_POLLING: "true"
+      CHOKIDAR_USEPOLLING: "1"
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+  # Backend Node.js/Express
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    image: unidys-api:dev
+    container_name: unidys_api_dev
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      MONGO_URL: mongodb://host.docker.internal:27017/dysone
+      JWT_SECRET: unidysSecret
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    command: [ "node", "server.js" ]
+
+  # MongoDB
+  mongo:
+    image: mongo:7
+    container_name: unidys_mongo_dev
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
