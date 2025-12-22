@@ -15,10 +15,8 @@ export interface User {
   // Photo de profil
   photoProfil?: string | null;
 
-  // Clés conditionnelles selon le rôle
-  eleveKey?: string;   // uniquement si role = 'eleve'
-  profKey?: string;    // uniquement si role = 'prof'
-  parentKey?: string;  // uniquement si role = 'parent'
+  // Clé unique selon le rôle
+  key?: string;
 
   // Codes d’association (optionnels selon le rôle)
   codeProf?: string;   

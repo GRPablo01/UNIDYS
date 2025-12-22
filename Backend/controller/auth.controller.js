@@ -22,7 +22,7 @@ exports.login = async (req, res) => {
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '7d' });
 
     // ==============================
-    // 🎯 Construction dynamique selon le rôle
+    // 🎯 Base user commun
     // ==============================
     const baseUser = {
       _id: user._id,
@@ -30,6 +30,7 @@ exports.login = async (req, res) => {
       prenom: user.prenom,
       email: user.email,
       role: user.role,
+      key: user.key || null, // ✅ clé unique pour tous les rôles
       initiale: user.initiale || `${(user.prenom?.[0] || '').toUpperCase()}${(user.nom?.[0] || '').toUpperCase()}`,
       photoProfil: user.photoProfil || '',
       theme: user.theme || 'sombre',
@@ -39,28 +40,26 @@ exports.login = async (req, res) => {
       cguValide: user.cguValide ?? false,
     };
 
-    // Ajout des données spécifiques
+    // ==============================
+    // ➕ Données spécifiques
+    // ==============================
     if (user.role === 'eleve') {
-      baseUser.eleveKey = user.eleveKey || null;
-      
+      baseUser.codeProf = user.codeProf || '';
       baseUser.dysListe = user.dysListe || [];
       baseUser.eleveRelations = user.eleveRelations || [];
       baseUser.xp = user.xp || 0;
     }
 
     if (user.role === 'prof') {
-      baseUser.profKey = user.profKey || null;
       baseUser.cours = user.cours || [];
       baseUser.qcm = user.qcm || [];
     }
 
     if (user.role === 'parent') {
-      baseUser.parentKey = user.parentKey || null;
       baseUser.codeParent = user.codeParent || '';
       baseUser.eleveRelations = user.eleveRelations || [];
     }
 
-    // 🔥 On renvoie uniquement l'essentiel
     res.status(200).json({ user: baseUser });
 
   } catch (error) {
@@ -87,7 +86,7 @@ exports.authenticate = (req, res, next) => {
 };
 
 // ==============================
-// 👤 Récupérer l'utilisateur connecté
+// 👤 Utilisateur connecté
 // ==============================
 exports.getCurrentUser = async (req, res) => {
   try {
@@ -100,6 +99,7 @@ exports.getCurrentUser = async (req, res) => {
       prenom: user.prenom,
       email: user.email,
       role: user.role,
+      key: user.key || null, // ✅ clé unique
       initiale: user.initiale || `${(user.prenom?.[0] || '').toUpperCase()}${(user.nom?.[0] || '').toUpperCase()}`,
       photoProfil: user.photoProfil || '',
       theme: user.theme || 'sombre',
@@ -109,9 +109,7 @@ exports.getCurrentUser = async (req, res) => {
       cguValide: user.cguValide ?? false,
     };
 
-    // Ajout des données spécifiques
     if (user.role === 'eleve') {
-      baseUser.eleveKey = user.eleveKey || null;
       baseUser.codeProf = user.codeProf || '';
       baseUser.dysListe = user.dysListe || [];
       baseUser.eleveRelations = user.eleveRelations || [];
@@ -119,13 +117,11 @@ exports.getCurrentUser = async (req, res) => {
     }
 
     if (user.role === 'prof') {
-      baseUser.profKey = user.profKey || null;
       baseUser.cours = user.cours || [];
       baseUser.qcm = user.qcm || [];
     }
 
     if (user.role === 'parent') {
-      baseUser.parentKey = user.parentKey || null;
       baseUser.codeParent = user.codeParent || '';
       baseUser.eleveRelations = user.eleveRelations || [];
     }

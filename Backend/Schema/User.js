@@ -20,10 +20,10 @@ const userSchema = new mongoose.Schema(
     // Photo de profil
     photoProfil: { type: String, default: null },
 
-    // Codes d’association / clés uniques
-    eleveKey: { type: String, default: null },
-    profKey: { type: String, default: null },
-    parentKey: { type: String, default: null },
+    // 🔹 Clé unique selon le rôle (remplace eleveKey, profKey, parentKey)
+    key: { type: String, default: null },
+
+    // Codes d’association
     codeProf: { type: String, default: null },   // pour associer élèves → prof
     codeParent: { type: String, default: null }, // pour associer élèves → parent
 
@@ -35,9 +35,9 @@ const userSchema = new mongoose.Schema(
     // Système de progression
     xp: { type: Number, default: 0 },
 
-    // 🔹 Modification : cours et qcm deviennent des strings (clé) au lieu d’ObjectId
-    cours: [{ type: String, default: [] }], // stocke coursKey directement
-    qcm: [{ type: String, default: [] }],   // stocke qcmKey directement
+    // 🔹 cours et qcm stockent directement des clés
+    cours: [{ type: String, default: [] }],
+    qcm: [{ type: String, default: [] }],
 
     // 🔹 Gestion du thème
     theme: { type: String, enum: ['clair', 'sombre'], default: 'sombre' },
@@ -52,16 +52,17 @@ const userSchema = new mongoose.Schema(
     // 🔹 Intensité de lumière (0 à 100)
     luminosite: { type: Number, min: 0, max: 100, default: 50 },
 
-    // 🔹 Relations élève (si rôle = élève)
+    // 🔹 Relations élève
     eleveRelations: { type: [eleveRelationSchema], default: [] },
 
-    // 🔹 ✅ COOKIE
+    // 🔹 Cookie
     cookie: {
       type: String,
       enum: ['accepted', 'refused', ''],
       default: ''
     },
 
+    // 🔹 Statuts
     status: {
       enLigne: { type: Boolean, default: true },
       nePasDeranger: { type: Boolean, default: false },

@@ -19,7 +19,8 @@ if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, uploadDir),
   filename: (req, file, cb) => {
-    const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1e9) + path.extname(file.originalname);
+    const uniqueName =
+      Date.now() + '-' + Math.round(Math.random() * 1e9) + path.extname(file.originalname);
     cb(null, uniqueName);
   }
 });
@@ -36,7 +37,7 @@ const upload = multer({
 }).single('photoProfil');
 
 // ==============================
-// 🔑 Génération aléatoire de clés
+// 🔑 Génération aléatoire de clé
 // ==============================
 function randomSuffix(length = 5) {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -82,30 +83,17 @@ exports.registerUser = (req, res) => {
         return res.status(400).json({ message: 'Champs obligatoires manquants' });
 
       const existingUser = await User.findOne({ email });
-      if (existingUser) return res.status(400).json({ message: 'Utilisateur déjà inscrit' });
+      if (existingUser)
+        return res.status(400).json({ message: 'Utilisateur déjà inscrit' });
 
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      // 🔑 Génération des clés aléatoires selon rôle
-      let eleveKey = null;
-      let profKey = null;
-      let parentKey = null;
+      // 🔑 Génération d'une clé unique
+      const key = generateKey();
 
-      switch (role) {
-        case 'eleve':
-          eleveKey = generateKey();
-          break;
-        case 'prof':
-          profKey = generateKey();
-          break;
-        case 'parent':
-          parentKey = generateKey();
-          break;
-        default:
-          return res.status(400).json({ message: 'Rôle invalide' });
-      }
-
-      const photoProfil = req.file ? `/uploads/profils/${req.file.filename}` : null;
+      const photoProfil = req.file
+        ? `/uploads/profils/${req.file.filename}`
+        : null;
 
       // Construction de l'objet à stocker dans la base
       const userData = {
@@ -117,9 +105,7 @@ exports.registerUser = (req, res) => {
         initiale: initiale || (prenom[0]?.toUpperCase() + nom[0]?.toUpperCase()),
         cguValide,
         dysListe: Array.isArray(dysListe) ? dysListe : [],
-        eleveKey,
-        profKey,
-        parentKey,
+        key,
         codeProf,
         codeParent,
         photoProfil,
@@ -151,9 +137,7 @@ exports.registerUser = (req, res) => {
         luminosite: user.luminosite,
         cookie: user.cookie,
         eleveRelations: user.eleveRelations || [],
-        eleveKey,
-        profKey,
-        parentKey,
+        key: user.key,
         codeProf,
         codeParent,
         status: user.status,
@@ -305,7 +289,8 @@ exports.changeTheme = async (req, res) => {
     const { id } = req.params;
     const { theme } = req.body;
 
-    if (!['clair', 'sombre'].includes(theme)) return res.status(400).json({ message: 'Thème invalide' });
+    if (!['clair', 'sombre'].includes(theme))
+      return res.status(400).json({ message: 'Thème invalide' });
 
     const user = await User.findByIdAndUpdate(id, { theme }, { new: true }).select('-password');
     if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
@@ -326,7 +311,8 @@ exports.changeFont = async (req, res) => {
     const { font } = req.body;
 
     const allowedFonts = ['Arial', 'Roboto', 'Open Sans', 'Comic Sans', 'Times New Roman', 'Lato', 'Montserrat'];
-    if (!allowedFonts.includes(font)) return res.status(400).json({ message: 'Police invalide' });
+    if (!allowedFonts.includes(font))
+      return res.status(400).json({ message: 'Police invalide' });
 
     const user = await User.findByIdAndUpdate(id, { font }, { new: true }).select('-password');
     if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
@@ -376,7 +362,7 @@ exports.getUserCard = async (req, res) => {
       initiale: user.initiale,
       dysListe: user.dysListe,
       eleveRelations: user.eleveRelations,
-      eleveKey: user.eleveKey,
+      key: user.key,
       codeProf: user.codeProf,
       codeParent: user.codeParent,
       photoProfil: user.photoProfil,
@@ -393,23 +379,17 @@ exports.getUserCard = async (req, res) => {
 };
 
 // ==============================
-// ✏️ METTRE À JOUR LE COOKIE VIA eleveKey, profKey ou parentKey
+// ✏️ METTRE À JOUR LE COOKIE VIA key
 // ==============================
 exports.updateCookieByKey = async (req, res) => {
   try {
     const { key } = req.params;
     const { cookie } = req.body;
 
-    if (!cookie) return res.status(400).json({ message: 'Valeur du cookie manquante' });
+    if (!cookie)
+      return res.status(400).json({ message: 'Valeur du cookie manquante' });
 
-    const user = await User.findOne({
-      $or: [
-        { eleveKey: key },
-        { profKey: key },
-        { parentKey: key }
-      ]
-    });
-
+    const user = await User.findOne({ key });
     if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
 
     user.cookie = cookie; // 'accepted' ou 'refused'
