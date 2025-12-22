@@ -1,26 +1,7 @@
-// ==================================================
-// 📦 controllers/authController.js
-// ==================================================
-
+// controllers/authController.js
 const jwt = require('jsonwebtoken');
+const User = require('../../Backend/Schema/User');
 const bcrypt = require('bcrypt');
-const mongoose = require('mongoose');
-
-// ==============================
-// 📄 Import des schémas Mongoose
-// ==============================
-const { UserSchema } = require('../../Backend/Schéma/UserSchema');
-const { EleveSchema } = require('../../Backend/Schéma/EleveSchema');
-const { ProfSchema } = require('../../Backend/Schéma/ProfSchema');
-const { ParentSchema } = require('../../Backend/Schéma/ParentSchema');
-
-// ==============================
-// 📁 Création des modèles à partir des schémas
-// ==============================
-const User = mongoose.models.User || mongoose.model('User', UserSchema);
-const Eleve = mongoose.models.Eleve || mongoose.model('Eleve', EleveSchema);
-const Prof = mongoose.models.Prof || mongoose.model('Prof', ProfSchema);
-const Parent = mongoose.models.Parent || mongoose.model('Parent', ParentSchema);
 
 const JWT_SECRET = process.env.JWT_SECRET || 'UNIDYS_SECRET';
 
@@ -37,11 +18,11 @@ exports.login = async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(401).json({ message: 'Mot de passe incorrect' });
 
-    // ⚡ Création du token JWT (optionnel)
+    // ⚡ Création du token
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '7d' });
 
     // ==============================
-    // 🎯 Construction de l'objet utilisateur
+    // 🎯 Construction dynamique selon le rôle
     // ==============================
     const baseUser = {
       _id: user._id,
@@ -50,76 +31,59 @@ exports.login = async (req, res) => {
       email: user.email,
       role: user.role,
       initiale: user.initiale || `${(user.prenom?.[0] || '').toUpperCase()}${(user.nom?.[0] || '').toUpperCase()}`,
-      avatar: user.avatar || user.photoProfil || '',
-      Key: user.Key || '',
+      photoProfil: user.photoProfil || '',
       theme: user.theme || 'sombre',
       font: user.font || 'Roboto',
       luminosite: user.luminosite ?? 50,
-      cookie: user.cookie ?? false,
+      cookie: user.cookie ?? '',
       cguValide: user.cguValide ?? false,
-      isActive: user.isActive ?? true,
     };
 
-    // 🔹 Données spécifiques selon le rôle
+    // Ajout des données spécifiques
     if (user.role === 'eleve') {
-      const eleveData = await Eleve.findOne({ userId: user._id });
-      baseUser.eleveKey = eleveData?.Key || user.Key || '';
-      baseUser.codeProf = eleveData?.codeProf || '';
-      baseUser.dysListe = eleveData?.dysListe || [];
-      baseUser.eleveRelations = eleveData?.eleveRelations || [];
-      baseUser.xp = eleveData?.xp || 0;
-      baseUser.cours = eleveData?.cours || [];
-      baseUser.qcm = eleveData?.qcm || [];
-      baseUser.suivi = eleveData?.suivi || [];
-      baseUser.abonnement = eleveData?.abonnement || [];
+      baseUser.eleveKey = user.eleveKey || null;
+      
+      baseUser.dysListe = user.dysListe || [];
+      baseUser.eleveRelations = user.eleveRelations || [];
+      baseUser.xp = user.xp || 0;
     }
 
     if (user.role === 'prof') {
-      const profData = await Prof.findOne({ userId: user._id });
-      baseUser.profKey = profData?.Key || user.Key || '';
-      baseUser.codeProf = profData?.codeProf || '';
-      baseUser.cours = profData?.coursCrees || [];
-      baseUser.qcm = profData?.qcmCrees || [];
-      baseUser.suivi = profData?.suivi || [];
-      baseUser.abonnement = profData?.abonnement || [];
+      baseUser.profKey = user.profKey || null;
+      baseUser.cours = user.cours || [];
+      baseUser.qcm = user.qcm || [];
     }
 
     if (user.role === 'parent') {
-      const parentData = await Parent.findOne({ userId: user._id });
-      baseUser.parentKey = parentData?.Key || user.Key || '';
-      baseUser.codeParent = parentData?.codeParent || '';
-      baseUser.eleveRelations = parentData?.enfants || [];
-      baseUser.suivi = parentData?.suivi || [];
-      baseUser.abonnement = parentData?.abonnement || [];
+      baseUser.parentKey = user.parentKey || null;
+      baseUser.codeParent = user.codeParent || '';
+      baseUser.eleveRelations = user.eleveRelations || [];
     }
 
-    // ⚡ Retour de l'utilisateur complet + token
-    return res.status(200).json({ user: baseUser, token });
+    // 🔥 On renvoie uniquement l'essentiel
+    res.status(200).json({ user: baseUser });
 
   } catch (error) {
-    console.error('Erreur login :', error);
-    return res.status(500).json({ message: 'Erreur serveur' });
+    console.error('Erreur login :', error.message);
+    res.status(500).json({ message: 'Erreur serveur' });
   }
 };
 
 // ==============================
-// 🛡️ Middleware authenticate via Key
+// 🛡️ Middleware JWT
 // ==============================
-exports.authenticate = async (req, res, next) => {
-  try {
-    const key = req.headers['x-user-key'];
-    if (!key) return res.status(401).json({ message: 'Key manquante' });
+exports.authenticate = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader) return res.status(401).json({ message: 'Token manquant' });
 
-    const user = await User.findOne({ Key: key });
-    if (!user) return res.status(401).json({ message: 'Utilisateur non trouvé pour cette Key' });
+  const token = authHeader.split(' ')[1];
+  if (!token) return res.status(401).json({ message: 'Token invalide' });
 
-    req.userId = user._id;
-    req.user = user;
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    if (err) return res.status(401).json({ message: 'Token invalide' });
+    req.userId = decoded.id;
     next();
-  } catch (err) {
-    console.error('Erreur authenticate via Key :', err);
-    res.status(500).json({ message: 'Erreur serveur' });
-  }
+  });
 };
 
 // ==============================
@@ -127,8 +91,6 @@ exports.authenticate = async (req, res, next) => {
 // ==============================
 exports.getCurrentUser = async (req, res) => {
   try {
-    if (!req.userId) return res.status(401).json({ message: 'Utilisateur non connecté' });
-
     const user = await User.findById(req.userId);
     if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
 
@@ -139,52 +101,39 @@ exports.getCurrentUser = async (req, res) => {
       email: user.email,
       role: user.role,
       initiale: user.initiale || `${(user.prenom?.[0] || '').toUpperCase()}${(user.nom?.[0] || '').toUpperCase()}`,
-      avatar: user.avatar || user.photoProfil || '',
-      Key: user.Key || '',
+      photoProfil: user.photoProfil || '',
       theme: user.theme || 'sombre',
       font: user.font || 'Roboto',
       luminosite: user.luminosite ?? 50,
-      cookie: user.cookie ?? false,
+      cookie: user.cookie ?? '',
       cguValide: user.cguValide ?? false,
-      isActive: user.isActive ?? true,
     };
 
+    // Ajout des données spécifiques
     if (user.role === 'eleve') {
-      const eleveData = await Eleve.findOne({ userId: user._id });
-      baseUser.eleveKey = eleveData?.Key || user.Key || '';
-      baseUser.codeProf = eleveData?.codeProf || '';
-      baseUser.dysListe = eleveData?.dysListe || [];
-      baseUser.eleveRelations = eleveData?.eleveRelations || [];
-      baseUser.xp = eleveData?.xp || 0;
-      baseUser.cours = eleveData?.cours || [];
-      baseUser.qcm = eleveData?.qcm || [];
-      baseUser.suivi = eleveData?.suivi || [];
-      baseUser.abonnement = eleveData?.abonnement || [];
+      baseUser.eleveKey = user.eleveKey || null;
+      baseUser.codeProf = user.codeProf || '';
+      baseUser.dysListe = user.dysListe || [];
+      baseUser.eleveRelations = user.eleveRelations || [];
+      baseUser.xp = user.xp || 0;
     }
 
     if (user.role === 'prof') {
-      const profData = await Prof.findOne({ userId: user._id });
-      baseUser.profKey = profData?.Key || user.Key || '';
-      baseUser.codeProf = profData?.codeProf || '';
-      baseUser.cours = profData?.coursCrees || [];
-      baseUser.qcm = profData?.qcmCrees || [];
-      baseUser.suivi = profData?.suivi || [];
-      baseUser.abonnement = profData?.abonnement || [];
+      baseUser.profKey = user.profKey || null;
+      baseUser.cours = user.cours || [];
+      baseUser.qcm = user.qcm || [];
     }
 
     if (user.role === 'parent') {
-      const parentData = await Parent.findOne({ userId: user._id });
-      baseUser.parentKey = parentData?.Key || user.Key || '';
-      baseUser.codeParent = parentData?.codeParent || '';
-      baseUser.eleveRelations = parentData?.enfants || [];
-      baseUser.suivi = parentData?.suivi || [];
-      baseUser.abonnement = parentData?.abonnement || [];
+      baseUser.parentKey = user.parentKey || null;
+      baseUser.codeParent = user.codeParent || '';
+      baseUser.eleveRelations = user.eleveRelations || [];
     }
 
-    return res.json(baseUser);
+    res.json(baseUser);
 
   } catch (err) {
-    console.error('Erreur getCurrentUser :', err);
-    return res.status(500).json({ message: 'Erreur serveur' });
+    console.error('Erreur getCurrentUser :', err.message);
+    res.status(500).json({ message: 'Erreur serveur' });
   }
 };

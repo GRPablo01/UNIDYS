@@ -2,14 +2,13 @@
 
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 
-// Controllers & Middleware
+// Schemas & Controllers
+const User = require('../../Backend/Schema/User'); // Assure-toi que le chemin est correct
 const userController = require('../controller/User.Controller');
 const authController = require('../controller/auth.controller');
-const authMiddleware = require('../../backend/middleware/auth'); // chemin correct
-
-// Modèle User
-const User = require('../Schéma/UserSchema'); // chemin vers le modèle Mongoose
+const authMiddleware = require('../../backend/middleware/auth'); // renomme correctement
 
 // ================= ROUTES UTILISATEURS =================
 
@@ -20,13 +19,10 @@ router.post('/users', userController.registerUser);
 router.post('/login', authController.login);
 
 // ✅ Récupérer l'utilisateur connecté
-router.get('/users/me', authController.authenticate, authController.getCurrentUser);
+router.get('/me', authController.authenticate, authController.getCurrentUser);
 
 // ✅ Récupérer un utilisateur par ID
 router.get('/users/id/:id', userController.getUserById);
-
-// ✅ Récupérer un utilisateur par email
-router.get('/users/email/:email', userController.getUserByEmail);
 
 // ✅ Récupérer tous les utilisateurs
 router.get('/users', userController.getAllUsers);
@@ -60,7 +56,11 @@ router.put('/users/:id', async (req, res) => {
 // ✅ Modifier uniquement le mot de passe d’un utilisateur
 router.put('/users/:id/password', userController.changePassword);
 
+// ✅ Récupérer un utilisateur par email
+router.get('/users/:email', userController.getUserByEmail);
 
+// ✅ Récupérer la carte complète de l’utilisateur par ID (avec auth)
+router.get('/card/:id', authMiddleware, userController.getUserCard);
 
 // ✅ Récupérer tous les contacts (liste des utilisateurs)
 router.get('/contacts', async (req, res) => {
@@ -72,8 +72,8 @@ router.get('/contacts', async (req, res) => {
   }
 });
 
-// ✅ POST /api/users/ajouter-cours
-router.post('/users/ajouter-cours', async (req, res) => {
+// POST /api/users/ajouter-cours
+router.post('/ajouter-cours', async (req, res) => {
   try {
     const { eleveKey, coursKey } = req.body;
 
@@ -81,11 +81,10 @@ router.post('/users/ajouter-cours', async (req, res) => {
       return res.status(400).json({ message: 'eleveKey ou coursKey manquant !' });
     }
 
-    const user = await User.findOne({ Key: eleveKey });
+    const user = await User.findOne({ eleveKey });
     if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
 
     // On évite les doublons
-    if (!user.cours) user.cours = [];
     if (!user.cours.includes(coursKey)) {
       user.cours.push(coursKey);
       await user.save();
@@ -99,11 +98,12 @@ router.post('/users/ajouter-cours', async (req, res) => {
 });
 
 // ✅ GET /api/users/cours/:eleveKey
+// Nouvelle route corrigée pour éviter conflit avec /users/:email
 router.get('/users/cours/:eleveKey', async (req, res) => {
   const { eleveKey } = req.params;
 
   try {
-    const utilisateur = await User.findOne({ Key: eleveKey });
+    const utilisateur = await User.findOne({ eleveKey });
     if (!utilisateur) return res.status(404).json({ message: 'Utilisateur non trouvé' });
 
     res.json(utilisateur.cours || []); // renvoie un tableau de coursKey
@@ -113,9 +113,23 @@ router.get('/users/cours/:eleveKey', async (req, res) => {
   }
 });
 
-// ✅ PUT pour mettre à jour le cookie via n'importe quelle key
-router.put('/users/cookie/:key', userController.updateCookieByKey);
+// PUT /api/users/update/:id
+router.put('/update/:id', async (req, res) => {
+  try {
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true } // renvoie le document mis à jour
+    );
+    if (!updatedUser) return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    res.json(updatedUser);
+  } catch (err) {
+    res.status(500).json({ message: 'Erreur serveur', error: err });
+  }
+});
 
+// PUT pour mettre à jour le cookie via n'importe quelle key
+router.put('/cookie/:key', userController.updateCookieByKey);
 
 
 

@@ -56,4 +56,7 @@ export class AuthService {
   // ⚠️ Le champ doit correspondre au backend (ici 'password')
   return this.http.post(`${this.apiUrl}/reset-link/confirm`, { token, password: motDePasse }).toPromise();
 }
+  
+  
+
 }

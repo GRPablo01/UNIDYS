@@ -1,28 +1,11 @@
-// ==================================================
-// 📦 controllers/UserController.js
-// ==================================================
-
+// ==============================
+// 📦 Import des modules
+// ==============================
+const User = require('../../Backend/Schema/User');
 const bcrypt = require('bcrypt');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const mongoose = require('mongoose');
-
-// ==============================
-// 📄 Import des schémas Mongoose
-// ==============================
-const { UserSchema } = require('../Schéma/UserSchema');
-const { ProfSchema } = require('../Schéma/ProfSchema');
-const { ParentSchema } = require('../Schéma/ParentSchema');
-const { EleveSchema } = require('../Schéma/EleveSchema');
-
-// ==============================
-// 📁 Création des modèles à partir des schémas
-// ==============================
-const User = mongoose.model('User', UserSchema);
-const Prof = mongoose.model('Prof', ProfSchema);
-const Parent = mongoose.model('Parent', ParentSchema);
-const Eleve = mongoose.model('Eleve', EleveSchema);
 
 // ==============================
 // 📁 Configuration du dossier uploads/profils
@@ -43,14 +26,14 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage,
-  limits: { fileSize: 3 * 1024 * 1024 },
+  limits: { fileSize: 3 * 1024 * 1024 }, // 3 Mo max
   fileFilter: (req, file, cb) => {
     const allowedTypes = /jpeg|jpg|png|webp/;
     const ext = path.extname(file.originalname).toLowerCase();
     if (allowedTypes.test(ext)) cb(null, true);
     else cb(new Error('Format non supporté (jpeg, jpg, png, webp)'));
   }
-}).single('avatar');
+}).single('photoProfil');
 
 // ==============================
 // 🔑 Génération aléatoire de clés
@@ -58,43 +41,22 @@ const upload = multer({
 function randomSuffix(length = 5) {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   let result = '';
-  for (let i = 0; i < length; i++) result += chars.charAt(Math.floor(Math.random() * chars.length));
+  for (let i = 0; i < length; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
   return result;
 }
 
 function generateKey() {
-  const numberPart = Math.floor(Math.random() * 100000);
+  const numberPart = Math.floor(Math.random() * 100000); // 0 à 99999
   const suffix = randomSuffix(5);
   return `${numberPart}${suffix}`;
 }
 
 // ==============================
-// 🔄 Fonction utilitaire : récupérer user + role
-// ==============================
-const getUserWithRoleData = async (filter) => {
-  const user = await User.findOne(filter).select('-password');
-  if (!user) return null;
-
-  let roleData = null;
-  switch (user.role) {
-    case 'eleve':
-      roleData = await Eleve.findOne({ userId: user._id });
-      break;
-    case 'prof':
-      roleData = await Prof.findOne({ userId: user._id });
-      break;
-    case 'parent':
-      roleData = await Parent.findOne({ userId: user._id });
-      break;
-  }
-
-  return { ...user.toObject(), roleData: roleData ? roleData.toObject() : null };
-};
-
-// ==============================
 // 📝 INSCRIPTION UTILISATEUR
 // ==============================
-const registerUser = async (req, res) => {
+exports.registerUser = (req, res) => {
   upload(req, res, async (err) => {
     if (err) return res.status(400).json({ message: err.message });
 
@@ -105,103 +67,102 @@ const registerUser = async (req, res) => {
         email,
         password,
         role,
-        initiales = '',
+        initiale = '',
         cguValide = false,
         dysListe = [],
-        theme = 'clair',
-        police = 'Roboto',
-        luminosite = '100',
+        theme = 'sombre',
+        font = 'Roboto',
+        luminosite = 100,
         codeProf = '',
-        codeParent = ''
+        codeParent = '',
+        cookie = ''
       } = req.body;
 
-      if (!nom || !prenom || !email || !password || !role)
+      if (!email || !password || !nom || !prenom || !role)
         return res.status(400).json({ message: 'Champs obligatoires manquants' });
 
       const existingUser = await User.findOne({ email });
       if (existingUser) return res.status(400).json({ message: 'Utilisateur déjà inscrit' });
 
       const hashedPassword = await bcrypt.hash(password, 10);
-      const avatar = req.file ? `/uploads/profils/${req.file.filename}` : null;
-      const userKey = generateKey();
 
-      // 🔹 Création du User
-      const newUser = new User({
+      // 🔑 Génération des clés aléatoires selon rôle
+      let eleveKey = null;
+      let profKey = null;
+      let parentKey = null;
+
+      switch (role) {
+        case 'eleve':
+          eleveKey = generateKey();
+          break;
+        case 'prof':
+          profKey = generateKey();
+          break;
+        case 'parent':
+          parentKey = generateKey();
+          break;
+        default:
+          return res.status(400).json({ message: 'Rôle invalide' });
+      }
+
+      const photoProfil = req.file ? `/uploads/profils/${req.file.filename}` : null;
+
+      // Construction de l'objet à stocker dans la base
+      const userData = {
         nom,
         prenom,
         email,
         password: hashedPassword,
         role,
-        initiales: initiales || (prenom[0]?.toUpperCase() + nom[0]?.toUpperCase()),
-        avatar,
+        initiale: initiale || (prenom[0]?.toUpperCase() + nom[0]?.toUpperCase()),
         cguValide,
-        Key: userKey,
+        dysListe: Array.isArray(dysListe) ? dysListe : [],
+        eleveKey,
+        profKey,
+        parentKey,
+        codeProf,
+        codeParent,
+        photoProfil,
         theme,
-        police,
-        luminosite,
-        cookie: false,
-      });
+        font,
+        luminosite: Number(luminosite) || 100,
+        cookie,
+        status: { enLigne: true, nePasDeranger: false, absent: false }
+      };
 
-      await newUser.save();
+      const user = new User(userData);
+      await user.save();
 
-      let roleData = null;
+      const response = {
+        _id: user._id,
+        nom: user.nom,
+        prenom: user.prenom,
+        email: user.email,
+        role: user.role,
+        photoProfil: user.photoProfil,
+        initiale: user.initiale,
+        cguValide: user.cguValide,
+        dysListe: user.dysListe,
+        xp: user.xp || 0,
+        cours: user.cours || [],
+        qcm: user.qcm || [],
+        theme: user.theme,
+        font: user.font,
+        luminosite: user.luminosite,
+        cookie: user.cookie,
+        eleveRelations: user.eleveRelations || [],
+        eleveKey,
+        profKey,
+        parentKey,
+        codeProf,
+        codeParent,
+        status: user.status,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+        __v: user.__v
+      };
 
-      switch (role) {
-        case 'eleve':
-          roleData = new Eleve({
-            userId: newUser._id,
-            name: `${nom} ${prenom}`,
-            Key: userKey,
-            avatar,
-            dysListe: Array.isArray(dysListe) ? dysListe : [],
-            xp: 0,
-            cours: [],
-            qcm: [],
-            suivi: [],
-            abonnement: []
-          });
-          await roleData.save();
-          break;
-
-        case 'prof':
-          roleData = new Prof({
-            userId: newUser._id,
-            name: `${nom} ${prenom}`,
-            Key: userKey,
-            avatar,
-            codeProf: codeProf || generateKey(),
-            matieres: [],
-            coursCrees: [],
-            qcmCrees: [],
-            suivi: [],
-            abonnement: []
-          });
-          await roleData.save();
-          break;
-
-        case 'parent':
-          roleData = new Parent({
-            userId: newUser._id,
-            name: `${nom} ${prenom}`,
-            Key: userKey,
-            avatar,
-            codeParent: codeParent || generateKey(),
-            enfants: [],
-            suivi: [],
-            abonnement: []
-          });
-          await roleData.save();
-          break;
-
-        default:
-          return res.status(400).json({ message: 'Rôle invalide' });
-      }
-
-      res.status(201).json({
-        message: 'Utilisateur créé avec succès',
-        user: newUser,
-        roleData
-      });
+      res.status(201).json(response);
 
     } catch (error) {
       console.error('❌ Erreur registerUser :', error);
@@ -213,13 +174,19 @@ const registerUser = async (req, res) => {
 // ==============================
 // 🔍 RÉCUPÉRER UN UTILISATEUR PAR EMAIL
 // ==============================
-const getUserByEmail = async (req, res) => {
+exports.getUserByEmail = async (req, res) => {
   try {
-    const userWithRole = await getUserWithRoleData({ email: req.params.email });
-    if (!userWithRole) return res.status(404).json({ message: 'Utilisateur non trouvé' });
-    res.json(userWithRole);
+    const user = await User.findOne({ email: req.params.email }).select('-password');
+    if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
+
+    res.json({
+      ...user.toObject(),
+      luminosite: user.luminosite ?? 50,
+      cookie: user.cookie ?? '',
+      status: user.status
+    });
   } catch (err) {
-    console.error(err);
+    console.error('Erreur getUserByEmail :', err);
     res.status(500).json({ message: 'Erreur serveur' });
   }
 };
@@ -227,13 +194,19 @@ const getUserByEmail = async (req, res) => {
 // ==============================
 // 🔍 RÉCUPÉRER UN UTILISATEUR PAR ID
 // ==============================
-const getUserById = async (req, res) => {
+exports.getUserById = async (req, res) => {
   try {
-    const userWithRole = await getUserWithRoleData({ _id: req.params.id });
-    if (!userWithRole) return res.status(404).json({ message: 'Utilisateur non trouvé' });
-    res.json(userWithRole);
+    const user = await User.findById(req.params.id).select('-password');
+    if (!user) return res.status(404).json({ message: 'Utilisateur introuvable' });
+
+    res.json({
+      ...user.toObject(),
+      luminosite: user.luminosite ?? 50,
+      cookie: user.cookie ?? '',
+      status: user.status
+    });
   } catch (err) {
-    console.error(err);
+    console.error('Erreur getUserById :', err);
     res.status(500).json({ message: 'Erreur serveur' });
   }
 };
@@ -241,20 +214,34 @@ const getUserById = async (req, res) => {
 // ==============================
 // ❌ SUPPRIMER UN UTILISATEUR
 // ==============================
-const deleteUserById = async (req, res) => {
+exports.deleteUserById = async (req, res) => {
   try {
-    const deletedUser = await User.findByIdAndDelete(req.params.id);
-    if (!deletedUser) return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    const deleted = await User.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).json({ message: 'Utilisateur non trouvé' });
 
-    switch (deletedUser.role) {
-      case 'eleve': await Eleve.deleteOne({ userId: deletedUser._id }); break;
-      case 'prof': await Prof.deleteOne({ userId: deletedUser._id }); break;
-      case 'parent': await Parent.deleteOne({ userId: deletedUser._id }); break;
-    }
-
-    res.json({ message: 'Utilisateur supprimé avec succès' });
+    console.log('Utilisateur supprimé :', req.params.id);
+    res.json({ message: 'Utilisateur supprimé' });
   } catch (err) {
-    console.error(err);
+    console.error('Erreur deleteUserById :', err);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+};
+
+// ==============================
+// 📋 RÉCUPÉRER TOUS LES UTILISATEURS
+// ==============================
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find().select('-password');
+
+    res.status(200).json(users.map(u => ({
+      ...u.toObject(),
+      luminosite: u.luminosite ?? 50,
+      cookie: u.cookie ?? '',
+      status: u.status
+    })));
+  } catch (err) {
+    console.error('Erreur getAllUsers :', err);
     res.status(500).json({ message: 'Erreur serveur' });
   }
 };
@@ -262,24 +249,26 @@ const deleteUserById = async (req, res) => {
 // ==============================
 // ✏️ MODIFIER UN UTILISATEUR
 // ==============================
-const updateUser = async (req, res) => {
+exports.updateUser = async (req, res) => {
   try {
     const { id } = req.params;
     const updates = { ...req.body };
-    delete updates.password;
+
+    if (updates.password) delete updates.password;
 
     const updatedUser = await User.findByIdAndUpdate(id, updates, { new: true }).select('-password');
     if (!updatedUser) return res.status(404).json({ message: 'Utilisateur non trouvé' });
 
-    // Fusion roleData
-    const roleData = await (updatedUser.role === 'eleve' ? Eleve.findOne({ userId: id }) :
-      updatedUser.role === 'prof' ? Prof.findOne({ userId: id }) :
-        updatedUser.role === 'parent' ? Parent.findOne({ userId: id }) :
-          null);
+    console.log('Utilisateur mis à jour :', updatedUser.email);
 
-    res.json({ ...updatedUser.toObject(), roleData: roleData ? roleData.toObject() : null });
+    res.json({
+      ...updatedUser.toObject(),
+      luminosite: updatedUser.luminosite ?? 50,
+      cookie: updatedUser.cookie ?? '',
+      status: updatedUser.status
+    });
   } catch (err) {
-    console.error(err);
+    console.error('Erreur updateUser :', err);
     res.status(500).json({ message: 'Erreur serveur' });
   }
 };
@@ -287,7 +276,7 @@ const updateUser = async (req, res) => {
 // ==============================
 // 🔐 CHANGER LE MOT DE PASSE
 // ==============================
-const changePassword = async (req, res) => {
+exports.changePassword = async (req, res) => {
   try {
     const { id } = req.params;
     const { oldPassword, newPassword } = req.body;
@@ -303,65 +292,132 @@ const changePassword = async (req, res) => {
 
     res.json({ message: 'Mot de passe mis à jour avec succès' });
   } catch (err) {
-    console.error(err);
+    console.error('Erreur changePassword :', err);
     res.status(500).json({ message: 'Erreur serveur' });
   }
 };
 
 // ==============================
-// 🔍 RÉCUPÉRER TOUS LES UTILISATEURS
+// 🎨 CHANGER LE THÈME
 // ==============================
-const getAllUsers = async (req, res) => {
+exports.changeTheme = async (req, res) => {
   try {
-    const users = await User.find().select('-password');
-    const usersWithRoles = await Promise.all(users.map(async user => {
-      let roleData = null;
-      switch (user.role) {
-        case 'eleve': roleData = await Eleve.findOne({ userId: user._id }); break;
-        case 'prof': roleData = await Prof.findOne({ userId: user._id }); break;
-        case 'parent': roleData = await Parent.findOne({ userId: user._id }); break;
-      }
-      return { ...user.toObject(), roleData: roleData ? roleData.toObject() : null };
-    }));
+    const { id } = req.params;
+    const { theme } = req.body;
 
-    res.json(usersWithRoles);
+    if (!['clair', 'sombre'].includes(theme)) return res.status(400).json({ message: 'Thème invalide' });
+
+    const user = await User.findByIdAndUpdate(id, { theme }, { new: true }).select('-password');
+    if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
+
+    res.json({ message: 'Thème mis à jour avec succès', theme: user.theme });
   } catch (err) {
-    console.error(err);
+    console.error('Erreur changeTheme :', err);
     res.status(500).json({ message: 'Erreur serveur' });
   }
 };
 
 // ==============================
-// 🔄 Mettre à jour le cookie via une key
+// 🎨 CHANGER LA POLICE
 // ==============================
-const updateCookieByKey = async (req, res) => {
+exports.changeFont = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { font } = req.body;
+
+    const allowedFonts = ['Arial', 'Roboto', 'Open Sans', 'Comic Sans', 'Times New Roman', 'Lato', 'Montserrat'];
+    if (!allowedFonts.includes(font)) return res.status(400).json({ message: 'Police invalide' });
+
+    const user = await User.findByIdAndUpdate(id, { font }, { new: true }).select('-password');
+    if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
+
+    res.json({ message: 'Police mise à jour avec succès', font: user.font });
+  } catch (err) {
+    console.error('Erreur changeFont :', err);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+};
+
+// ==============================
+// 🎨 CHANGER LA LUMINOSITÉ
+// ==============================
+exports.changeLuminosite = async (req, res) => {
+  try {
+    const { id } = req.params;
+    let { luminosite } = req.body;
+
+    luminosite = Number(luminosite);
+    if (isNaN(luminosite) || luminosite < 0 || luminosite > 100) {
+      return res.status(400).json({ message: 'Luminosité invalide (0-100)' });
+    }
+
+    const user = await User.findByIdAndUpdate(id, { luminosite }, { new: true }).select('-password');
+    if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
+
+    res.json({ message: 'Luminosité mise à jour avec succès', luminosite: user.luminosite });
+  } catch (err) {
+    console.error('Erreur changeLuminosite :', err);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+};
+
+// ==============================
+// 🃏 RÉCUPÉRER LA CARTE UTILISATEUR
+// ==============================
+exports.getUserCard = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select('-password -cguValide');
+    if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
+
+    res.json({
+      nom: user.nom,
+      prenom: user.prenom,
+      role: user.role,
+      initiale: user.initiale,
+      dysListe: user.dysListe,
+      eleveRelations: user.eleveRelations,
+      eleveKey: user.eleveKey,
+      codeProf: user.codeProf,
+      codeParent: user.codeParent,
+      photoProfil: user.photoProfil,
+      theme: user.theme,
+      font: user.font,
+      luminosite: user.luminosite ?? 50,
+      cookie: user.cookie ?? '',
+      status: user.status
+    });
+  } catch (err) {
+    console.error('Erreur getUserCard :', err);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+};
+
+// ==============================
+// ✏️ METTRE À JOUR LE COOKIE VIA eleveKey, profKey ou parentKey
+// ==============================
+exports.updateCookieByKey = async (req, res) => {
   try {
     const { key } = req.params;
     const { cookie } = req.body;
 
-    const user = await User.findOne({ Key: key });
+    if (!cookie) return res.status(400).json({ message: 'Valeur du cookie manquante' });
+
+    const user = await User.findOne({
+      $or: [
+        { eleveKey: key },
+        { profKey: key },
+        { parentKey: key }
+      ]
+    });
+
     if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
 
-    user.cookie = cookie;
+    user.cookie = cookie; // 'accepted' ou 'refused'
     await user.save();
 
     res.json({ message: 'Cookie mis à jour', cookie: user.cookie });
   } catch (err) {
-    console.error(err);
+    console.error('Erreur updateCookieByKey :', err);
     res.status(500).json({ message: 'Erreur serveur' });
   }
-};
-
-// ==============================
-// 📤 EXPORTS
-// ==============================
-module.exports = {
-  registerUser,
-  getUserByEmail,
-  getUserById,
-  deleteUserById,
-  updateUser,
-  changePassword,
-  getAllUsers,
-  updateCookieByKey
 };

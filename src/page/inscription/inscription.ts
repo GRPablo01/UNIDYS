@@ -7,6 +7,7 @@ import { Registrer } from "../../composant/registrer/registrer";
 
 @Component({
   selector: 'app-inscription',
+  standalone:true,
   imports: [CommonModule, RouterLink, Registrer],
   templateUrl: './inscription.html',
   styleUrl: './inscription.css'

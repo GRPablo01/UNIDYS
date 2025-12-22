@@ -77,8 +77,8 @@ mongoose
 // ==============================
 // 📌 Import des routes
 // ==============================
-const userRoutes = require('./backend/routes/User.Routes');
-const authRoutes = require('./backend/routes/User.Routes'); // vérifier si voulu
+const userRoutes = require('./Backend/Routes/User.Routes');
+const authRoutes = require('./Backend/Routes/User.Routes'); // vérifier si voulu
 // const utilisateurRoutes = require('./backend/routes/utilisateur.Routes');
 // const coursRoutes = require('./backend/routes/cours.Routes');
 // const coursHtmlRoute = require('./backend/routes/cours-html.route');
