@@ -21,15 +21,13 @@ interface InscriptionData {
   confirmPassword?: string;
   codeProf?: string;
   codeParent?: string;
-  profKey?: string;
-  parentKey?: string;
+  key?: string;              // Remplace eleveKey, profKey, parentKey
   role: 'prof' | 'eleve' | 'parent';
   dysListe?: string[];
   cguValide?: boolean;
   initiale?: string;
   photoProfil?: string | null;
   eleveRelations?: EleveRelation[];
-  eleveKey?: string;
   theme?: 'clair' | 'sombre';
   font?: string;
   luminosite?: number;
@@ -46,9 +44,7 @@ interface SessionUser {
   photoProfil: string;
   codeProf?: string;
   codeParent?: string;
-  eleveKey?: string;
-  profKey?: string;
-  parentKey?: string;
+  key?: string;              // Remplace eleveKey, profKey, parentKey
   theme: 'clair' | 'sombre';
   font: string;
   luminosite: number;
@@ -74,9 +70,7 @@ export class Registrer implements OnInit, OnDestroy {
     dysListe: [],
     cguValide: false,
     eleveRelations: [],
-    eleveKey: '',
-    profKey: '',
-    parentKey: '',
+    key: '',
     codeProf: '',
     codeParent: '',
     photoProfil: null,
@@ -99,19 +93,15 @@ export class Registrer implements OnInit, OnDestroy {
   isUploading = false;
   error: string | null = null;
 
-  // Codes fournis par l'application pour vérifier le rôle
   readonly CODE_PROF = 'PROF2025';
   readonly CODE_PARENT = 'PARENT2025';
 
   dysList: string[] = ['dyslexie', 'dysorthographie', 'dyscalculie', 'dyspraxie', 'dysphasie', 'autre'];
-
   themesList: string[] = ['clair', 'sombre'];
   theme: 'clair' | 'sombre' = 'sombre';
-
   fontsList: string[] = ['Arial', 'Roboto', 'Open Sans', 'Comic Sans', 'Times New Roman', 'Lato', 'Montserrat'];
   font: string = 'Roboto';
   dysSelectionnes: string[] = [];
-
   luminosite: number = 100;
 
   constructor(private http: HttpClient, private router: Router, private authService: AuthService) { }
@@ -146,14 +136,7 @@ export class Registrer implements OnInit, OnDestroy {
   choisirRole(role: 'eleve' | 'prof' | 'parent') {
     this.actif = role;
     this.inscriptionData.role = role;
-
-    // Réinitialisation des champs codes/keys selon rôle
-    if (role === 'eleve') {
-      this.inscriptionData.codeProf = '';
-      this.inscriptionData.codeParent = '';
-      this.inscriptionData.profKey = '';
-      this.inscriptionData.parentKey = '';
-    }
+    this.inscriptionData.key = ''; // réinitialisation du key
     this.saveLocalData();
   }
 
@@ -184,20 +167,58 @@ export class Registrer implements OnInit, OnDestroy {
     this.saveLocalData();
   }
 
-  onImageChange(event: any) {
-    const file = event.target.files[0];
+  onPhotoSelected(e: Event) {
+    this.error = null;
+    const file = (e.target as HTMLInputElement).files?.[0];
     if (!file) return;
+    if (file.size > 2 * 1024 * 1024) { this.error = 'Image trop lourde (max 2 Mo).'; return; }
+    this.selectedFile = file;
 
     const reader = new FileReader();
-    reader.onload = () => this.photoPreview = reader.result as string;
+    reader.onload = () => {
+      this.photoPreview = reader.result;
+      this.inscriptionData.photoProfil = reader.result as string;
+      this.saveLocalData();
+    };
     reader.readAsDataURL(file);
   }
 
-  revenirEtapePrecedente() {
-    if (this.etape > 1) {
-      this.etape--;
-      this.saveLocalData();
-    }
+  stepDescription(): string {
+  switch (this.etape) {
+    case 1: return 'Informations personnelles';
+    case 2: return 'Choisir un mot de passe';
+    case 3: return 'Personnalisation du profil';
+    case 3.5: return 'Photo et rôle';
+    case 4: return 'Vérification des informations';
+    default: return '';
+  }
+}
+
+changeFont(newFont: string) {
+  if (this.fontsList.includes(newFont)) {
+    this.font = newFont;
+    this.inscriptionData.font = newFont;
+    this.applyFont(newFont);
+    this.saveLocalData();
+  }
+}
+
+changeLuminosite(value: number) {
+  const luminosite = Math.min(Math.max(value, 50), 100);
+  this.luminosite = luminosite;
+  this.inscriptionData.luminosite = luminosite;
+  document.body.style.filter = `brightness(${luminosite}%)`;
+  this.saveLocalData();
+}
+
+
+  resetPhoto(e: MouseEvent) {
+    e.stopPropagation();
+    this.photoPreview = null;
+    this.selectedFile = null;
+    this.inscriptionData.photoProfil = null;
+    this.error = null;
+    this.saveLocalData();
   }
 
   valider() {
@@ -210,10 +231,8 @@ export class Registrer implements OnInit, OnDestroy {
 
     const initiale = (this.inscriptionData.prenom[0] ?? '').toUpperCase() + (this.inscriptionData.nom[0] ?? '').toUpperCase();
 
-    // Génération automatique des clés uniques
-    if (this.inscriptionData.role === 'eleve') this.inscriptionData.eleveKey = `${Math.floor(Math.random() * 1000)}GFSDH`;
-    if (this.inscriptionData.role === 'prof') this.inscriptionData.profKey = `${Math.floor(Math.random() * 1000)}PROF`;
-    if (this.inscriptionData.role === 'parent') this.inscriptionData.parentKey = `${Math.floor(Math.random() * 1000)}PARENT`;
+    // Génération automatique du key
+    this.inscriptionData.key = `${Math.floor(Math.random() * 10000)}${this.inscriptionData.role.toUpperCase()}`;
 
     const formData = new FormData();
     formData.append('nom', this.inscriptionData.nom);
@@ -226,22 +245,10 @@ export class Registrer implements OnInit, OnDestroy {
     formData.append('theme', this.theme);
     formData.append('font', this.font);
     formData.append('luminosite', String(this.luminosite));
+    formData.append('key', this.inscriptionData.key ?? '');
 
     if (this.inscriptionData.role === 'eleve' && this.inscriptionData.dysListe)
       formData.append('dysListe', JSON.stringify(this.inscriptionData.dysListe));
-
-    if (this.inscriptionData.role === 'eleve')
-      formData.append('eleveKey', this.inscriptionData.eleveKey ?? '');
-
-    if (this.inscriptionData.role === 'prof') {
-      formData.append('profKey', this.inscriptionData.profKey ?? '');
-      formData.append('codeProf', this.inscriptionData.codeProf ?? '');
-    }
-
-    if (this.inscriptionData.role === 'parent') {
-      formData.append('parentKey', this.inscriptionData.parentKey ?? '');
-      formData.append('codeParent', this.inscriptionData.codeParent ?? '');
-    }
 
     if (this.selectedFile)
       formData.append('photoProfil', this.selectedFile);
@@ -271,84 +278,9 @@ export class Registrer implements OnInit, OnDestroy {
     });
   }
 
-  onPhotoSelected(e: Event) {
-    this.error = null;
-    const file = (e.target as HTMLInputElement).files?.[0];
-    if (!file) return;
-    if (file.size > 2 * 1024 * 1024) { this.error = 'Image trop lourde (max 2 Mo).'; return; }
-    this.selectedFile = file;
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.photoPreview = reader.result;
-      this.inscriptionData.photoProfil = reader.result as string;
-      this.saveLocalData();
-    };
-    reader.readAsDataURL(file);
-  }
-
-  resetPhoto(e: MouseEvent) {
-    e.stopPropagation();
-    this.photoPreview = null;
-    this.selectedFile = null;
-    this.inscriptionData.photoProfil = null;
-    this.error = null;
-    this.saveLocalData();
-  }
-
-  changeTheme(newTheme: 'clair' | 'sombre') {
-    this.theme = newTheme;
-    this.inscriptionData.theme = newTheme;
-    this.applyTheme(newTheme);
-    this.saveLocalData();
-  }
-
-  changeFont(newFont: string) {
-    if (this.fontsList.includes(newFont)) {
-      this.font = newFont;
-      this.inscriptionData.font = newFont;
-      this.applyFont(newFont);
-      this.saveLocalData();
-    }
-  }
-
-  changeLuminosite(value: number) {
-    const luminosite = Math.min(Math.max(value, 50), 100);
-    this.luminosite = luminosite;
-    this.inscriptionData.luminosite = luminosite;
-    document.body.style.filter = `brightness(${luminosite}%)`;
-    this.saveLocalData();
-  }
-
-  private applyTheme(theme: 'clair' | 'sombre') {
-    if (theme === 'clair') document.documentElement.classList.remove('dark');
-    else document.documentElement.classList.add('dark');
-  }
-
-  private applyFont(font: string) {
-    document.documentElement.style.setProperty('--font-family', font);
-  }
-
-  private applyLuminosite(luminosite: number) {
-    document.documentElement.style.setProperty('--luminosite', `${luminosite}%`);
-  }
-
-  stepDescription(): string {
-    switch (this.etape) {
-      case 1: return 'Informations personnelles';
-      case 2: return 'Choisir un mot de passe';
-      case 3: return 'Personnalisation du profil';
-      case 3.5: return 'Photo et rôle';
-      case 4: return 'Vérification des informations';
-      default: return '';
-    }
-  }
-
   private saveUserSession(user: any): void {
-    // URL complète pour la photo si elle existe
     const fullPhotoUrl = user.photoProfil ? `http://localhost:3000${user.photoProfil}` : '';
-  
-    // Objet de session commun à tous les rôles
+
     let sessionUser: Partial<SessionUser> = {
       _id: user._id,
       nom: user.nom || '',
@@ -360,44 +292,25 @@ export class Registrer implements OnInit, OnDestroy {
       theme: user.theme || 'sombre',
       font: user.font || 'Roboto',
       luminosite: user.luminosite ?? 100,
+      key: user.key ?? ''
     };
-  
-    // Ajouter uniquement certains champs selon le rôle
-    switch (sessionUser.role) {
-      case 'eleve':
-        sessionUser = {
-          ...sessionUser,
-          eleveKey: user.eleveKey || '',
-          dysListe: user.dysListe ?? [],
-          cguValide: user.cguValide ?? false,
-          xp: user.xp ?? 0
-        };
-        break;
-  
-      case 'prof':
-        sessionUser = {
-          ...sessionUser,
-          profKey: user.profKey || '',
-          codeProf: user.codeProf || ''
-        };
-        break;
-  
-      case 'parent':
-        sessionUser = {
-          ...sessionUser,
-          parentKey: user.parentKey || '',
-          codeParent: user.codeParent || ''
-        };
-        break;
+
+    if (sessionUser.role === 'eleve') {
+      sessionUser = {
+        ...sessionUser,
+        dysListe: user.dysListe ?? [],
+        cguValide: user.cguValide ?? false,
+        xp: user.xp ?? 0
+      };
+    } else if (sessionUser.role === 'prof') {
+      sessionUser = { ...sessionUser, codeProf: user.codeProf || '' };
+    } else if (sessionUser.role === 'parent') {
+      sessionUser = { ...sessionUser, codeParent: user.codeParent || '' };
     }
-  
-    // Stockage dans localStorage
+
     localStorage.setItem('utilisateur', JSON.stringify(sessionUser));
-    
-    // Mise à jour du service AuthService
     this.authService.setUser(sessionUser as SessionUser);
   }
-  
 
   private saveLocalData() {
     localStorage.setItem('inscriptionDataTemp', JSON.stringify(this.inscriptionData));
@@ -425,4 +338,79 @@ export class Registrer implements OnInit, OnDestroy {
     localStorage.removeItem('actifTemp');
     localStorage.removeItem('etapeTemp');
   }
+
+  private applyTheme(theme: 'clair' | 'sombre') {
+    if (theme === 'clair') document.documentElement.classList.remove('dark');
+    else document.documentElement.classList.add('dark');
+  }
+
+  private applyFont(font: string) {
+    document.documentElement.style.setProperty('--font-family', font);
+  }
+
+  private applyLuminosite(luminosite: number) {
+    document.documentElement.style.setProperty('--luminosite', `${luminosite}%`);
+  }
 }
+
+
+
+// stepDescription(): string {
+//   switch (this.etape) {
+//     case 1: return 'Informations personnelles';
+//     case 2: return 'Choisir un mot de passe';
+//     case 3: return 'Personnalisation du profil';
+//     case 3.5: return 'Photo et rôle';
+//     case 4: return 'Vérification des informations';
+//     default: return '';
+//   }
+// }
+
+// onPhotoSelected(e: Event) {
+//   this.error = null;
+//   const file = (e.target as HTMLInputElement).files?.[0];
+//   if (!file) return;
+//   if (file.size > 2 * 1024 * 1024) { this.error = 'Image trop lourde (max 2 Mo).'; return; }
+//   this.selectedFile = file;
+
+//   const reader = new FileReader();
+//   reader.onload = () => {
+//     this.photoPreview = reader.result;
+//     this.inscriptionData.photoProfil = reader.result as string;
+//     this.saveLocalData();
+//   };
+//   reader.readAsDataURL(file);
+// }
+
+// resetPhoto(e: MouseEvent) {
+//   e.stopPropagation();
+//   this.photoPreview = null;
+//   this.selectedFile = null;
+//   this.inscriptionData.photoProfil = null;
+//   this.error = null;
+//   this.saveLocalData();
+// }
+
+// changeTheme(newTheme: 'clair' | 'sombre') {
+//   this.theme = newTheme;
+//   this.inscriptionData.theme = newTheme;
+//   this.applyTheme(newTheme);
+//   this.saveLocalData();
+// }
+
+// changeFont(newFont: string) {
+//   if (this.fontsList.includes(newFont)) {
+//     this.font = newFont;
+//     this.inscriptionData.font = newFont;
+//     this.applyFont(newFont);
+//     this.saveLocalData();
+//   }
+// }
+
+// changeLuminosite(value: number) {
+//   const luminosite = Math.min(Math.max(value, 50), 100);
+//   this.luminosite = luminosite;
+//   this.inscriptionData.luminosite = luminosite;
+//   document.body.style.filter = `brightness(${luminosite}%)`;
+//   this.saveLocalData();
+// }

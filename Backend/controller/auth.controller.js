@@ -31,6 +31,7 @@ exports.login = async (req, res) => {
       email: user.email,
       role: user.role,
       key: user.key || null, // ✅ clé unique pour tous les rôles
+      code: user.code || '', // 🔑 champ unique fusionné
       initiale: user.initiale || `${(user.prenom?.[0] || '').toUpperCase()}${(user.nom?.[0] || '').toUpperCase()}`,
       photoProfil: user.photoProfil || '',
       theme: user.theme || 'sombre',
@@ -41,10 +42,9 @@ exports.login = async (req, res) => {
     };
 
     // ==============================
-    // ➕ Données spécifiques
+    // ➕ Données spécifiques selon rôle
     // ==============================
     if (user.role === 'eleve') {
-      baseUser.codeProf = user.codeProf || '';
       baseUser.dysListe = user.dysListe || [];
       baseUser.eleveRelations = user.eleveRelations || [];
       baseUser.xp = user.xp || 0;
@@ -56,11 +56,10 @@ exports.login = async (req, res) => {
     }
 
     if (user.role === 'parent') {
-      baseUser.codeParent = user.codeParent || '';
       baseUser.eleveRelations = user.eleveRelations || [];
     }
 
-    res.status(200).json({ user: baseUser });
+    res.status(200).json({ user: baseUser, token });
 
   } catch (error) {
     console.error('Erreur login :', error.message);
@@ -100,6 +99,7 @@ exports.getCurrentUser = async (req, res) => {
       email: user.email,
       role: user.role,
       key: user.key || null, // ✅ clé unique
+      code: user.code || '', // 🔑 champ unique fusionné
       initiale: user.initiale || `${(user.prenom?.[0] || '').toUpperCase()}${(user.nom?.[0] || '').toUpperCase()}`,
       photoProfil: user.photoProfil || '',
       theme: user.theme || 'sombre',
@@ -110,7 +110,6 @@ exports.getCurrentUser = async (req, res) => {
     };
 
     if (user.role === 'eleve') {
-      baseUser.codeProf = user.codeProf || '';
       baseUser.dysListe = user.dysListe || [];
       baseUser.eleveRelations = user.eleveRelations || [];
       baseUser.xp = user.xp || 0;
@@ -122,7 +121,6 @@ exports.getCurrentUser = async (req, res) => {
     }
 
     if (user.role === 'parent') {
-      baseUser.codeParent = user.codeParent || '';
       baseUser.eleveRelations = user.eleveRelations || [];
     }
 

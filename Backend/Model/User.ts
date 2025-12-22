@@ -18,9 +18,8 @@ export interface User {
   // Clé unique selon le rôle
   key?: string;
 
-  // Codes d’association (optionnels selon le rôle)
-  codeProf?: string;   
-  codeParent?: string; 
+  // 🔹 Code unique pour associer un élève à un prof ou parent
+  code?: string;
 
   initiale?: string;
   cguValide?: boolean;

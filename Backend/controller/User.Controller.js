@@ -49,7 +49,7 @@ function randomSuffix(length = 5) {
 }
 
 function generateKey() {
-  const numberPart = Math.floor(Math.random() * 100000); // 0 à 99999
+  const numberPart = Math.floor(Math.random() * 100000);
   const suffix = randomSuffix(5);
   return `${numberPart}${suffix}`;
 }
@@ -74,8 +74,7 @@ exports.registerUser = (req, res) => {
         theme = 'sombre',
         font = 'Roboto',
         luminosite = 100,
-        codeProf = '',
-        codeParent = '',
+        code,
         cookie = ''
       } = req.body;
 
@@ -87,27 +86,24 @@ exports.registerUser = (req, res) => {
         return res.status(400).json({ message: 'Utilisateur déjà inscrit' });
 
       const hashedPassword = await bcrypt.hash(password, 10);
-
-      // 🔑 Génération d'une clé unique
       const key = generateKey();
 
       const photoProfil = req.file
         ? `/uploads/profils/${req.file.filename}`
         : null;
 
-      // Construction de l'objet à stocker dans la base
+      // Construction de l'objet utilisateur
       const userData = {
         nom,
         prenom,
         email,
         password: hashedPassword,
         role,
+        code: code || null, // Champ unique fusionné
         initiale: initiale || (prenom[0]?.toUpperCase() + nom[0]?.toUpperCase()),
         cguValide,
         dysListe: Array.isArray(dysListe) ? dysListe : [],
         key,
-        codeProf,
-        codeParent,
         photoProfil,
         theme,
         font,
@@ -119,12 +115,14 @@ exports.registerUser = (req, res) => {
       const user = new User(userData);
       await user.save();
 
+      // Préparer la réponse JSON
       const response = {
         _id: user._id,
         nom: user.nom,
         prenom: user.prenom,
         email: user.email,
         role: user.role,
+        code: user.code,
         photoProfil: user.photoProfil,
         initiale: user.initiale,
         cguValide: user.cguValide,
@@ -138,8 +136,6 @@ exports.registerUser = (req, res) => {
         cookie: user.cookie,
         eleveRelations: user.eleveRelations || [],
         key: user.key,
-        codeProf,
-        codeParent,
         status: user.status,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
@@ -163,12 +159,14 @@ exports.getUserByEmail = async (req, res) => {
     const user = await User.findOne({ email: req.params.email }).select('-password');
     if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
 
-    res.json({
+    const response = {
       ...user.toObject(),
       luminosite: user.luminosite ?? 50,
       cookie: user.cookie ?? '',
       status: user.status
-    });
+    };
+
+    res.json(response);
   } catch (err) {
     console.error('Erreur getUserByEmail :', err);
     res.status(500).json({ message: 'Erreur serveur' });
@@ -183,12 +181,14 @@ exports.getUserById = async (req, res) => {
     const user = await User.findById(req.params.id).select('-password');
     if (!user) return res.status(404).json({ message: 'Utilisateur introuvable' });
 
-    res.json({
+    const response = {
       ...user.toObject(),
       luminosite: user.luminosite ?? 50,
       cookie: user.cookie ?? '',
       status: user.status
-    });
+    };
+
+    res.json(response);
   } catch (err) {
     console.error('Erreur getUserById :', err);
     res.status(500).json({ message: 'Erreur serveur' });
@@ -355,7 +355,7 @@ exports.getUserCard = async (req, res) => {
     const user = await User.findById(req.params.id).select('-password -cguValide');
     if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
 
-    res.json({
+    const card = {
       nom: user.nom,
       prenom: user.prenom,
       role: user.role,
@@ -363,15 +363,16 @@ exports.getUserCard = async (req, res) => {
       dysListe: user.dysListe,
       eleveRelations: user.eleveRelations,
       key: user.key,
-      codeProf: user.codeProf,
-      codeParent: user.codeParent,
       photoProfil: user.photoProfil,
       theme: user.theme,
       font: user.font,
       luminosite: user.luminosite ?? 50,
       cookie: user.cookie ?? '',
-      status: user.status
-    });
+      status: user.status,
+      code: user.code // 🔑 champ fusionné
+    };
+
+    res.json(card);
   } catch (err) {
     console.error('Erreur getUserCard :', err);
     res.status(500).json({ message: 'Erreur serveur' });
