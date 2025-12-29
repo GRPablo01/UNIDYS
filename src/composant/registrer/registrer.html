@@ -296,10 +296,20 @@
       <!-- Code rôle pour prof ou parent -->
       <div *ngIf="actif==='prof' || actif==='parent'" class="relative w-full">
         <i class="fas fa-key absolute left-3 top-1/2 -translate-y-1/2 text-white/60 text-sm"></i>
-        <input [type]="passwordVisible ? 'text' : 'password'" placeholder="Code rôle"
-          [(ngModel)]="inscriptionData.codeProf" name="codeProf" class="w-full pl-9 pr-10 py-3 rounded-xl bg-white/10 text-white border border-white/20
+        <input
+          [type]="passwordVisible ? 'text' : 'password'"
+          placeholder="Code rôle"
+          [ngModel]="actif === 'prof'
+            ? inscriptionData.codeProf
+            : inscriptionData.codeParent"
+          (ngModelChange)="onCodeRoleChange($event)"
+          [name]="actif === 'prof' ? 'codeProf' : 'codeParent'"
+          class="w-full pl-9 pr-10 py-3 rounded-xl bg-white/10 text-white border border-white/20
                 focus:border-[var(--electric-violet)] focus:ring-2 focus:ring-[var(--electric-violet)]/50
-                hover:border-[var(--vivid-pink)]/50 transition-all duration-300 text-sm sm:text-base" />
+                hover:border-[var(--vivid-pink)]/50 transition-all duration-300 text-sm sm:text-base"
+        />
+
+      
         <button type="button" (click)="togglePasswordVisibility()"
           class="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-[var(--Vert)] transition">
           <i class="fas" [ngClass]="passwordVisible ? 'fa-eye-slash' : 'fa-eye'"></i>

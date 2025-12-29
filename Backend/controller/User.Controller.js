@@ -74,7 +74,8 @@ exports.registerUser = (req, res) => {
         theme = 'sombre',
         font = 'Roboto',
         luminosite = 100,
-        code,
+        codeProf = '',
+        codeParent = '',
         cookie = ''
       } = req.body;
 
@@ -99,11 +100,12 @@ exports.registerUser = (req, res) => {
         email,
         password: hashedPassword,
         role,
-        code: code || null, // Champ unique fusionné
         initiale: initiale || (prenom[0]?.toUpperCase() + nom[0]?.toUpperCase()),
         cguValide,
         dysListe: Array.isArray(dysListe) ? dysListe : [],
         key,
+        codeProf,
+        codeParent,
         photoProfil,
         theme,
         font,
@@ -122,7 +124,6 @@ exports.registerUser = (req, res) => {
         prenom: user.prenom,
         email: user.email,
         role: user.role,
-        code: user.code,
         photoProfil: user.photoProfil,
         initiale: user.initiale,
         cguValide: user.cguValide,
@@ -136,6 +137,8 @@ exports.registerUser = (req, res) => {
         cookie: user.cookie,
         eleveRelations: user.eleveRelations || [],
         key: user.key,
+        codeProf,
+        codeParent,
         status: user.status,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
@@ -369,7 +372,8 @@ exports.getUserCard = async (req, res) => {
       luminosite: user.luminosite ?? 50,
       cookie: user.cookie ?? '',
       status: user.status,
-      code: user.code // 🔑 champ fusionné
+      codeProf: user.codeProf,
+      codeParent: user.codeParent,
     };
 
     res.json(card);

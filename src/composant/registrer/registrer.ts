@@ -134,11 +134,17 @@ export class Registrer implements OnInit, OnDestroy {
   }
 
   choisirRole(role: 'eleve' | 'prof' | 'parent') {
+    console.log('🟡 choisirRole appelé avec :', role);
+  
     this.actif = role;
     this.inscriptionData.role = role;
-    this.inscriptionData.key = ''; // réinitialisation du key
+    this.inscriptionData.key = '';
+  
+    console.log('📦 inscriptionData après choix du rôle :', this.inscriptionData);
+  
     this.saveLocalData();
   }
+  
 
   isEmailValid(email: string): boolean {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -149,16 +155,79 @@ export class Registrer implements OnInit, OnDestroy {
   }
 
   formulaireValide(): boolean {
-    const { nom, prenom, email, password, role, codeProf, codeParent, dysListe } = this.inscriptionData;
-    if (!nom || !prenom) return false;
-    if (!this.isEmailValid(email)) return false;
-    if (!password || password.length < 6) return false;
-    if (role === 'prof' && codeProf !== this.CODE_PROF) return false;
-    if (role === 'parent' && codeParent !== this.CODE_PARENT) return false;
-    if (role === 'eleve' && (!dysListe || dysListe.length === 0)) return false;
-    if (!this.cguAccepte) return false;
+    const {
+      nom,
+      prenom,
+      email,
+      password,
+      role,
+      codeProf,
+      codeParent,
+      dysListe
+    } = this.inscriptionData;
+  
+    console.log('🧪 Vérification formulaireValide');
+    console.log('➡️ nom:', nom);
+    console.log('➡️ prenom:', prenom);
+    console.log('➡️ email:', email, 'valide ?', this.isEmailValid(email));
+    console.log('➡️ password length:', password?.length);
+    console.log('➡️ role:', role);
+    console.log('➡️ codeProf:', codeProf);
+    console.log('➡️ codeParent:', codeParent);
+    console.log('➡️ dysListe:', dysListe);
+    console.log('➡️ cguAccepte:', this.cguAccepte);
+  
+    if (!nom || !prenom) {
+      console.log('❌ nom ou prénom manquant');
+      return false;
+    }
+  
+    if (!this.isEmailValid(email)) {
+      console.log('❌ email invalide');
+      return false;
+    }
+  
+    if (!password || password.length < 6) {
+      console.log('❌ mot de passe invalide');
+      return false;
+    }
+  
+    if (role === 'prof' && codeProf !== this.CODE_PROF) {
+      console.log('❌ code prof incorrect');
+      return false;
+    }
+  
+    if (role === 'parent' && codeParent !== this.CODE_PARENT) {
+      console.log('❌ code parent incorrect');
+      return false;
+    }
+  
+    if (role === 'eleve' && (!dysListe || dysListe.length === 0)) {
+      console.log('❌ aucune dys sélectionnée');
+      return false;
+    }
+  
+    if (!this.cguAccepte) {
+      console.log('❌ CGU non acceptées');
+      return false;
+    }
+  
+    console.log('✅ formulaireValide = TRUE');
     return true;
   }
+
+  onCodeRoleChange(value: string) {
+    if (this.actif === 'prof') {
+      this.inscriptionData.codeProf = value;
+      this.inscriptionData.codeParent = '';
+    } else if (this.actif === 'parent') {
+      this.inscriptionData.codeParent = value;
+      this.inscriptionData.codeProf = '';
+    }
+    this.saveLocalData();
+  }
+  
+  
 
   onCguChange(event: Event) {
     const checkbox = event.target as HTMLInputElement;
@@ -253,7 +322,7 @@ changeLuminosite(value: number) {
     if (this.selectedFile)
       formData.append('photoProfil', this.selectedFile);
 
-    this.http.post('http://localhost:3000/api/dysone/users', formData, {
+    this.http.post('http://localhost:3000/api/unidys10/users', formData, {
       reportProgress: true,
       observe: 'events'
     }).subscribe({

@@ -66,7 +66,7 @@ const upload = multer({ storage });
 // 🌍 Connexion à MongoDB
 // ==============================
 // 🌍 Connexion à MongoDB
-const MONGO_URL = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/dysone';
+const MONGO_URL = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/unidys10';
 
 mongoose
   .connect(MONGO_URL)
@@ -87,7 +87,7 @@ const authRoutes = require('./Backend/Routes/User.Routes'); // vérifier si voul
 // 🧭 Déclaration des routes API
 // ==============================
 app.use('/api/user', userRoutes);
-app.use('/api/dysone', authRoutes);
+app.use('/api/unidys10', authRoutes);
 // app.use('/api/utilisateurs', utilisateurRoutes);
 // app.use('/api/cours', coursRoutes);
 // app.use('/api/cours/html', coursHtmlRoute);

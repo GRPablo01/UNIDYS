@@ -23,8 +23,10 @@ const userSchema = new mongoose.Schema(
     // 🔹 Clé unique selon le rôle (remplace eleveKey, profKey, parentKey)
     key: { type: String, default: null },
 
-    // 🔹 Code unique pour associer un élève à un prof ou parent
-    code: { type: String, default: null },
+   
+    codeProf: { type: String, default: null },
+    codeParent: { type: String, default: null },
+
 
     // Autres informations
     initiale: { type: String },
