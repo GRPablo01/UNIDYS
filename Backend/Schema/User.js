@@ -24,8 +24,9 @@ const userSchema = new mongoose.Schema(
     key: { type: String, default: null },
 
    
-    codeProf: { type: String, default: null },
-    codeParent: { type: String, default: null },
+    codeProf: { type: String },
+    codeParent: { type: String },
+
 
 
     // Autres informations
@@ -68,7 +69,14 @@ const userSchema = new mongoose.Schema(
       enLigne: { type: Boolean, default: true },
       nePasDeranger: { type: Boolean, default: false },
       absent: { type: Boolean, default: false }
-    }
+    },
+
+    // 🔹 Statut global du compte
+    compte: {
+      type: String,
+      enum: ['actif', 'desactive', 'supprime'],
+      default: 'actif'
+    },
     
   },
   { timestamps: true }

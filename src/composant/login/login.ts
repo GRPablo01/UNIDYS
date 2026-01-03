@@ -20,23 +20,29 @@ export interface SessionUser {
   police?: string;
   luminosite?: number;
   cguValide?: boolean;
-  isActive?: boolean;
+
   Key?: string;
-  // Champs spécifiques selon rôle
-  eleveKey?: string;
+ 
   dysListe?: any[];
   xp?: number;
   cours?: any[];
   qcm?: any[];
   suivi?: any[];
   abonnement?: any[];
-  profKey?: string;
+
   codeProf?: string;
   coursCrees?: any[];
   qcmCrees?: any[];
   parentKey?: string;
   codeParent?: string;
   enfants?: any[];
+  status?: any;
+  eleveRelations?: any[];
+
+  password?: string;
+  photoProfil?: string;
+  key?: string;
+  font?: string;
 }
 
 @Component({
@@ -89,87 +95,14 @@ export class Login {
   }
 
   private saveUserSession(user: any): void {
+    // 🔒 Stockage complet de l'utilisateur tel quel dans le localStorage
+    localStorage.setItem('utilisateur', JSON.stringify(user));
 
-
-    // -------------------------------
-    // 🔹 Infos communes à tous les utilisateurs
-    // -------------------------------
-    const sessionUser: any = {
-      nom: user.nom || user.roleData?.nom || '',
-      prenom: user.prenom || user.roleData?.prenom || '',
-      email: user.email || user.roleData?.email || '',
-      role: (user.role || user.roleData?.role || 'eleve').trim().toLowerCase(),
-      initiale: user.initiales
-        || ((user.prenom?.[0] ?? '').toUpperCase() + (user.nom?.[0] ?? '').toUpperCase())
-        || ((user.roleData?.prenom?.[0] ?? '').toUpperCase() + (user.roleData?.nom?.[0] ?? '').toUpperCase()),
-      avatar: user.avatar
-        ? `http://localhost:3000${user.avatar}`
-        : user.photoProfil
-          ? `http://localhost:3000${user.photoProfil}`
-          : user.roleData?.avatar
-            ? `http://localhost:3000${user.roleData.avatar}`
-            : '',
-      Key: user.Key || user.roleData?.Key || '',
-      theme: user.theme || user.roleData?.theme || 'sombre',
-      luminosite: user.luminosite ?? user.roleData?.luminosite ?? 100,
-      police: user.police || user.roleData?.police || 'Roboto',
-    };
-
-
-
-    // -------------------------------
-    // 🔹 Infos spécifiques selon le rôle
-    // -------------------------------
-    if (user.roleData || sessionUser.role) {
-      switch (sessionUser.role) {
-        case 'eleve':
-          sessionUser.dysListe = user.roleData?.dysListe || user.dysListe || [];
-          sessionUser.xp = user.roleData?.xp || user.xp || 0;
-          sessionUser.cours = user.roleData?.cours || user.cours || [];
-          sessionUser.qcm = user.roleData?.qcm || user.qcm || [];
-          sessionUser.suivi = user.roleData?.suivi || user.suivi || [];
-          sessionUser.abonnement = user.roleData?.abonnement || user.abonnement || [];
-          console.log('✅ Infos spécifiques ELEVE:', sessionUser);
-          break;
-
-        case 'prof':
-          sessionUser.codeProf = user.roleData?.codeProf || user.codeProf || '';
-          sessionUser.coursCrees = user.roleData?.coursCrees || user.coursCrees || [];
-          sessionUser.qcmCrees = user.roleData?.qcmCrees || user.qcmCrees || [];
-          sessionUser.suivi = user.roleData?.suivi || user.suivi || [];
-          sessionUser.abonnement = user.roleData?.abonnement || user.abonnement || [];
-          console.log('✅ Infos spécifiques PROF:', sessionUser);
-          break;
-
-        case 'parent':
-          sessionUser.codeParent = user.roleData?.codeParent || user.codeParent || '';
-          sessionUser.enfants = user.roleData?.enfants || user.enfants || [];
-          sessionUser.suivi = user.roleData?.suivi || user.suivi || [];
-          sessionUser.abonnement = user.roleData?.abonnement || user.abonnement || [];
-          console.log('✅ Infos spécifiques PARENT:', sessionUser);
-          break;
-      }
-    }
-
-
-    // -------------------------------
-    // 🔒 Stockage dans le localStorage
-    // -------------------------------
-    localStorage.setItem('utilisateur', JSON.stringify(sessionUser));
-
-
-    // -------------------------------
     // 🔄 Mise à jour du AuthService
-    // -------------------------------
-    this.authService.setUser(sessionUser);
+    this.authService.setUser(user);
 
-
-    // 🔹 Log final pour vérification
-    //console.log('🎯 Utilisateur filtré pour la session :', sessionUser);
+    //console.log('🎯 Utilisateur stocké complet :', user);
   }
-
-
-
 
   valider(): void {
     this.formSubmitted = true;
@@ -179,7 +112,7 @@ export class Login {
     this.errorMessage = null;
 
     this.http
-      .post('http://localhost:3000/api/dysone/login', this.connexionData)
+      .post('http://localhost:3000/api/unidys10/login', this.connexionData)
       .subscribe({
         next: (res: any) => {
           const user = res.user || res;

@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Header } from '../../composant/header/header';
+import { Welcome } from '../../composant/header/Page-Accueil/welcome/welcome';
 
 @Component({
   selector: 'app-accueil',
   standalone: true,
-  imports: [CommonModule, Header],
+  imports: [CommonModule, Header,Welcome],
   templateUrl: './accueil.html',
   styleUrl: './accueil.css'
 })
@@ -115,7 +116,7 @@ export class Accueil implements OnInit {
 
       // 🌤️ Background clair
       this.background =
-        'linear-gradient(135deg, #e5fdfc 0%, #b3f3ef 45%, #6ee3dc 100%)';
+        '#FFFFFF';
     }
 
     // ✅ Luminosité utilisateur (CORRIGÉ)

@@ -48,6 +48,9 @@ export interface User {
   // Cookie
   cookie?: '' | 'accepted' | 'refused';
 
+  // 🔹 Statut global du compte
+  compte?: 'actif' | 'desactive' | 'supprime';
+
   createdAt?: string;
   updatedAt?: string;
 }

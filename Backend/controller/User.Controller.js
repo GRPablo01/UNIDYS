@@ -88,12 +88,9 @@ exports.registerUser = (req, res) => {
 
       const hashedPassword = await bcrypt.hash(password, 10);
       const key = generateKey();
+      const photoProfil = req.file ? `/uploads/profils/${req.file.filename}` : null;
 
-      const photoProfil = req.file
-        ? `/uploads/profils/${req.file.filename}`
-        : null;
-
-      // Construction de l'objet utilisateur
+      // Création de l'objet userData
       const userData = {
         nom,
         prenom,
@@ -102,48 +99,48 @@ exports.registerUser = (req, res) => {
         role,
         initiale: initiale || (prenom[0]?.toUpperCase() + nom[0]?.toUpperCase()),
         cguValide,
-        dysListe: Array.isArray(dysListe) ? dysListe : [],
-        key,
-        codeProf,
-        codeParent,
         photoProfil,
         theme,
         font,
         luminosite: Number(luminosite) || 100,
         cookie,
-        status: { enLigne: true, nePasDeranger: false, absent: false }
+        status: { enLigne: true, nePasDeranger: false, absent: false },
+        key,
+        compte: 'actif'
       };
+
+      // Champs spécifiques aux rôles
+      if (role === 'eleve') {
+        userData.dysListe = Array.isArray(dysListe)
+          ? dysListe
+          : typeof dysListe === 'string' && dysListe.length
+            ? dysListe.split(',').map(s => s.trim())
+            : [];
+        userData.xp = 0;
+      } else if (role === 'prof') {
+        userData.codeProf = codeProf;
+      } else if (role === 'parent') {
+        userData.codeParent = codeParent;
+      }
 
       const user = new User(userData);
       await user.save();
 
-      // Préparer la réponse JSON
-      const response = {
-        _id: user._id,
-        nom: user.nom,
-        prenom: user.prenom,
-        email: user.email,
-        role: user.role,
-        photoProfil: user.photoProfil,
-        initiale: user.initiale,
-        cguValide: user.cguValide,
-        dysListe: user.dysListe,
-        xp: user.xp || 0,
-        cours: user.cours || [],
-        qcm: user.qcm || [],
-        theme: user.theme,
-        font: user.font,
-        luminosite: user.luminosite,
-        cookie: user.cookie,
-        eleveRelations: user.eleveRelations || [],
-        key: user.key,
-        codeProf,
-        codeParent,
-        status: user.status,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-        __v: user.__v
-      };
+      const response = user.toObject();
+
+      // Supprimer les champs non pertinents pour chaque rôle
+      if (role === 'eleve') {
+        delete response.codeProf;
+        delete response.codeParent;
+      } else if (role === 'prof') {
+        delete response.codeParent;
+        delete response.dysListe;
+        delete response.xp;
+      } else if (role === 'parent') {
+        delete response.codeProf;
+        delete response.dysListe;
+        delete response.xp;
+      }
 
       res.status(201).json(response);
 
@@ -162,14 +159,26 @@ exports.getUserByEmail = async (req, res) => {
     const user = await User.findOne({ email: req.params.email }).select('-password');
     if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
 
-    const response = {
-      ...user.toObject(),
+    const response = user.toObject();
+
+    // Supprimer les champs non pertinents selon le rôle
+    if (user.role === 'prof') {
+      delete response.dysListe;
+      delete response.xp;
+    } else if (user.role === 'parent') {
+      delete response.dysListe;
+      delete response.xp;
+    } else if (user.role === 'eleve') {
+      delete response.codeProf;
+      delete response.codeParent;
+    }
+
+    res.json({
+      ...response,
       luminosite: user.luminosite ?? 50,
       cookie: user.cookie ?? '',
       status: user.status
-    };
-
-    res.json(response);
+    });
   } catch (err) {
     console.error('Erreur getUserByEmail :', err);
     res.status(500).json({ message: 'Erreur serveur' });
@@ -184,14 +193,22 @@ exports.getUserById = async (req, res) => {
     const user = await User.findById(req.params.id).select('-password');
     if (!user) return res.status(404).json({ message: 'Utilisateur introuvable' });
 
-    const response = {
-      ...user.toObject(),
+    const response = user.toObject();
+
+    if (user.role === 'prof' || user.role === 'parent') {
+      delete response.dysListe;
+      delete response.xp;
+    } else if (user.role === 'eleve') {
+      delete response.codeProf;
+      delete response.codeParent;
+    }
+
+    res.json({
+      ...response,
       luminosite: user.luminosite ?? 50,
       cookie: user.cookie ?? '',
       status: user.status
-    };
-
-    res.json(response);
+    });
   } catch (err) {
     console.error('Erreur getUserById :', err);
     res.status(500).json({ message: 'Erreur serveur' });
@@ -221,12 +238,24 @@ exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find().select('-password');
 
-    res.status(200).json(users.map(u => ({
-      ...u.toObject(),
-      luminosite: u.luminosite ?? 50,
-      cookie: u.cookie ?? '',
-      status: u.status
-    })));
+    const response = users.map(u => {
+      const obj = u.toObject();
+      if (u.role === 'prof' || u.role === 'parent') {
+        delete obj.dysListe;
+        delete obj.xp;
+      } else if (u.role === 'eleve') {
+        delete obj.codeProf;
+        delete obj.codeParent;
+      }
+      return {
+        ...obj,
+        luminosite: u.luminosite ?? 50,
+        cookie: u.cookie ?? '',
+        status: u.status
+      };
+    });
+
+    res.status(200).json(response);
   } catch (err) {
     console.error('Erreur getAllUsers :', err);
     res.status(500).json({ message: 'Erreur serveur' });
@@ -240,16 +269,24 @@ exports.updateUser = async (req, res) => {
   try {
     const { id } = req.params;
     const updates = { ...req.body };
-
     if (updates.password) delete updates.password;
 
     const updatedUser = await User.findByIdAndUpdate(id, updates, { new: true }).select('-password');
     if (!updatedUser) return res.status(404).json({ message: 'Utilisateur non trouvé' });
 
+    const response = updatedUser.toObject();
+    if (updatedUser.role === 'prof' || updatedUser.role === 'parent') {
+      delete response.dysListe;
+      delete response.xp;
+    } else if (updatedUser.role === 'eleve') {
+      delete response.codeProf;
+      delete response.codeParent;
+    }
+
     console.log('Utilisateur mis à jour :', updatedUser.email);
 
     res.json({
-      ...updatedUser.toObject(),
+      ...response,
       luminosite: updatedUser.luminosite ?? 50,
       cookie: updatedUser.cookie ?? '',
       status: updatedUser.status
@@ -358,23 +395,14 @@ exports.getUserCard = async (req, res) => {
     const user = await User.findById(req.params.id).select('-password -cguValide');
     if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
 
-    const card = {
-      nom: user.nom,
-      prenom: user.prenom,
-      role: user.role,
-      initiale: user.initiale,
-      dysListe: user.dysListe,
-      eleveRelations: user.eleveRelations,
-      key: user.key,
-      photoProfil: user.photoProfil,
-      theme: user.theme,
-      font: user.font,
-      luminosite: user.luminosite ?? 50,
-      cookie: user.cookie ?? '',
-      status: user.status,
-      codeProf: user.codeProf,
-      codeParent: user.codeParent,
-    };
+    const card = user.toObject();
+    if (user.role === 'prof' || user.role === 'parent') {
+      delete card.dysListe;
+      delete card.xp;
+    } else if (user.role === 'eleve') {
+      delete card.codeProf;
+      delete card.codeParent;
+    }
 
     res.json(card);
   } catch (err) {
@@ -397,7 +425,7 @@ exports.updateCookieByKey = async (req, res) => {
     const user = await User.findOne({ key });
     if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
 
-    user.cookie = cookie; // 'accepted' ou 'refused'
+    user.cookie = cookie;
     await user.save();
 
     res.json({ message: 'Cookie mis à jour', cookie: user.cookie });
