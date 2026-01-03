@@ -106,7 +106,11 @@ exports.registerUser = (req, res) => {
         cookie,
         status: { enLigne: true, nePasDeranger: false, absent: false },
         key,
-        compte: 'actif'
+        compte: 'actif',
+
+        // 🔥 NOUVEAUX CHAMPS
+        abonnement: [],
+        suivie: []
       };
 
       // Champs spécifiques aux rôles

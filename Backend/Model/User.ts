@@ -1,56 +1,99 @@
-export interface EleveRelation {
-  role: 'prof' | 'parent';
-  nom: string;
-  email: string;
+// =============================
+// 🔹 Relations Abonnement / Suivi
+// =============================
+export interface RelationUser {
+  userId: string;
+  role: 'prof' | 'eleve' | 'parent';
 }
 
+// =============================
+// 🔹 Interface User
+// =============================
 export interface User {
   _id: string;
+
+  // =============================
+  // 🔹 Informations de base
+  // =============================
   nom: string;
   prenom: string;
   email: string;
   role: 'prof' | 'eleve' | 'parent';
   password?: string;
 
-  // Photo de profil
+  // =============================
+  // 🔹 Profil
+  // =============================
   photoProfil?: string | null;
-
-  // Clé unique selon le rôle
-  key?: string;
-
-  codeProf?: string;   
-  codeParent?: string; 
-
   initiale?: string;
-  cguValide?: boolean;
+
+  // 🔹 Clé unique selon le rôle
+  key?: string;
+  codeProf?: string;
+  codeParent?: string;
+
+  // =============================
+  // 🔹 Préférences utilisateur
+  // =============================
+  theme?: 'clair' | 'sombre';
+  font?: 
+    | 'Arial'
+    | 'Roboto'
+    | 'Open Sans'
+    | 'Comic Sans'
+    | 'Times New Roman'
+    | 'Lato'
+    | 'Montserrat'
+    | string;
+  luminosite?: number;
+
+  // =============================
+  // 🔹 Données éducatives
+  // =============================
   dysListe?: string[];
   xp?: number;
 
-  // Cours et QCM
-  cours?: { _id: string; titre?: string }[];
-  qcm?: { _id: string; titre?: string }[];
+  cours?: {
+    _id: string;
+    titre?: string;
+  }[];
 
-  // Statuts regroupés
+  qcm?: {
+    _id: string;
+    titre?: string;
+  }[];
+
+  // =============================
+  // 🔹 Abonnements & Suivis
+  // =============================
+
+  /** Comptes que l'utilisateur suit */
+  abonnements?: RelationUser[];
+
+  /** Comptes qui suivent l'utilisateur */
+  suivis?: RelationUser[];
+
+  // =============================
+  // 🔹 Statuts
+  // =============================
   status?: {
     enLigne: boolean;
     nePasDeranger: boolean;
     absent: boolean;
   };
 
-  // Relations de l'élève
-  eleveRelations?: EleveRelation[];
-
-  // Thème et police
-  theme?: 'clair' | 'sombre';
-  font?: 'Arial' | 'Roboto' | 'Open Sans' | 'Comic Sans' | 'Times New Roman' | string;
-  luminosite?: number;
-
-  // Cookie
+  // =============================
+  // 🔹 Cookies & Compte
+  // =============================
   cookie?: '' | 'accepted' | 'refused';
 
-  // 🔹 Statut global du compte
   compte?: 'actif' | 'desactive' | 'supprime';
 
+  cguValide?: boolean;
+
+  // =============================
+  // 🔹 Dates
+  // =============================
   createdAt?: string;
   updatedAt?: string;
 }
