@@ -1,0 +1,64 @@
+<!-- welcome.component.html -->
+<link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans&display=swap" rel="stylesheet">
+
+<div
+  class="relative w-full min-h-screen flex flex-col md:flex-row justify-center items-center px-6 md:px-16 overflow-hidden font-sans"
+  style="font-family: 'Inclusive Sans', sans-serif;" role="banner" aria-label="Section d'accueil UniDys"
+  [ngStyle]="{ 'background': background, 'color': text }">
+
+  <!-- Image de décor en arrière-plan -->
+  <img [src]="Image" alt="Décor accueil UniDys"
+    class="absolute top-0 left-0 w-full h-full object-cover pointer-events-none" />
+
+  
+</div>
+
+<!-- Animations -->
+<style>
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fadeInUp {
+    animation: fadeInUp 1s ease forwards;
+  }
+
+  .animate-fadeInUp.delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .animate-fadeInUp.delay-300 {
+    animation-delay: 0.3s;
+  }
+
+  .animate-fadeInUp.delay-400 {
+    animation-delay: 0.4s;
+  }
+
+  @keyframes gradientAnimation {
+    0% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradientAnimation 5s ease infinite;
+  }
+</style>

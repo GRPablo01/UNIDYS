@@ -2,14 +2,15 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Header } from '../../composant/header/header';
-import { Welcome } from '../../composant/header/Page-Accueil/welcome/welcome';
+import { Welcome } from '../../composant/Page-Accueil/welcome/welcome';
+import { Histoire } from "../../composant/Page-Accueil/histoire/histoire";
 
 @Component({
   selector: 'app-accueil',
   standalone: true,
-  imports: [CommonModule, Header,Welcome],
+  imports: [CommonModule, Header, Welcome, Histoire],
   templateUrl: './accueil.html',
-  styleUrl: './accueil.css'
+  styleUrls: ['./accueil.css']
 })
 export class Accueil implements OnInit {
 
@@ -20,7 +21,6 @@ export class Accueil implements OnInit {
   // VARIABLES THÈME & UTILISATEUR
   // ────────────────────────────────────────────
   background: string = '';
-
   cours: any[] = [];
   dysListe: any[] = [];
   Key: string = '';
@@ -38,14 +38,20 @@ export class Accueil implements OnInit {
   role: string = '';
   cookie: string = '';
 
+  // 🎨 Couleurs du thème
+  rouge!: string;
+  bleu!: string;
+  rose!: string;
+  orange!: string;
+  background2!: string;
+  Image!: string;
+  text!:string;
+
   constructor(
     private titleService: Title,
     private renderer: Renderer2
   ) {}
 
-  // ────────────────────────────────────────────
-  // INITIALISATION
-  // ────────────────────────────────────────────
   ngOnInit(): void {
 
     // 🧠 Titre onglet
@@ -53,10 +59,8 @@ export class Accueil implements OnInit {
 
     // 🔐 Récupération utilisateur connecté
     const utilisateurString = localStorage.getItem('utilisateur');
-
     if (utilisateurString) {
       const utilisateur = JSON.parse(utilisateurString);
-
       ({
         cours: this.cours,
         dysListe: this.dysListe,
@@ -76,12 +80,13 @@ export class Accueil implements OnInit {
         cookie: this.cookie
       } = utilisateur);
 
-      // ✅ Sécurisation luminosité (string → number)
       this.luminosite = Number(this.luminosite ?? 100);
     }
 
-    // 🎨 Appliquer thème + luminosité
+    // 🎨 Appliquer thème + couleurs + luminosité
+    this.setThemeColors();
     this.appliquerTheme();
+    this.updateScrollbarColors();
 
     // ⏳ Petit effet de chargement
     setTimeout(() => {
@@ -90,40 +95,60 @@ export class Accueil implements OnInit {
   }
 
   // ────────────────────────────────────────────
+  // DÉFINITION DES COULEURS SELON LE THÈME
+  // ────────────────────────────────────────────
+  private setThemeColors(): void {
+    if (this.theme === 'sombre') {
+      this.text = '#FFF';
+      this.background = '#261466';
+      this.background2 = '#1C0F4B99';
+      this.rouge = '#b80000';
+      this.bleu = '#4533FD';
+      this.rose = '#F729FE';
+      this.orange = '#FE8218';
+      this.Image = 'assets/decorwelcomedark.png';
+    } else {
+      this.text = '#000';
+      this.background = '#FFF';
+      this.background2 = '#ffffffaa';
+      this.rouge = '#9b0202';
+      this.bleu = '#1101B6';
+      this.rose = '#A902AF';
+      this.orange = '#CF6103';
+      this.Image = 'assets/decorwelcomeclair.png';
+    }
+  }
+
+  // ────────────────────────────────────────────
   // THÈME CLAIR / SOMBRE + LUMINOSITÉ UTILISATEUR
   // ────────────────────────────────────────────
   appliquerTheme(): void {
-
     const brightnessValue = this.luminosite / 100;
 
     if (this.theme === 'sombre') {
-
-      this.renderer.setAttribute(
-        document.documentElement,
-        'data-theme',
-        'dark'
-      );
-
-      // 🌑 Background sombre
-      this.background = '#001219';
-
+      this.renderer.setAttribute(document.documentElement, 'data-theme', 'dark');
     } else {
-
-      this.renderer.removeAttribute(
-        document.documentElement,
-        'data-theme'
-      );
-
-      // 🌤️ Background clair
-      this.background =
-        '#FFFFFF';
+      this.renderer.removeAttribute(document.documentElement, 'data-theme');
     }
 
-    // ✅ Luminosité utilisateur (CORRIGÉ)
-    this.renderer.setStyle(
-      document.body,
-      'filter',
-      `brightness(${brightnessValue})`
-    );
+    // ✅ Luminosité utilisateur
+    this.renderer.setStyle(document.body, 'filter', `brightness(${brightnessValue})`);
+  }
+
+  // ────────────────────────────────────────────
+  // SCROLLBAR DYNAMIQUE SELON THÈME
+  // ────────────────────────────────────────────
+  updateScrollbarColors(): void {
+    const root = document.documentElement;
+
+    if (this.theme === 'sombre') {
+      root.style.setProperty('--scroll-track', this.background2);
+      root.style.setProperty('--scroll-thumb', this.bleu);
+      root.style.setProperty('--scroll-thumb-hover', this.rose);
+    } else {
+      root.style.setProperty('--scroll-track', this.background2);
+      root.style.setProperty('--scroll-thumb', this.bleu);
+      root.style.setProperty('--scroll-thumb-hover', this.rose);
+    }
   }
 }

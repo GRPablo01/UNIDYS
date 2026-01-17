@@ -2,11 +2,19 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, HostListener, OnInit, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Icon } from '../icon/icon';
+import { Profil } from "../dossier-Header/profil/profil";
+import { Nav } from "../dossier-Header/nav/nav";
+import { Notif } from "../dossier-Header/notif/notif";
+import { Parametre } from "../dossier-Header/parametre/parametre";
+import { Support } from "../dossier-Header/support/support";
+import { Login } from "../login/login";
+import { Logo } from "../dossier-Header/logo/logo";
+import { Icon2 } from '../dossier-Header/icon2/icon2';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, Icon],
+  imports: [CommonModule, Icon, Profil, Nav,Icon2, Logo],
   templateUrl: './header.html',
   styleUrls: ['./header.css'],
 })
@@ -80,7 +88,7 @@ export class Header implements OnInit {
   private setThemeColors(): void {
     if (this.theme === 'sombre') {
       this.text = '#FFF';
-      this.background = '#001219';
+      this.background = '#261466';
       this.rouge = '#b80000';
 
       this.bgblue='#1E40AF'; this.textblue='#93C5FD';
@@ -92,12 +100,12 @@ export class Header implements OnInit {
       this.Logo = 'assets/IconBlanc.svg';
     } else {
       this.text = '#000';
-      this.background = '#FFF';
+      this.background = '#E9E7F5';
       this.rouge = '#9b0202';
 
       this.bgblue='#DBEAFE'; this.textblue='#1D4ED8';
       this.bggreen='#D1FAE5'; this.textgreen='#047857';
-      this.bgyellow='#FEF3C7'; this.textyellow='#B45309';
+      this.bgyellow='#FEF3C7'; this.textyellow='#D6BA02';
       this.bgpurple='#F3E8FF'; this.textpurple='#7C3AED';
       this.bgpink='#FFE4E6'; this.textpink='#BE123C';
 

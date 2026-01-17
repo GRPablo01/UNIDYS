@@ -1,12 +1,19 @@
 <!-- Loader -->
-<div *ngIf="!isLoaded" class="fixed inset-0 flex items-center justify-center bg-white z-50">
-    <span class="text-lg font-bold">Chargement...</span>
-</div>
-
-
-<!-- Conteneur principal -->
-<div class="actus-container" [ngStyle]="{ 'background': background }">
+<div *ngIf="!isLoaded" class="fixed inset-0 flex items-center justify-center z-50 bg-black/50">
+    <span class="text-lg font-bold text-white">Chargement...</span>
+  </div>
+  
+  <!-- Conteneur principal -->
+  <div class="actus-container" [ngStyle]="{ 'background': background, 'color': text }">
+  
+    <!-- Header -->
     <app-header></app-header>
+  
+    <!-- Section Welcome -->
     <app-welcome></app-welcome>
-</div>
+  
+    <!-- Section Histoire -->
+    <app-histoire></app-histoire>
+  
+  </div>
   

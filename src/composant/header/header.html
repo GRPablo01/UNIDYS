@@ -1,181 +1,48 @@
-<app-icon></app-icon>
+<!-- CONTENEUR HEADER -->
+<header class="flex items-center justify-between w-full px-4 -py-3" [ngStyle]="{'background': background}">
 
-<!-- ========== HEADER ========== -->
-<header
-  class="relative flex items-center px-6 py-2.5 shadow-md sticky top-0 z-[100000]"
-  [ngStyle]="{ 'font-family': font, 'color': text, 'background': background }"
->
+    <!-- Partie gauche : Logo + Notif + Paramètre + Support -->
+    <div class="flex items-center gap-4">
 
-  <!-- ================== LOGO (GAUCHE) ================== -->
-  <div class="flex-shrink-0">
-    <a href="/" class="flex items-center gap-3 rounded-xl focus:outline-none focus-visible:ring-4">
-      <img [src]="Logo" class="h-11 w-auto" alt="Logo UniDys" />
-    </a>
-  </div>
+        <!-- Logo -->
+        <app-logo class="flex-shrink-0"></app-logo>
 
-  <!-- ================== NAVIGATION (CENTRE) ================== -->
-  <nav
-    class="hidden md:flex items-center gap-2 font-semibold
-           absolute left-1/2 top-1/2
-           -translate-x-1/2 -translate-y-1/2"
-  >
+        <!-- Icônes : notifications, paramètres, support -->
+        <div class="flex items-center gap-2 sm:gap-4 md:gap-6">
+            <app-icon2></app-icon2>
+        </div>
 
-    <!-- Cours -->
-    <a
-      href="#"
-      class="flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200"
-      (mouseenter)="hoverBleu = true"
-      (mouseleave)="hoverBleu = false"
-      [style.background]="hoverBleu ? textblue : bgblue"
-      [style.color]="hoverBleu ? 'white' : textblue"
-    >
-      <i class="fa-solid fa-book-open"></i>
-      <span>Cours</span>
-    </a>
+    </div>
 
-    <!-- Exercices -->
-    <a
-      href="#"
-      class="flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200"
-      (mouseenter)="hoverVert = true"
-      (mouseleave)="hoverVert = false"
-      [style.background]="hoverVert ? textgreen : bggreen"
-      [style.color]="hoverVert ? 'white' : textgreen"
-    >
-      <i class="fa-solid fa-pen-to-square"></i>
-      <span>Exercices</span>
-    </a>
+    <!-- Partie droite : Profil + Nav -->
+    <div class="flex items-center gap-2 sm:gap-4 md:gap-6">
 
-    <!-- Contact -->
-    <a
-      href="#"
-      class="flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200"
-      (mouseenter)="hoverViolet = true"
-      (mouseleave)="hoverViolet = false"
-      [style.background]="hoverViolet ? textpurple : bgpurple"
-      [style.color]="hoverViolet ? 'white' : textpurple"
-    >
-      <i class="fa-solid fa-envelope"></i>
-      <span>Contact</span>
-    </a>
+        <!-- Navigation -->
+        <app-nav></app-nav>
 
-    <!-- À propos -->
-    <a
-      href="#"
-      class="flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200"
-      (mouseenter)="hoverOrange = true"
-      (mouseleave)="hoverOrange = false"
-      [style.background]="hoverOrange ? textpink : bgpink"
-      [style.color]="hoverOrange ? 'white' : textpink"
-    >
-      <i class="fa-solid fa-circle-info"></i>
-      <span>À propos</span>
-    </a>
+        <!-- Profil -->
+        <app-profil></app-profil>
 
-  </nav>
+    </div>
 
-  <!-- ================== PROFIL (DROITE) ================== -->
-  <div
-    class="ml-auto relative rounded-xl"
-    [ngStyle]="{
-      'background': 'linear-gradient(to right,' + bgblue + ',' + bggreen + ')',
-      'color': text
-    }"
-  >
-
-    <!-- Bouton profil -->
-    <button
-      type="button"
-      aria-haspopup="true"
-      [attr.aria-expanded]="menuOpen"
-      aria-label="Menu utilisateur"
-      (click)="toggleMenu()"
-      class="flex items-center gap-2 px-2 py-1.5 rounded-full
-             shadow-sm transition-all duration-150
-             focus:outline-none focus-visible:ring-2"
-      [ngStyle]="{ 'color': text }"
-    >
-      <i class="fa-solid fa-user text-sm opacity-90"></i>
-
-      <div
-        class="w-8 h-8 rounded-full overflow-hidden
-               flex items-center justify-center
-               text-[11px] font-semibold uppercase"
-      >
-        <img
-          *ngIf="photoProfil; else initiales"
-          [src]="photoProfil"
-          (error)="photoProfil = null"
-          class="w-full h-full object-cover"
-        />
-        <ng-template #initiales>{{ initiale }}</ng-template>
-      </div>
-    </button>
-
-   <!-- ================== MENU PROFIL ================== -->
-<div
-*ngIf="menuOpen"
-class="absolute right-0 mt-2 w-56 rounded-xl shadow-xl border"
-[ngStyle]="{
-  'background': background,
-  'color': text,
-  'border-color': bgpink
-}"
->
-
-<!-- Mon profil -->
-<a
-  class="flex items-center gap-3 px-4 py-2 text-sm
-         transition-colors cursor-pointer rounded-lg"
-  (mouseenter)="hoverProfil = true"
-  (mouseleave)="hoverProfil = false"
-  [ngStyle]="{
-    'background': hoverProfil ? bgblue : 'transparent',
-    'color': hoverProfil ? textblue : text
-  }"
->
-  <i class="fa-solid fa-user"></i>
-  <span>Mon profil</span>
-</a>
-
-<!-- Paramètres -->
-<a
-  class="flex items-center gap-3 px-4 py-2 text-sm
-         transition-colors cursor-pointer rounded-lg"
-  (mouseenter)="hoverSettings = true"
-  (mouseleave)="hoverSettings = false"
-  [ngStyle]="{
-    'background': hoverSettings ? bggreen : 'transparent',
-    'color': hoverSettings ? textgreen : text
-  }"
->
-  <i class="fa-solid fa-gear"></i>
-  <span>Paramètres</span>
-</a>
-
-<!-- Séparateur -->
-<div
-  class="my-1 border-t"
-  [ngStyle]="{ 'border-color': bgpink }"
-></div>
-
-<!-- Déconnexion -->
-<a
-  class="flex items-center gap-3 px-4 py-2 text-sm
-         transition-colors cursor-pointer rounded-lg"
-  (mouseenter)="hoverLogout = true"
-  (mouseleave)="hoverLogout = false"
-  [ngStyle]="{
-    'background': hoverLogout ? rouge : 'transparent',
-    'color': hoverLogout ? '#fff' : rouge
-  }"
-  (click)="deconnecter()"
->
-  <i class="fa-solid fa-right-from-bracket"></i>
-  <span>Déconnexion</span>
-</a>
-
-</div>
-
-  </div>
 </header>
+
+<!-- Mobile responsiveness -->
+<style>
+    /* Pour écrans ≤ 989px */
+    /* @media (max-width: 989px) {
+        app-nav {
+            display: none; /* cacher la nav 
+        }
+    } */
+
+    /* Pour écrans ≤ 905px (optionnel, tu peux changer le style si besoin) */
+    @media (max-width: 905px) {
+        /* Par exemple, réduire les gaps ou la taille des icônes */
+        .flex.items-center.gap-2,
+        .flex.items-center.gap-4,
+        .flex.items-center.gap-6 {
+            gap: 1rem; /* réduire légèrement l'espacement */
+        }
+    }
+</style>

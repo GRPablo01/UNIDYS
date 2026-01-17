@@ -1,0 +1,17 @@
+<app-icon></app-icon>
+<!-- Icône Support -->
+<div 
+class="relative inline-block px-3 py-2 rounded-xl cursor-pointer transition-all duration-500 ease-in-out shadow-md ml-1"
+[ngStyle]="{
+  'color': hoverSupport ? '#FFF' : text,
+  'background': hoverSupport 
+      ? 'linear-gradient(135deg, ' + bleu + ', ' + rose + ', ' + orange + ')' 
+      : background,
+  'box-shadow': hoverSupport ? '0 4px 15px rgba(0,0,0,0.3)' : 'none'
+}"
+(mouseenter)="hoverSupport = true"
+(mouseleave)="hoverSupport = false"
+>
+  <i class="fa-solid fa-headset text-xl sm:text-2xl md:text-2xl"></i>
+</div>
+

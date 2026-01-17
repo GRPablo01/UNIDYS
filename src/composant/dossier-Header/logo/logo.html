@@ -1,0 +1,28 @@
+<a routerLink="/accueil"><div 
+  class="flex items-center gap-3 p-2 sm:p-1 md:p-2 select-none cursor-pointer
+         transition-all duration-300 ease-out"
+  (mouseenter)="hoverLogo = true"
+  (mouseleave)="hoverLogo = false"
+>
+
+    <!-- LOGO animé légèrement -->
+    <img [src]="Logo" alt="Logo UniDys"
+         class="h-9 w-9 sm:h-10 sm:w-10 md:h-12 md:w-12 object-contain transition-all duration-300"
+         [ngStyle]="{
+           'transform': hoverLogo ? 'scale(1.08)' : 'scale(1)',
+           'filter': hoverLogo ? 'drop-shadow(0 2px 6px rgba(0,0,0,0.25))' : 'none'
+         }"
+    />
+
+    <!-- TEXTE animé + adaptatif -->
+    <span class="font-extrabold tracking-wide
+                 text-lg sm:text-xl md:text-2xl
+                 transition-all duration-300"
+          [ngStyle]="{
+            'color': text,
+            'letter-spacing': hoverLogo ? '1px' : '0.5px',
+            'opacity': hoverLogo ? '1' : '0.9'
+          }">
+        {{ appName }}
+    </span>
+</div></a>

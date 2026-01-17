@@ -25,7 +25,7 @@
   /* 🌙 Mode sombre */
   :root[data-theme="dark"] {
     --Bleu-dark:#020118;
-    --Blanc:#ffffff;
+    --Blanc:#ffffff44;
   
     --Blanc2:#929292;
   

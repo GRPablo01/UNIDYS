@@ -1,0 +1,25 @@
+<div class="flex flex-row items-center m-0 p-0">
+  
+  <!-- Icône Notification -->
+  <div 
+    class="relative inline-block px-3 py-2 rounded-xl cursor-pointer transition-all duration-500 ease-in-out shadow-md"
+    [ngStyle]="{
+      'color': hoverNotif ? '#FFF' : text,
+      'background': hoverNotif 
+          ? 'linear-gradient(135deg, ' + bleu + ', ' + rose + ', ' + orange + ')' 
+          : background,
+      'box-shadow': hoverNotif ? '0 4px 15px rgba(0,0,0,0.3)' : 'none'
+    }"
+    (mouseenter)="hoverNotif = true"
+    (mouseleave)="hoverNotif = false"
+  >
+      <i class="fa-solid fa-bell text-xl sm:text-2xl md:text-2xl"></i>
+      <span *ngIf="nbNotifications > 0"
+            class="absolute -top-1 -right-1 sm:-top-2 sm:-right-2
+                   flex items-center justify-center 
+                   bg-red-600 text-white 
+                   text-[10px] sm:text-xs w-4 h-4 sm:w-5 sm:h-5 
+                   rounded-full shadow-lg">
+          {{ nbNotifications }}
+      </span>
+</div>

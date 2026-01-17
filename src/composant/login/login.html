@@ -1,8 +1,4 @@
-<!-- <a routerLink="/accueil" class="z-10 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-  Aller à l'accueil
-</a> -->
-
-<!-- 🌟 CONTAINER CONNEXION (centré et sans scroll) -->
+<!-- 🌟 CONTAINER CONNEXION -->
 <div class="connexion-container fixed inset-0 w-full h-full flex flex-col justify-center items-center overflow-hidden 
             bg-gradient-to-br from-[var(--Black)] via-[var(--Gris)] to-[var(--Black)] 
             dark:from-[var(--Noir)] dark:via-[var(--Gris)] dark:to-[var(--Noir)] 
@@ -12,105 +8,120 @@
   <app-icon class="mb-6 animate-fade-in z-20"></app-icon>
 
   <!-- 🌄 Image de fond -->
-  <div class="absolute inset-0 flex items-center justify-center overflow-hidden">
-    <!-- 🌌 Image principale -->
-    <div class="absolute inset-0 bg-cover bg-center scale-105 blur-[1px] brightness-[0.4] transition-transform duration-700"
+  <div class="absolute inset-0 overflow-hidden">
+    <div class="absolute inset-0 bg-cover bg-center scale-105 blur-[1px] brightness-[0.4]"
          style="background-image: url('assets/bg1.jpg');"></div>
-
-    <!-- 🌑 Overlay dégradé -->
     <div class="absolute inset-0 bg-gradient-to-br from-black/80 via-[var(--Black)]/60 to-[var(--Rouge)]/20 backdrop-blur-sm"></div>
   </div>
 
   <!-- 🧩 Conteneur principal -->
   <div class="relative z-10 w-full max-w-md sm:max-w-lg px-4 sm:px-6 animate-fade-in-up">
 
-    <!-- ✅ Message de bienvenue -->
-    <div *ngIf="message" role="alert" aria-live="polite"
-         class="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" (click)="message = null"></div>
-      <div class="relative z-10 w-full max-w-sm p-6 rounded-2xl bg-gradient-to-br from-[var(--Bleu)] to-[var(--Vert)]
-                  text-white text-center shadow-[0_0_25px_rgba(255,80,80,0.5)] border border-[var(--vivid-pink)]/30 animate-fade-in-up">
-        <p class="text-base font-medium">{{ message }}</p>
-        <button (click)="message = null"
-                class="mt-4 px-4 py-2 bg-white/20 text-white rounded-lg hover:bg-white/40 transition">
-          Fermer
-        </button>
-      </div>
-    </div>
-
-    <!-- 🧠 Formulaire de connexion -->
+    <!-- 🧠 Formulaire -->
     <form (ngSubmit)="valider()" #connexionForm="ngForm"
-          class="relative -mt-2 bg-white/10 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 shadow-2xl 
-                 border border-[var(--Vert-Clair)] space-y-6 transform hover:scale-[1.01] transition-all duration-500 ease-out">
+          class="bg-white/10 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 shadow-2xl 
+                 border border-[var(--Vert-Clair)] space-y-6">
 
-      <!-- 🧩 Logo / Header -->
-      <div class="text-center mb-6 sm:mb-8">
-        <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 bg-gradient-to-br from-[var(--Vert)] to-[var(--Bleu)] rounded-2xl flex items-center justify-center shadow-lg shadow-[var(--bright-blue)]/30">
-          <i class="fas fa-user-lock text-2xl sm:text-3xl text-white"></i>
+      <!-- Header -->
+      <div class="text-center">
+        <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-[var(--Vert)] to-[var(--Bleu)] rounded-2xl flex items-center justify-center shadow-lg">
+          <i class="fas fa-user-lock text-3xl text-white"></i>
         </div>
-        <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Connexion</h2>
-        <p class="text-white text-sm mt-2">Accédez à votre espace personnel</p>
+        <h2 class="text-4xl font-extrabold text-white">Connexion</h2>
+        <p class="text-white/80 mt-2">Accédez à votre espace personnel</p>
       </div>
 
-      <!-- ✉️ Email -->
-      <div class="space-y-2">
-        <label for="email" class="block text-sm font-semibold text-white flex items-center">
-          <i class="fas fa-envelope mr-2 text-[var(--vivid-pink)]"></i> Adresse e-mail
+      <!-- ✉️ EMAIL -->
+      <div>
+        <label class="block text-sm font-semibold text-white mb-1">
+          <i class="fas fa-envelope mr-2 text-[var(--vivid-pink)]"></i>Email
         </label>
-        <input type="email" id="email" name="email" required [(ngModel)]="connexionData.email"
-               #email="ngModel" placeholder="Votre e-mail"
-               class="w-full px-4 py-3 rounded-xl bg-white/10 text-white placeholder-white/60 
-                      border border-white/20 focus:border-[var(--electric-violet)] focus:ring-4 focus:ring-[var(--electric-violet)]/30
-                      hover:border-[var(--vivid-pink)]/40 focus:scale-[1.02]
-                      transition-all duration-300 text-base" />
+
+        <input
+          type="email"
+          name="email"
+          required
+          [(ngModel)]="connexionData.email"
+          #email="ngModel"
+          placeholder="Votre e-mail"
+
+          class="w-full px-4 py-3 rounded-xl bg-white/10 text-white placeholder-white/60
+                 border transition-all duration-300 focus:ring-4 focus:scale-[1.02]"
+
+          [ngClass]="{
+            'border-[var(--Vert)] focus:ring-[var(--Vert)]/30': email.valid && email.touched,
+            'border-[var(--Rouge)] focus:ring-[var(--Rouge)]/30': email.invalid && email.touched,
+            'border-white/20': !email.touched
+          }"
+        />
+
+        <p *ngIf="email.invalid && email.touched"
+           class="text-[var(--Rouge)] text-xs mt-1 animate-fade-in">
+          Adresse e-mail invalide
+        </p>
       </div>
 
-      <!-- 🔒 Mot de passe -->
-      <div class="space-y-2">
-        <label for="password" class="block text-sm font-semibold text-white flex items-center">
-          <i class="fas fa-lock mr-2 text-[var(--vivid-pink)]"></i> Mot de passe
+      <!-- 🔒 MOT DE PASSE -->
+      <div>
+        <label class="block text-sm font-semibold text-white mb-1">
+          <i class="fas fa-lock mr-2 text-[var(--vivid-pink)]"></i>Mot de passe
         </label>
+
         <div class="relative">
-          <input [type]="passwordVisible ? 'text' : 'password'" id="password" name="password"
-                 required minlength="6" [(ngModel)]="connexionData.password"
-                 #password="ngModel" placeholder="Votre mot de passe"
-                 class="w-full px-4 py-3 pr-10 rounded-xl bg-white/10 text-white placeholder-white/60 
-                        border border-white/20 focus:border-[var(--electric-violet)] focus:ring-4 focus:ring-[var(--electric-violet)]/30
-                        hover:border-[var(--vivid-pink)]/40 focus:scale-[1.02]
-                        transition-all duration-300 text-base" />
-          <button type="button" (click)="togglePasswordVisibility()"
-                  class="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-[var(--Vert)] transition">
+          <input
+            [type]="passwordVisible ? 'text' : 'password'"
+            name="password"
+            required
+            minlength="6"
+            [(ngModel)]="connexionData.password"
+            #password="ngModel"
+            placeholder="Votre mot de passe"
+
+            class="w-full px-4 py-3 pr-10 rounded-xl bg-white/10 text-white placeholder-white/60
+                   border transition-all duration-300 focus:ring-4 focus:scale-[1.02]"
+
+            [ngClass]="{
+              'border-[var(--Vert)] focus:ring-[var(--Vert)]/30': password.valid && password.touched,
+              'border-[var(--Rouge)] focus:ring-[var(--Rouge)]/30': password.invalid && password.touched,
+              'border-white/20': !password.touched
+            }"
+          />
+
+          <button type="button"
+                  (click)="togglePasswordVisibility()"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-[var(--Vert)]">
             <i class="fas" [ngClass]="passwordVisible ? 'fa-eye-slash' : 'fa-eye'"></i>
           </button>
         </div>
+
+        <p *ngIf="password.invalid && password.touched"
+           class="text-[var(--Rouge)] text-xs mt-1 animate-fade-in">
+          Minimum 6 caractères requis
+        </p>
       </div>
 
       <!-- ⚠️ Erreur serveur -->
-      <div *ngIf="errorMessage" role="alert"
-           class="bg-[var(--Rouge)]/25 border border-[var(--Rouge)] rounded-xl p-4 text-[var(--Rouge)] text-sm flex items-center animate-fade-in-up">
-        <i class="fas fa-exclamation-circle mr-2"></i>
-        <span>{{ errorMessage }}</span>
+      <div *ngIf="errorMessage"
+           class="bg-[var(--Rouge)]/25 border border-[var(--Rouge)] rounded-xl p-3 text-[var(--Rouge)] text-sm flex items-center">
+        <i class="fas fa-exclamation-circle mr-2"></i>{{ errorMessage }}
       </div>
 
-      <!-- 🚀 Bouton de soumission -->
-      <button type="submit" [disabled]="isLoading"
-              class="w-full py-3 rounded-xl font-bold text-white tracking-wide
-                     bg-gradient-to-r from-[var(--Vert)] to-[var(--Bleu)] 
-                     hover:from-[var(--Vert)] hover:to-[var(--Vert)]
-                     active:scale-95 disabled:opacity-60
-                     transition-all duration-500 ease-in-out shadow-lg shadow-[var(--bright-blue)]/30">
-        <span *ngIf="!isLoading"><i class="fas fa-sign-in-alt mr-2"></i> Se connecter</span>
-        <span *ngIf="isLoading"><i class="fas fa-spinner fa-spin mr-2"></i> Connexion...</span>
+      <!-- 🚀 Bouton -->
+      <button type="submit"
+              [disabled]="connexionForm.invalid || isLoading"
+              class="w-full py-3 rounded-xl font-bold text-white
+                     bg-gradient-to-r from-[var(--Vert)] to-[var(--Bleu)]
+                     disabled:opacity-50 transition-all">
+        <span *ngIf="!isLoading">Se connecter</span>
+        <span *ngIf="isLoading"><i class="fas fa-spinner fa-spin mr-2"></i>Connexion...</span>
       </button>
 
-      <!-- 🧾 Lien inscription -->
-      <div class="text-center mt-8 pt-5 border-t border-[var(--Vert)]">
+      <!-- 🧾 Inscription -->
+      <div class="text-center border-t border-[var(--Vert)] pt-5">
         <p class="text-white/80 text-sm">
           Pas encore de compte ?
           <a routerLink="/inscription"
-             class="inline-block ml-2 px-4 py-2 bg-[var(--Bleu-Foncé)]/90 text-white font-semibold rounded-lg 
-                    hover:bg-[var(--Vert-Foncé)] hover:text-white hover:scale-105 active:scale-95
-                    transition-all duration-300">
+             class="ml-2 px-4 py-2 bg-[var(--Bleu-Foncé)] rounded-lg hover:bg-[var(--Vert-Foncé)] transition">
             Créer un compte
           </a>
         </p>

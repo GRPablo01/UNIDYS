@@ -1,0 +1,154 @@
+<!-- welcome.component.html -->
+<link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans&display=swap" rel="stylesheet">
+
+<div
+  class="relative w-full min-h-screen flex flex-col md:flex-row justify-center items-center px-6 md:px-16 overflow-hidden font-sans"
+  style="font-family: 'Inclusive Sans', sans-serif;" role="banner" aria-label="Section d'accueil UniDys"
+  [ngStyle]="{ 'background': background, 'color': text }">
+
+  <!-- Image de décor en arrière-plan -->
+  <img [src]="Image" alt="Décor accueil UniDys"
+    class="absolute top-0 left-0 w-full h-full object-cover pointer-events-none" />
+
+  <!-- Contenu principal -->
+  <div class="relative z-20 flex flex-col md:flex-row items-center justify-center w-full gap-8">
+
+    <!-- Bloc texte -->
+    <div class="flex-1 flex flex-col items-center text-center space-y-6 px-6 py-6 rounded-2xl"
+      [ngStyle]="{ 'background': background2, 'backdrop-filter': 'blur(100px)', 'color': text }">
+
+      <!-- Titre avec gradient -->
+      <h1
+        class="text-4xl md:text-6xl font-bold bg-clip-text text-transparent leading-tight tracking-wide animate-gradient"
+        [ngStyle]="{ 'background-image': 'linear-gradient(90deg,' + bleu + ',' + rose + ',' + orange + ')' }"
+        role="heading" aria-level="1">
+        Bienvenue sur UniDys
+      </h1>
+
+      <!-- Sous-titre avec mots importants en gradient -->
+      <p class="text-lg md:text-xl max-w-2xl leading-relaxed">
+        Une plateforme pensée pour rendre l’apprentissage plus
+        <span class="font-semibold px-2 py-1 rounded-xl text-white"
+          [ngStyle]="{ 'background-image': 'linear-gradient(90deg,' + bleu + ',' + rose + ',' + orange + ')', '-webkit-background-clip': 'text', 'color':'transparent' }">accessible</span>,
+        plus
+        <span class="font-semibold px-2 py-1 rounded-xl text-white"
+          [ngStyle]="{ 'background-image': 'linear-gradient(90deg,' + bleu + ',' + rose + ',' + orange + ')', '-webkit-background-clip': 'text', 'color':'transparent' }">clair</span>
+        et plus
+        <span class="font-semibold px-2 py-1 rounded-xl text-white"
+          [ngStyle]="{ 'background-image': 'linear-gradient(90deg,' + bleu + ',' + rose + ',' + orange + ')', '-webkit-background-clip': 'text', 'color':'transparent' }">confortable</span>
+        pour les personnes
+        <span class="font-semibold px-2 py-1 rounded-xl text-white"
+          [ngStyle]="{ 'background-image': 'linear-gradient(90deg,' + bleu + ',' + rose + ',' + orange + ')', '-webkit-background-clip': 'text', 'color':'transparent' }">DYS</span>.
+      </p>
+
+      <!-- Description détaillée -->
+      <div class="space-y-6 max-w-3xl p-6 md:p-0 mx-auto backdrop-blur-sm rounded-2xl">
+
+        <p class="text-lg md:text-xl px-2 py-3 leading-relaxed" style="text-align: justify;">
+          Ici, tu trouveras des
+          <span class="font-semibold px-3 py-1 rounded-xl"
+            [ngStyle]="{ 'background-image': 'linear-gradient(90deg,' + bleu + ',' + rose + ',' + orange + ')', '-webkit-background-clip': 'text', 'color':'transparent' }">cours
+            simplifiés</span>,
+          des
+          <span class="font-semibold px-3 py-1 rounded-xl"
+            [ngStyle]="{ 'background-image': 'linear-gradient(90deg,' + bleu + ',' + rose + ',' + orange + ')', '-webkit-background-clip': 'text', 'color':'transparent' }">exercices
+            adaptés</span>
+          et des
+          <span class="font-semibold px-3 py-1 rounded-xl"
+            [ngStyle]="{ 'background-image': 'linear-gradient(90deg,' + bleu + ',' + rose + ',' + orange + ')', '-webkit-background-clip': 'text', 'color':'transparent' }">outils
+            conçus</span>
+          pour
+          <span class="font-semibold px-3 py-1 rounded-xl"
+            [ngStyle]="{ 'background-image': 'linear-gradient(90deg,' + bleu + ',' + rose + ',' + orange + ')', '-webkit-background-clip': 'text', 'color':'transparent' }">faciliter
+            la lecture</span>
+          et la compréhension.
+        </p>
+
+        <p class="text-lg md:text-xl leading-relaxed" style="text-align: justify;">
+          Nous t'accompagnons pas à pas pour apprendre en confiance et avancer sereinement.
+        </p>
+
+      </div>
+
+
+      <!-- Boutons -->
+      <div class="flex flex-col md:flex-row gap-4 mt-6 animate-fadeInUp delay-400">
+        <button [ngStyle]="{ 'background-image': 'linear-gradient(90deg,' + bleu + ',' + rose + ',' + orange + ')' }"
+          class="px-8 py-4 text-white font-semibold rounded-xl shadow-lg hover:scale-105 hover:shadow-2xl transform transition-all duration-300 flex items-center space-x-2 group"
+          aria-label="Commencer l'apprentissage sur UniDys" type="button">
+          <span>Commencer</span>
+          <svg class="w-5 h-5 transform transition-transform duration-300 group-hover:translate-x-1" fill="none"
+            stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+          </svg>
+        </button>
+
+        <button type="button" [ngStyle]="{'color': bleu, 'border-color': bleu}"
+          class="px-6 py-3 rounded-xl font-semibold border-2 shadow-lg transition-all duration-300 hover:text-white hover:scale-105 transform focus:outline-none focus:ring-4 focus:ring-opacity-40 focus:ring-[currentColor] flex items-center justify-center gap-2">
+          En savoir plus
+          <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none"
+            stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Image illustration -->
+    <div class="flex-1 flex justify-center items-center animate-fadeInUp delay-400">
+      <img src="assets/image-Sac.svg" alt="Illustration accueil UniDys"
+        class="w-full max-w-md md:max-w-lg rounded-xl" />
+    </div>
+
+  </div>
+</div>
+
+<!-- Animations -->
+<style>
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fadeInUp {
+    animation: fadeInUp 1s ease forwards;
+  }
+
+  .animate-fadeInUp.delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .animate-fadeInUp.delay-300 {
+    animation-delay: 0.3s;
+  }
+
+  .animate-fadeInUp.delay-400 {
+    animation-delay: 0.4s;
+  }
+
+  @keyframes gradientAnimation {
+    0% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradientAnimation 5s ease infinite;
+  }
+</style>
