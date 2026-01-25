@@ -1,53 +1,68 @@
 <app-icon></app-icon>
 
 <!-- Conteneur violet arrondi -->
-<div 
+<div
   class="relative inline-flex items-center gap-2 px-3 py-1.5 rounded-full w-auto cursor-pointer transition-all duration-500 ease-in-out"
-  (mouseenter)="openMenu()"
-  [ngStyle]="{
+  (mouseenter)="openMenu()" [ngStyle]="{
     'color': menuOpen ? '#FFF' : text,
     'background': menuOpen 
-        ? 'linear-gradient(135deg, ' + bleu + ', ' + rose + ', ' + orange + ')' 
+    ? 'linear-gradient(90deg, ' + Header2 + ',)' 
         : 'rgba(156,163,175,0.4)',
     'box-shadow': menuOpen ? '0 4px 15px rgba(0,0,0,0.3)' : 'none'
-  }"
->
+  }">
 
-    <!-- Icône user -->
-    <div 
-      class="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full bg-white text-gray-700 shadow-sm transition-all duration-500"
-      [ngStyle]="{
+  <!-- Icône user -->
+  <div
+    class="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full bg-white text-black shadow-sm transition-all duration-500"
+    [ngStyle]="{
         'transform': menuOpen ? 'scale(1.05)' : 'scale(1)',
         'box-shadow': menuOpen ? '0 2px 10px rgba(0,0,0,0.25)' : 'none'
-      }"
-    >
-        <i class="fa-solid fa-user text-sm sm:text-base md:text-lg"></i>
-    </div>
+      }">
+    <i class="fa-solid fa-user text-sm sm:text-base md:text-lg"></i>
+  </div>
 
-    <!-- Image utilisateur -->
-    <img 
-      [src]="photoUtilisateur" 
-      alt="Photo utilisateur" 
-      class="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-full object-cover transition-all duration-500"
-      [ngStyle]="{
+  <!-- Image utilisateur -->
+  <img [src]="photoUtilisateur" alt="Photo utilisateur"
+    class="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-full object-cover transition-all duration-500" [ngStyle]="{
         'transform': menuOpen ? 'scale(1.05)' : 'scale(1)',
         'box-shadow': menuOpen ? '0 2px 10px rgba(0,0,0,0.25)' : 'none'
-      }"
-    />
+      }" />
 
-    <!-- MENU DÉROULANT -->
-    <div 
-      *ngIf="menuOpen"
-      class="absolute top-full right-0 mt-2 w-40 bg-white shadow-lg rounded-lg py-2 border border-gray-200 transition-all duration-300 z-50"
-      (mouseenter)="keepMenuOpen()"
-      (mouseleave)="closeMenu()"
-    >
-        <a class="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">Voir le profil</a>
-        <a class="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">Paramètres</a>
+  <!-- MENU DÉROULANT -->
+  <div *ngIf="menuOpen"
+    class="absolute top-full right-0 mt-2 w-40 shadow-lg rounded-lg py-2 transition-all duration-300 z-50" [ngStyle]="{
+  'background': Background,
+  'color': Texte
+}" (mouseenter)="keepMenuOpen()" (mouseleave)="closeMenu()">
 
-        <hr class="my-1">
+    <!-- Voir le profil -->
+    <a class="block w-full px-4 py-2 cursor-pointer transition-colors duration-300 rounded"
+      (mouseenter)="hoverProfil = true" (mouseleave)="hoverProfil = false" [ngStyle]="{
+    'background-color': hoverProfil ? '#333366' : 'transparent',
+    color: Texte
+  }">
+      Voir le profil
+    </a>
 
-        <a class="block px-4 py-2 text-red-600 hover:bg-red-100 cursor-pointer"(click)="deconnecter()">Déconnexion</a>
-    </div>
+    <!-- Paramètres -->
+    <a class="block w-full px-4 py-2 cursor-pointer transition-colors duration-300 rounded"
+      (mouseenter)="hoverParam = true" (mouseleave)="hoverParam = false" [ngStyle]="{
+    'background-color': hoverParam ? '#333366' : 'transparent',
+    color: Texte
+  }">
+      Paramètres
+    </a>
+
+    <hr class="my-1 border-gray-500" />
+
+    <!-- Déconnexion -->
+    <a class="block w-full px-4 py-2 cursor-pointer transition-colors duration-300 rounded hover:bg-red-100"
+      [ngStyle]="{ color: rouge }" (click)="deconnecter()">
+      Déconnexion
+    </a>
+
+  </div>
+
+
 
 </div>

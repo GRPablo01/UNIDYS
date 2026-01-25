@@ -68,7 +68,7 @@ export class Logo implements OnInit {
       this.text = '#000';
       this.background = '#FFF';
       this.rouge = '#9b0202';
-      this.Logo = 'assets/IconBlack.svg';
+      this.Logo = 'assets/IconBlanc.svg';
     }
   }
 

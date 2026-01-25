@@ -4,11 +4,13 @@ import { Title } from '@angular/platform-browser';
 import { Header } from '../../composant/header/header';
 import { Welcome } from '../../composant/Page-Accueil/welcome/welcome';
 import { Histoire } from "../../composant/Page-Accueil/histoire/histoire";
+import { Comment } from '../../composant/Page-Accueil/comment/comment';
+import { Profil } from "../../composant/dossier-Header/profil/profil";
 
 @Component({
   selector: 'app-accueil',
   standalone: true,
-  imports: [CommonModule, Header, Welcome, Histoire],
+  imports: [CommonModule, Header, Welcome, Histoire, Comment, Profil],
   templateUrl: './accueil.html',
   styleUrls: ['./accueil.css']
 })

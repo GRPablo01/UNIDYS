@@ -86,7 +86,7 @@ const authRoutes = require('./Backend/Routes/User.Routes'); // vérifier si voul
 // ==============================
 // 🧭 Déclaration des routes API
 // ==============================
-app.use('/api/user', userRoutes);
+app.use('/api', userRoutes);
 app.use('/api/unidys10', authRoutes);
 // app.use('/api/utilisateurs', utilisateurRoutes);
 // app.use('/api/cours', coursRoutes);

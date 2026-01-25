@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { Inscription } from '../page/inscription/inscription';
 import { Connexion } from '../page/connexion/connexion';
 import { Accueil } from '../page/accueil/accueil';
+import { Attents } from '../page/attents/attents';
 
 
 // import { Dashboard } from '../page/dashboard/dashboard';
@@ -20,6 +21,7 @@ export const routes: Routes = [
     // { path: 'cgu', component: CGU},
     // { path: 'cookies', component: COOKIES},
     { path: 'accueil', component: Accueil},
+    { path: 'attents', component: Attents},
     // { path: 'dashboard', component: Dashboard},
     // { path: 'cours', component: MesCours},
     // { path: 'modules', component: Modules},

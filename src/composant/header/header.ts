@@ -33,15 +33,34 @@ export class Header implements OnInit {
   font = 'Inter';
   status = 'En ligne';
 
+  // ─────────────── THÈME & COULEURS ───────────────
   theme: 'clair' | 'sombre' = 'clair';
   text = '';
+  texte = '';
+  titre = '';
+  header = '';
   rouge = '';
   background = '';
-
-  bgblue = ''; bggreen = ''; bgpurple = ''; bgpink = ''; bgyellow = '';
-  textblue = ''; textgreen = ''; textpurple = ''; textpink = ''; textyellow = '';
-
+  background2 = '';
   Logo = '';
+  Forme = '';
+
+  Header: string = '';
+  Header2: string = '';
+  Background: string = '';
+  BoutonP: string = '';
+  BoutonS: string = '';
+  Titre: string = '';
+  Texte: string = '';
+  Cartes: string = '';
+  Bordures: string = '';
+  Succes: string = '';
+  Erreur: string = '';
+  Info: string = '';
+  
+
+  
+  Image = '';
 
   hoverBleu = false;
   hoverVert = false;
@@ -50,6 +69,8 @@ export class Header implements OnInit {
   hoverProfil = false;
   hoverSettings = false;
   hoverLogout = false;
+
+
 
 
 
@@ -87,29 +108,39 @@ export class Header implements OnInit {
 
   private setThemeColors(): void {
     if (this.theme === 'sombre') {
-      this.text = '#FFF';
-      this.background = '#261466';
-      this.rouge = '#b80000';
 
-      this.bgblue='#1E40AF'; this.textblue='#93C5FD';
-      this.bggreen='#065F46'; this.textgreen='#6EE7B7';
-      this.bgyellow='#78350F'; this.textyellow='#FCD34D';
-      this.bgpurple='#5B21B6'; this.textpurple='#C4B5FD';
-      this.bgpink='#881337'; this.textpink='#F9A8D4';
+      this.Header = '#020617';
+      this.Header2 = '#081962';
+      this.Background = '#0F172A';
+      this.BoutonP = '#FDBA74';
+      this.BoutonS = '#93C5FD';
+      this.Titre = '#FFFFFF';
+      this.Texte = '#E5E7EB';
+      this.Cartes = '#1E293B';
+      this.Bordures = '#334155';
+      this.Succes = '#6EE7B7';
+      this.Erreur = '#FCA5A5';
+      this.Info = '#67E8F9';
 
-      this.Logo = 'assets/IconBlanc.svg';
+      
+
+      this.Logo = 'assets/IconBlanc.svg'; this.Forme = 'assets/formeclair.png';
     } else {
-      this.text = '#000';
-      this.background = '#E9E7F5';
-      this.rouge = '#9b0202';
 
-      this.bgblue='#DBEAFE'; this.textblue='#1D4ED8';
-      this.bggreen='#D1FAE5'; this.textgreen='#047857';
-      this.bgyellow='#FEF3C7'; this.textyellow='#D6BA02';
-      this.bgpurple='#F3E8FF'; this.textpurple='#7C3AED';
-      this.bgpink='#FFE4E6'; this.textpink='#BE123C';
+      this.Header = '#166534';
+      this.Header2 = '#082915';
+      this.Background = '#F8FAFC';
+      this.BoutonP = '#EA580C';
+      this.BoutonS = '#1E3A8A';
+      this.Titre = '#1F2933';
+      this.Texte = '#000000';
+      this.Cartes = '#FFFFFF';
+      this.Bordures = '#CBD5E1';
+      this.Succes = '#15803D';
+      this.Erreur = '#DC2626';
+      this.Info = '#0F4C5C';
 
-      this.Logo = 'assets/IconBlack.svg';
+      this.Logo = 'assets/IconBlack.svg'; this.Forme = 'assets/formeclair.png';
     }
   }
 

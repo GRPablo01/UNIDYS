@@ -25,7 +25,7 @@ router.get('/me', authController.authenticate, authController.getCurrentUser);
 router.get('/users/id/:id', userController.getUserById);
 
 // ✅ Récupérer tous les utilisateurs
-router.get('/users', userController.getAllUsers);
+router.get('/user', userController.getAllUsers);
 
 // ✅ Supprimer un utilisateur par ID
 router.delete('/users/:id', userController.deleteUserById);

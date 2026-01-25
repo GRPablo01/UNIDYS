@@ -27,7 +27,20 @@ export class Parametre implements OnInit {
   background: string = '';
   theme: 'clair' | 'sombre' = 'clair';
   Logo: string = '';
+  Forme: string = '';
 
+  Header: string = '';
+  Header2: string = '';
+  Background: string = '';
+  BoutonP: string = '';
+  BoutonS: string = '';
+  Titre: string = '';
+  Texte: string = '';
+  Cartes: string = '';
+  Bordures: string = '';
+  Succes: string = '';
+  Erreur: string = '';
+  Info: string = '';
   // Hover sur l'élément
   hoverParam: boolean = false;
 
@@ -73,24 +86,41 @@ export class Parametre implements OnInit {
    */
   private setThemeColors(): void {
     if (this.theme === 'sombre') {
-      this.text = '#FFF';
-      this.background = '#261466';
-      this.rouge = '#b80000';
-      this.bleu = '#4533FD';
-      this.rose = '#F729FE';
-      this.orange = '#FE8218';
-      this.Logo = 'assets/IconBlanc.svg';
+
+      this.Header = '#020617';
+      this.Header2 = '#344076';
+      this.Background = '#0F172A';
+      this.BoutonP = '#FDBA74';
+      this.BoutonS = '#93C5FD';
+      this.Titre = '#FFFFFF';
+      this.Texte = '#E5E7EB';
+      this.Cartes = '#1E293B';
+      this.Bordures = '#334155';
+      this.Succes = '#6EE7B7';
+      this.Erreur = '#FCA5A5';
+      this.Info = '#67E8F9';
+
+      
+
+      this.Logo = 'assets/IconBlanc.svg'; this.Forme = 'assets/formeclair.png';
     } else {
-      this.text = '#000';
-      this.background = '#E9E7F5';
-      this.rouge = '#9b0202';
-      this.bleu = '#1101B6';
-      this.rose = '#A902AF';
-      this.orange = '#CF6103';
-      this.Logo = 'assets/IconBlack.svg';
+
+      this.Header = '#166534';
+      this.Header2 = '#082915';
+      this.Background = '#F8FAFC';
+      this.BoutonP = '#EA580C';
+      this.BoutonS = '#1E3A8A';
+      this.Titre = '#1F2933';
+      this.Texte = '#000000';
+      this.Cartes = '#FFFFFF';
+      this.Bordures = '#CBD5E1';
+      this.Succes = '#15803D';
+      this.Erreur = '#DC2626';
+      this.Info = '#0F4C5C';
+
+      this.Logo = 'assets/IconBlack.svg'; this.Forme = 'assets/formeclair.png';
     }
   }
-
   /**
    * Change le thème et met à jour le localStorage
    */

@@ -1,64 +1,89 @@
-<!-- welcome.component.html -->
-<link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans&display=swap" rel="stylesheet">
+<app-icon></app-icon>
 
-<div
-  class="relative w-full min-h-screen flex flex-col md:flex-row justify-center items-center px-6 md:px-16 overflow-hidden font-sans"
-  style="font-family: 'Inclusive Sans', sans-serif;" role="banner" aria-label="Section d'accueil UniDys"
-  [ngStyle]="{ 'background': background, 'color': text }">
+<section class="font-black w-full py-16 px-6 sm:px-10 lg:px-20 relative overflow-hidden"
+         aria-labelledby="histoire-title"
+         [ngStyle]="{'background': background, 'color': text}">
 
-  <!-- Image de décor en arrière-plan -->
-  <img [src]="Image" alt="Décor accueil UniDys"
-    class="absolute top-0 left-0 w-full h-full object-cover pointer-events-none" />
+  <div class="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-10 scroll-smooth relative z-10">
 
-  
-</div>
+    <!-- Image à gauche -->
+    <div class="flex-1 flex justify-center lg:justify-start">
+      <img src="assets/imagehistoire.jpg" alt="Illustration UniDys" class="w-full max-w-md rounded-2xl shadow-lg">
+    </div>
 
-<!-- Animations -->
+    <!-- Texte à droite -->
+    <div class="flex-1 flex flex-col gap-10">
+
+      <!-- Header -->
+      <header class="text-left lg:text-left">
+        <h1 id="histoire-title"
+            class="text-4xl md:text-5xl font-bold mb-4 flex items-center gap-3">
+          <i class="fa-solid fa-seedling" [ngStyle]="{'color': Bleuclair}"></i>
+          <span [ngStyle]="{'color':Orangeclair}">L’histoire d’UniDys</span>
+        </h1>
+      </header>
+
+      <!-- Corps -->
+      <div class="flex flex-col gap-6 leading-relaxed text-lg md:text-xl text-justify">
+
+        <p>
+          <i class="fa-solid fa-heart mr-2" [ngStyle]="{'color': rouge}"></i>
+          UniDys est né d’une idée <strong [ngStyle]="{'color': RougeFonce}">simple mais essentielle</strong>&nbsp;:
+          <strong [ngStyle]="{'color': Or}">chaque enfant mérite d’apprendre à son rythme</strong>, sans être mis de côté.
+        </p>
+
+        <p>
+          <i class="fa-solid fa-child-reaching mr-2" [ngStyle]="{'color': Bleuclair}"></i>
+          Pendant longtemps, les élèves <strong [ngStyle]="{'color': rouge}">DYS</strong> ont dû s’adapter à des méthodes qui
+          n’étaient pas pensées pour eux. Résultat&nbsp;: <span [ngStyle]="{'color': rouge}">difficultés, fatigue, perte de confiance, décrochage</span>…
+          alors qu’ils possèdent souvent une <strong [ngStyle]="{'color': Bleuclair}">créativité et une intelligence uniques</strong>.
+        </p>
+
+        <p>
+          <i class="fa-solid fa-hand-holding-heart mr-2" [ngStyle]="{'color': rouge}"></i>
+          UniDys a été créé pour offrir une plateforme <strong [ngStyle]="{'color': Or}">douce, adaptée et accessible</strong>,
+          qui permet d’apprendre autrement. Nous accompagnons les élèves, les parents et les enseignants.
+        </p>
+
+        <!-- Citation -->
+        <blockquote class="mt-8 flex items-center justify-between gap-4 rounded-2xl p-6 italic text-lg md:text-xl text-justify"
+                    [ngStyle]="{'background-color': Bleuclair + '40', 'color': text}">
+          <i class="fa-solid fa-quote-left text-3xl md:text-4xl" [ngStyle]="{'color': Bleuclair}"></i>
+          <p class="flex-1">« Parce que chaque élève mérite de comprendre et d’apprendre à son rythme. »</p>
+          <i class="fa-solid fa-quote-right text-3xl md:text-4xl" [ngStyle]="{'color': Bleuclair}"></i>
+        </blockquote>
+
+      </div>
+    </div>
+  </div>
+</section>
+
 <style>
-  @keyframes fadeInUp {
-    0% {
-      opacity: 0;
-      transform: translateY(20px);
+  .deco-side {
+    position: absolute;
+    top: 45%;
+    transform: translateY(-50%);
+    width: 200px;
+    pointer-events: none;
+    user-select: none;
+    z-index: 9999;
+  }
+
+  .deco-left {
+    left: -70px;
+  }
+
+  .deco-right {
+    right: -70px;
+  }
+
+  /* Flex responsive : empilement sur petits écrans */
+  @media (max-width: 1024px) {
+    .flex-col {
+      flex-direction: column !important;
     }
-
-    100% {
-      opacity: 1;
-      transform: translateY(0);
+    .text-left {
+      text-align: center !important;
     }
-  }
-
-  .animate-fadeInUp {
-    animation: fadeInUp 1s ease forwards;
-  }
-
-  .animate-fadeInUp.delay-200 {
-    animation-delay: 0.2s;
-  }
-
-  .animate-fadeInUp.delay-300 {
-    animation-delay: 0.3s;
-  }
-
-  .animate-fadeInUp.delay-400 {
-    animation-delay: 0.4s;
-  }
-
-  @keyframes gradientAnimation {
-    0% {
-      background-position: 0% 50%;
-    }
-
-    50% {
-      background-position: 100% 50%;
-    }
-
-    100% {
-      background-position: 0% 50%;
-    }
-  }
-
-  .animate-gradient {
-    background-size: 200% 200%;
-    animation: gradientAnimation 5s ease infinite;
   }
 </style>

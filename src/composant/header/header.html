@@ -1,48 +1,38 @@
-<!-- CONTENEUR HEADER -->
-<header class="flex items-center justify-between w-full px-4 -py-3" [ngStyle]="{'background': background}">
+<header
+  class="fixed top-0 left-0 z-50 w-full"
+  [ngStyle]="{ 'background': Header, 'color':'#FFFFFF' }"
+>
+  <!-- CONTENEUR GLOBAL – pleine largeur -->
+  <div class="flex items-center w-full px-4 sm:px-6 lg:px-8 py-1">
 
-    <!-- Partie gauche : Logo + Notif + Paramètre + Support -->
-    <div class="flex items-center gap-4">
+    <!-- GAUCHE : Logo + Navigation -->
+    <div class="flex items-center gap-4 sm:gap-6">
 
-        <!-- Logo -->
-        <app-logo class="flex-shrink-0"></app-logo>
+      <!-- Logo (collé à gauche avec padding) -->
+      <app-logo class="flex-shrink-0"></app-logo>
 
-        <!-- Icônes : notifications, paramètres, support -->
-        <div class="flex items-center gap-2 sm:gap-4 md:gap-6">
-            <app-icon2></app-icon2>
-        </div>
-
-    </div>
-
-    <!-- Partie droite : Profil + Nav -->
-    <div class="flex items-center gap-2 sm:gap-4 md:gap-6">
-
-        <!-- Navigation -->
+      <!-- Navigation (cachée sur mobile) -->
+      <div class="hidden lg:flex">
         <app-nav></app-nav>
-
-        <!-- Profil -->
-        <app-profil></app-profil>
+      </div>
 
     </div>
 
+    <!-- ESPACE FLEX POUR POUSSER À DROITE -->
+    <div class="flex-1"></div>
+
+    <!-- DROITE : Notifs + Profil -->
+    <div class="flex items-center gap-2 sm:gap-4">
+
+      <!-- Notifications / paramètres / support -->
+      <div class="flex items-center gap-2 sm:gap-3 md:gap-4">
+        <app-icon2></app-icon2>
+      </div>
+
+      <!-- Profil (collé à droite avec padding) -->
+      <app-profil class="flex-shrink-0"></app-profil>
+
+    </div>
+
+  </div>
 </header>
-
-<!-- Mobile responsiveness -->
-<style>
-    /* Pour écrans ≤ 989px */
-    /* @media (max-width: 989px) {
-        app-nav {
-            display: none; /* cacher la nav 
-        }
-    } */
-
-    /* Pour écrans ≤ 905px (optionnel, tu peux changer le style si besoin) */
-    @media (max-width: 905px) {
-        /* Par exemple, réduire les gaps ou la taille des icônes */
-        .flex.items-center.gap-2,
-        .flex.items-center.gap-4,
-        .flex.items-center.gap-6 {
-            gap: 1rem; /* réduire légèrement l'espacement */
-        }
-    }
-</style>

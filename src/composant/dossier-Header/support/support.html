@@ -1,12 +1,11 @@
 <app-icon></app-icon>
 <!-- Icône Support -->
 <div 
-class="relative inline-block px-3 py-2 rounded-xl cursor-pointer transition-all duration-500 ease-in-out shadow-md ml-1"
+class="relative inline-block px-3 py-2 rounded-xl cursor-pointer shadow-md"
 [ngStyle]="{
-  'color': hoverSupport ? '#FFF' : text,
   'background': hoverSupport 
-      ? 'linear-gradient(135deg, ' + bleu + ', ' + rose + ', ' + orange + ')' 
-      : background,
+  ? 'linear-gradient(90deg, ' + Header2 + ', ' + Header2 + ')' 
+    : 'transparent',
   'box-shadow': hoverSupport ? '0 4px 15px rgba(0,0,0,0.3)' : 'none'
 }"
 (mouseenter)="hoverSupport = true"

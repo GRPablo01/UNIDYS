@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Header } from '../../header/header';
 
 interface Utilisateur {
   nom?: string;
@@ -11,7 +12,7 @@ interface Utilisateur {
 @Component({
   selector: 'app-welcome',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,Header],
   templateUrl: './welcome.html',
   styleUrls: ['./welcome.css'],
 })
@@ -23,15 +24,38 @@ export class Welcome implements OnInit {
 
   theme: 'clair' | 'sombre' = 'clair';
   text = '';
+  texte = '';
+  titre = '';
+  header = '';
   rouge = '';
   background = '';
   background2 = '';
   Image = '';
   isMobile = false;
+  Logo ='';
+  Forme ='';
 
-  bleu: string = '';
-  rose: string = '';
-  orange: string = '';
+
+  hoverBtn: boolean = false;
+// Bleuclair: string = '#B3E0F2';
+// Orangeclair: string = '#D9965B';
+
+
+
+Header: string = '';
+Header2: string = '';
+Background: string = '';
+BoutonP: string = '';
+BoutonS: string = '';
+Titre: string = '';
+Texte: string = '';
+Cartes: string = '';
+Bordures: string = '';
+Succes: string = '';
+Erreur: string = '';
+Info: string = '';
+
+  
 
   constructor(private router: Router) {}
 
@@ -80,28 +104,47 @@ export class Welcome implements OnInit {
     return (nom?.[0] || '').toUpperCase() + (prenom?.[0] || '').toUpperCase();
   }
 
-  // 🎨 Définir les couleurs selon le thème
-  private setThemeColors(): void {
+  /**
+ * Définit les couleurs selon le thème
+ */
+private setThemeColors(): void {
     if (this.theme === 'sombre') {
-      this.text = '#FFF';
-      this.background = '#261466';
-      this.background2 = '#1C0F4B99';
-      this.rouge = '#b80000';
-      this.bleu = '#4533FD';
-      this.rose = '#F729FE';
-      this.orange = '#FE8218';
-      this.Image = 'assets/decorwelcomedark.png';
+
+      this.Header = '#020617';
+      this.Header2 = '#0F172A';
+      this.Background = '#0F172A';
+      this.BoutonP = '#FDBA74';
+      this.BoutonS = '#93C5FD';
+      this.Titre = '#FFFFFF';
+      this.Texte = '#E5E7EB';
+      this.Cartes = '#1E293B';
+      this.Bordures = '#334155';
+      this.Succes = '#6EE7B7';
+      this.Erreur = '#FCA5A5';
+      this.Info = '#67E8F9';
+
+      
+
+      this.Logo = 'assets/IconBlanc.svg'; this.Forme = 'assets/formeclair.png';
     } else {
-      this.text = '#000';
-      this.background = '#FFF';
-      this.background2 = '#ffffffaa';
-      this.rouge = '#9b0202';
-      this.bleu = '#1101B6';
-      this.rose = '#A902AF';
-      this.orange = '#CF6103';
-      this.Image = 'assets/decorwelcomeclair.png';
+
+      this.Header = '#166534';
+      this.Header2 = '#082915';
+      this.Background = '#F8FAFC';
+      this.BoutonP = '#EA580C';
+      this.BoutonS = '#1E3A8A';
+      this.Titre = '#1F2933';
+      this.Texte = '#000000';
+      this.Cartes = '#FFFFFF';
+      this.Bordures = '#CBD5E1';
+      this.Succes = '#15803D';
+      this.Erreur = '#DC2626';
+      this.Info = '#0F4C5C';
+
+      this.Logo = 'assets/IconBlack.svg'; this.Forme = 'assets/formeclair.png';
     }
   }
+
 
   // Navigation
   commencerApprentissage(): void {

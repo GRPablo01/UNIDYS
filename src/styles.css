@@ -2,55 +2,7 @@
 
 /* 🌞 Mode clair par défaut */
 :root {
-    --Blanc:#FFF;
-    --Black:#000;
-    --Gris:#676767;
-    --FondHeader: var(--Blanc); /* couleur par défaut pour le header */
   
-    --Bleu-Clair:#00d3cf;
-    --Bleu:#029f9d;
-    --Bleu-Foncé:#014342;
+  --test: #344076;
   
-  
-    --Vert-Clair:#02c309;
-    --Vert:#019119;
-    --Vert-Foncé:#036413;
-  
-    --Rouge-Clair:#e80101;
-    --Rouge:#bf0404;
-    --Rouge-Foncé:#430101;
-  }
-  
-  
-  /* 🌙 Mode sombre */
-  :root[data-theme="dark"] {
-    --Bleu-dark:#020118;
-    --Blanc:#ffffff44;
-  
-    --Blanc2:#929292;
-  
-    --Bleu-Clair:#007f7d;
-    --Bleu:#01a4a1;
-    --Bleu-Foncé:#012b2a;
-  
-    --Vert-Clair:#00a81c;
-    --Vert:#03c620;
-  
-  
-    --Vert2:#00a919;
-  
-  
-    --Vert-Foncé:#013d09;
-  
-    --Rouge-Clair:#b80000;
-    --Rouge:#7a0202;
-    --Rouge-Foncé:#2a0000;
-
-
-
-    --test:#029391;
-  }
-  
-  
-
-
+}

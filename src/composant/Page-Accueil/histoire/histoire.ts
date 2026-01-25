@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Icon } from '../../icon/icon';
 
 interface Utilisateur {
   nom?: string;
@@ -11,7 +12,7 @@ interface Utilisateur {
 @Component({
   selector: 'app-histoire',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,Icon],
   templateUrl: './histoire.html',
   styleUrls: ['./histoire.css'],
 })
@@ -23,11 +24,28 @@ export class Histoire implements OnInit {
 
   theme: 'clair' | 'sombre' = 'clair';
   text = '';
+  texte = '';
+  titre = '';
+  header = '';
   rouge = '';
   background = '';
   background2 = '';
   Image = '';
   isMobile = false;
+  Logo ='';
+  Forme ='';
+
+
+  hoverBtn: boolean = false;
+// Bleuclair: string = '#B3E0F2';
+// Orangeclair: string = '#D9965B';
+
+  Bleuclair: string = '';
+  Orangeclair: string = '';
+  Or: string = '';
+  Maron: string = '';
+  RougeFonce: string = '';
+  
 
   bleu: string = '';
   rose: string = '';
@@ -80,29 +98,60 @@ export class Histoire implements OnInit {
     return (nom?.[0] || '').toUpperCase() + (prenom?.[0] || '').toUpperCase();
   }
 
-  // 🎨 Définir les couleurs selon le thème
-  private setThemeColors(): void {
-    if (this.theme === 'sombre') {
-      this.text = '#FFF';
-      this.background = '#261466';
-      this.background2 = '#1C0F4B99';
-      this.rouge = '#b80000';
-      this.bleu = '#4533FD';
-      this.rose = '#F729FE';
-      this.orange = '#FE8218';
-      this.Image = 'assets/decorhistoiredark.png';
-    } else {
-      this.text = '#000';
-      this.background = '#FFF';
-      this.background2 = '#ffffffaa';
-      this.rouge = '#9b0202';
-      this.bleu = '#1101B6';
-      this.rose = '#A902AF';
-      this.orange = '#CF6103';
-      this.Image = 'assets/decorhistoireclair.png';
-    }
-  }
+    /**
+ * Définit les couleurs selon le thème
+ */
+private setThemeColors(): void {
 
+  if (this.theme === 'sombre') {
+
+    // ===== TEXTE =====
+    this.text = '#FFFFFF';          // texte principal
+    this.texte = '#E6F2EE';         // texte courant (plus doux)
+    this.titre = '#FFFFFF';         // titres
+
+    // ===== STRUCTURE =====
+    this.background = '#0E2F26';    // fond principal
+    this.header = '#044629';        // header
+
+    // ===== ACCENTS =====
+    this.rouge = '#b80000';
+
+    this.Bleuclair = '#4A6C7A';
+    this.Orangeclair = '#B5723C';
+    this.Or = '#A57C36';
+    this.RougeFonce = '#A03B2B';
+    this.Maron = '#7A2E17';
+
+    // ===== LOGO =====
+    this.Logo = 'assets/IconBlanc.svg';
+    this.Forme = 'assets/formeclair.png';
+
+  } else {
+
+    // ===== TEXTE =====
+    this.text = '#000000';          // texte principal
+    this.texte = '#044629';         // texte courant
+    this.titre = '#044629';         // titres
+
+    // ===== STRUCTURE =====
+    this.background = '#F6F7F8';    // fond principal
+    this.header = '#B3E0F2';        // header
+
+    // ===== ACCENTS =====
+    this.rouge = '#9b0202';
+
+    this.Bleuclair = '#B3E0F2';
+    this.Orangeclair = '#D9965B';
+    this.Or = '#D9AD5B';
+    this.RougeFonce = '#592B1B';
+    this.Maron = '#CD5320';
+
+    // ===== LOGO =====
+    this.Logo = 'assets/IconBlack.svg';
+    this.Forme = 'assets/formeclair.png';
+  }
+}
   // Navigation
   commencerApprentissage(): void {
     this.router.navigate(['/apprentissage']);

@@ -4,13 +4,39 @@ import { Observable } from 'rxjs';
 import { AuthService } from '../User/Auth.Service';
 
 export interface User {
-  _id?: string;
+  _id: string;
   nom: string;
   prenom: string;
-  role?: string;
-  email?: string;
-  initiales?: string; // <-- Ajoute ceci
+  email: string;
+  password?: string;
+  role: string;
+  photoProfil?: string;
+  initiale?: string;
+  theme?: string;
+  font?: string;
+  luminosite?: number;
+
+  // état de présence
+  status?: {
+    enLigne?: boolean;
+    nePasDeranger?: boolean;
+    absent?: boolean;
+  };
+
+  // statut du compte : actif / desactive / supprime
+  compte?: string;
+
+  cguValide?: boolean;
+
+  // autres champs existants
+  cookie?: string;
+  cours?: any[];
+  qcm?: any[];
+  dysListe?: any[];
+  abonnements?: any[];
+  suivis?: any[];
 }
+
 
 
 @Injectable({ providedIn: 'root' })
@@ -75,10 +101,11 @@ export class ProfileService {
     console.log('Compte et données utilisateur supprimés définitivement.');
   }
 
-  // 🔹 Récupère tous les utilisateurs (ex: liste des joueurs)
-  getAllJoueurs(): Observable<User[]> {
-    return this.http.get<User[]>(this.apiUrl);
+  // 🔹 Récupère tous les utilisateurs 
+  getAllJoueurs() {
+    return this.http.get<User[]>('http://localhost:3000/api/user');
   }
+  
 
   // 🔹 Retourne l'ID utilisateur pour le backend
   getUserId(): string | null {
