@@ -1,0 +1,354 @@
+<!-- ========================================== -->
+<!-- USER FOOTBALL COMPONENT V3.0 (COMPACT) -->
+<!-- MENU RÔLE DYNAMIQUE RESPONSIVE -->
+<!-- ========================================== -->
+
+<section class="relative inline-block font-sans select-none" [ngStyle]="{'color': themeService.Textprincipal}">
+
+  <!-- ======================= -->
+  <!-- BOUTON USER (RÉDUIT) -->
+  <!-- ======================= -->
+  <button id="userMenuButton" type="button" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen"
+    class="group relative flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-full border shadow-sm transition-all duration-300 hover:shadow-md hover:scale-[1.01] active:scale-95 focus:outline-none focus:ring-2"
+    [ngStyle]="{
+      'background': themeService.Backgroundprincipal,
+      'border': themeService.Bordernormal
+    }">
+
+    <!-- AVATAR -->
+    <div class="relative">
+      <div
+        class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-white text-[11px] shadow-md ring-1 ring-white/20 overflow-hidden"
+        [ngStyle]="{'background': getRoleGradient(role)}">
+
+        <!-- IMAGE SI EXISTE -->
+        <ng-container  *ngIf="imageUrl; else fallbackAvatar">
+          <img
+            [src]="imageUrl"
+            alt="avatar"
+            class="w-full h-full object-cover"
+            (error)="imageUrl = null"
+          />
+        </ng-container>
+
+        <!-- FALLBACK -->
+        <ng-template #fallbackAvatar>
+
+          <!-- SUPER ADMIN -->
+          <ng-container *ngIf="role === 'admin'; else normalUser">
+            <i class="fa-solid fa-crown text-[10px]"></i>
+          </ng-container>
+
+          <!-- UTILISATEUR NORMAL -->
+          <ng-template #normalUser>
+            {{ initials || 'IN' }}
+          </ng-template>
+
+        </ng-template>
+
+      </div>
+    </div>
+
+    <!-- INFOS USER -->
+    <div class="flex flex-col text-left min-w-[80px]">
+      <span class="text-[11px] font-semibold truncate leading-tight">
+        {{ prenom }} {{ nom }}
+      </span>
+      <span class="text-[10px] opacity-70 uppercase tracking-wide" [ngStyle]="{'color': themeService.Textsecondaire}">
+        {{ formatRole(role) }}
+      </span>
+    </div>
+
+    <!-- CHEVRON -->
+    <svg class="w-3.5 h-3.5 transition-transform duration-300" [class.rotate-180]="menuOpen" fill="none"
+      stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+    </svg>
+
+  </button>
+
+  <!-- ======================= -->
+  <!-- DROPDOWN (RÉDUIT) -->
+  <!-- ======================= -->
+  <div *ngIf="menuOpen" id="userMenuDropdown"
+    class="absolute right-0 top-full mt-2 w-64 rounded-xl border shadow-xl z-50 animate-dropdown backdrop-blur-sm"
+    [ngStyle]="{
+      'background': themeService.Backgroundcards,
+      'border': themeService.Bordernormal
+    }" (clickOutside)="closeMenu()">
+
+    <!-- HEADER USER -->
+    <div class="relative px-4 py-3 border-b" [ngStyle]="{'border-color': themeService.Bordernormal}">
+
+      <div class="absolute inset-0 opacity-5" [ngStyle]="{'background': getRoleGradient(role)}"></div>
+
+      <div class="relative flex items-center gap-3">
+
+        <!-- AVATAR GRAND -->
+        <div
+          class="w-9 h-9 rounded-full flex items-center justify-center font-bold text-white text-sm shadow-md overflow-hidden"
+          [ngStyle]="{'background': getRoleGradient(role)}">
+
+
+          <!-- IMAGE SI EXISTE (sauf admin) -->
+          <ng-container *ngIf="imageUrl && role !== 'admin'; else fallbackAvatar">
+            <img
+              [src]="imageUrl"
+              alt="avatar"
+              class="w-full h-full object-cover shadow-xl"
+              (error)="imageUrl = null"
+            />
+          </ng-container>
+
+          <!-- FALLBACK -->
+          <ng-template #fallbackAvatar>
+
+            <!-- SUPER ADMIN -->
+            <ng-container *ngIf="role === 'superadmin'; else normalUserLarge">
+              <i class="fa-solid fa-crown text-xs"></i>
+            </ng-container>
+
+            <!-- UTILISATEUR NORMAL -->
+            <ng-template #normalUserLarge>
+              {{ initials || 'IN' }}
+            </ng-template>
+
+          </ng-template>
+
+        </div>
+
+        <!-- INFOS -->
+        <div class="flex-1 min-w-0">
+          <p class="text-xs font-bold truncate">
+            {{ prenom || 'Invité' }} {{ nom || '' }}
+          </p>
+          <p class="text-[10px] opacity-60 truncate">
+            {{ email }}
+          </p>
+
+          <span class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase"
+            [ngStyle]="{
+              'background': getRoleBadgeBg(role),
+              'color': getRoleBadgeColor(role)
+            }">
+            {{ formatRole(role) }}
+          </span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav class="py-1 max-h-[60vh] custom-scrollbar">
+
+      <!-- SUPER ADMIN / ADMIN (identique mais compact) -->
+      <ng-container *ngIf="role === 'superadmin' || role === 'admin'">
+
+        <a routerLink="/dashboard" class="menu-item">
+          <div class="menu-icon bg-blue-500">
+            <i class="fa-solid fa-chart-line text-white text-[10px]"></i>
+          </div>
+          Dashboard
+        </a>
+
+        <a routerLink="/users" class="menu-item">
+          <div class="menu-icon bg-purple-500">
+            <i class="fa-solid fa-users text-white text-[10px]"></i>
+          </div>
+          Utilisateurs
+        </a>
+
+        <a routerLink="/teams" class="menu-item">
+          <div class="menu-icon bg-green-500">
+            <i class="fa-solid fa-people-group text-white text-[10px]"></i>
+          </div>
+          Équipes
+        </a>
+
+        <a routerLink="/matchs" class="menu-item">
+          <div class="menu-icon bg-amber-500">
+            <i class="fa-solid fa-futbol text-white text-[10px]"></i>
+          </div>
+          Events
+        </a>
+
+      </ng-container>
+
+      <!-- ENTRAINEUR -->
+      <ng-container *ngIf="role === 'prof'">
+
+        <a routerLink="/dashboard" class="menu-item">
+          <div class="menu-icon bg-blue-500">
+            <i class="fa-solid fa-chart-line text-white text-[10px]"></i>
+          </div>
+          Dashboard
+        </a>
+
+        <a routerLink="/team" class="menu-item">
+          <div class="menu-icon bg-green-500">
+            <i class="fa-solid fa-people-group text-white text-[10px]"></i>
+          </div>
+          Équipe
+        </a>
+
+        <a routerLink="/convocations" class="menu-item">
+          <div class="menu-icon bg-pink-500">
+            <i class="fa-solid fa-clipboard-list text-white text-[10px]"></i>
+          </div>
+          Convocations
+        </a>
+
+      </ng-container>
+
+      <!-- ============================================
+          ROLE ELEVE
+      ============================================ -->
+      <ng-container *ngIf="role === 'eleve'">
+
+        <!-- Dashboard -->
+        <a routerLink="/dashboard" class="menu-item group">
+          <div class="menu-icon bg-blue-500 group-hover:scale-110 transition-transform duration-200">
+            <i class="fa-solid fa-chart-line text-white text-[11px]"></i>
+          </div>
+          <span class="menu-label">Dashboard</span>
+        </a>
+
+        <!-- Mes cours -->
+        <a routerLink="/mes-cours" class="menu-item group">
+          <div class="menu-icon bg-green-500 group-hover:scale-110 transition-transform duration-200">
+            <i class="fa-solid fa-book-open text-white text-[11px]"></i>
+          </div>
+          <span class="menu-label">Mes cours</span>
+        </a>
+
+        <!-- Mes exercices -->
+        <a routerLink="/exercices" class="menu-item group">
+          <div class="menu-icon bg-purple-500 group-hover:scale-110 transition-transform duration-200">
+            <i class="fa-solid fa-pen text-white text-[11px]"></i>
+          </div>
+          <span class="menu-label">Exercices</span>
+        </a>
+
+        <!-- Mes progrès -->
+        <a routerLink="/progression" class="menu-item group">
+          <div class="menu-icon bg-yellow-500 group-hover:scale-110 transition-transform duration-200">
+            <i class="fa-solid fa-chart-pie text-white text-[11px]"></i>
+          </div>
+          <span class="menu-label">Progression</span>
+        </a>
+
+      </ng-container>
+
+
+      <div class="separator"></div>
+
+      <!-- COMPTE -->
+      <a routerLink="/profile" class="menu-item">
+        <div class="menu-icon bg-gray-200">
+          <i class="fa-solid fa-user text-gray-600 text-[10px]"></i>
+        </div>
+        Profil
+      </a>
+
+      <a routerLink="/settings" class="menu-item">
+        <div class="menu-icon bg-gray-200">
+          <i class="fa-solid fa-gear text-gray-600 text-[10px]"></i>
+        </div>
+        Paramètres
+      </a>
+
+      <div class="separator"></div>
+
+      <!-- LOGOUT -->
+      <button (click)="deconnecter()" class="menu-item logout w-full text-left">
+        <div class="menu-icon bg-red-100">
+          <i class="fa-solid fa-right-from-bracket text-red-500 text-[10px]"></i>
+        </div>
+        Déconnexion
+      </button>
+
+    </nav>
+  </div>
+
+  <!-- OVERLAY -->
+  <div *ngIf="menuOpen" (click)="closeMenu()" class="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm"></div>
+
+</section>
+
+<!-- ======================= -->
+<!-- STYLES COMPACTS -->
+<!-- ======================= -->
+<style>
+  .animate-dropdown {
+    animation: dropdown 0.18s ease-out;
+    transform-origin: top right;
+  }
+
+  @keyframes dropdown {
+    from {
+      opacity: 0;
+      transform: translateY(-8px) scale(0.97);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    margin: 2px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    transition: 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .menu-item:hover {
+    background: rgba(0, 0, 0, 0.05);
+    transform: translateX(3px);
+  }
+
+  .menu-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .separator {
+    height: 1px;
+    margin: 8px 12px;
+    background: currentColor;
+    opacity: 0.08;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+
+  @media (max-width: 640px) {
+    #userMenuDropdown {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      border-radius: 16px 16px 0 0;
+      max-height: 80vh;
+    }
+  }
+</style>

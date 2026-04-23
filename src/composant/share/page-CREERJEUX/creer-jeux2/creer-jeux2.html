@@ -1,0 +1,138 @@
+<section class="min-h-screen flex items-center justify-center px-4 py-10 bg-gradient-to-br from-indigo-100 to-purple-100">
+
+    <div class="w-full max-w-2xl bg-white shadow-xl rounded-2xl p-8 space-y-6">
+  
+      <!-- HEADER -->
+      <div class="text-center">
+        <h1 class="text-2xl font-bold text-gray-800">Créer un jeu éducatif 🎮</h1>
+        <p class="text-sm text-gray-500">Génère un jeu intelligent pour tes élèves</p>
+      </div>
+  
+      <!-- SUCCESS -->
+      <div *ngIf="successMessage" class="bg-green-100 text-green-700 p-3 rounded-lg text-center">
+        {{ successMessage }}
+      </div>
+  
+      <!-- ERROR -->
+      <div *ngIf="errorMessage" class="bg-red-100 text-red-700 p-3 rounded-lg text-center">
+        {{ errorMessage }}
+      </div>
+  
+      <!-- FORM -->
+      <form (ngSubmit)="creerJeu()" class="space-y-5">
+  
+        <!-- TITRE -->
+        <div>
+          <label class="text-sm font-semibold">Titre du jeu</label>
+          <input type="text"
+            [(ngModel)]="jeu.titre"
+            name="titre"
+            required
+            class="w-full mt-1 px-4 py-2 rounded-xl border focus:ring-2 focus:ring-indigo-400 outline-none">
+        </div>
+  
+        <!-- TYPE -->
+        <div>
+          <label class="text-sm font-semibold">Type de jeu</label>
+          <select [(ngModel)]="jeu.type" name="type" required
+            class="w-full mt-1 px-4 py-2 rounded-xl border">
+            <option value="">Choisir...</option>
+            <option *ngFor="let t of typesJeux">{{ t }}</option>
+          </select>
+        </div>
+  
+        <!-- NIVEAU -->
+        <div>
+          <label class="text-sm font-semibold">Niveau</label>
+          <select [(ngModel)]="jeu.niveau" name="niveau" required
+            class="w-full mt-1 px-4 py-2 rounded-xl border">
+            <option value="">Choisir...</option>
+            <option *ngFor="let n of niveaux">{{ n }}</option>
+          </select>
+        </div>
+  
+        <!-- DIFFICULTÉ -->
+        <div>
+          <label class="text-sm font-semibold">Difficulté</label>
+          <select [(ngModel)]="jeu.difficulte" name="difficulte"
+            class="w-full mt-1 px-4 py-2 rounded-xl border">
+            <option value="facile">Facile</option>
+            <option value="moyen">Moyen</option>
+            <option value="difficile">Difficile</option>
+          </select>
+        </div>
+  
+        <!-- CONSIGNE -->
+        <div>
+          <label class="text-sm font-semibold">Consigne</label>
+          <textarea [(ngModel)]="jeu.consigne"
+            name="consigne"
+            rows="3"
+            class="w-full mt-1 px-4 py-2 rounded-xl border"></textarea>
+        </div>
+  
+        <!-- ========================= -->
+        <!-- 🔵 QCM -->
+        <!-- ========================= -->
+        <div *ngIf="jeu.type === 'qcm'" class="space-y-3">
+          <input [(ngModel)]="jeu.question" name="question" placeholder="Question"
+            class="w-full border p-2 rounded">
+  
+          <input [(ngModel)]="jeu.options" name="options"
+            placeholder="Options (ex: A,B,C)"
+            class="w-full border p-2 rounded">
+  
+          <input [(ngModel)]="jeu.reponse" name="reponse"
+            placeholder="Bonne réponse"
+            class="w-full border p-2 rounded">
+        </div>
+  
+        <!-- ========================= -->
+        <!-- 🟡 PUZZLE -->
+        <!-- ========================= -->
+        <div *ngIf="jeu.type === 'puzzle'" class="space-y-3">
+          <input [(ngModel)]="jeu.mot" name="mot"
+            placeholder="Mot (ex: C_T)"
+            class="w-full border p-2 rounded">
+  
+          <input [(ngModel)]="jeu.lettresManquantes" name="lettresManquantes"
+            placeholder="Lettres (ex: A)"
+            class="w-full border p-2 rounded">
+        </div>
+  
+        <!-- ========================= -->
+        <!-- 🟢 TEXTE -->
+        <!-- ========================= -->
+        <div *ngIf="jeu.type === 'texte'" class="space-y-3">
+          <input [(ngModel)]="jeu.phrase" name="phrase"
+            placeholder="Phrase"
+            class="w-full border p-2 rounded">
+  
+          <input [(ngModel)]="jeu.trou" name="trou"
+            placeholder="Réponse"
+            class="w-full border p-2 rounded">
+        </div>
+  
+        <!-- ========================= -->
+        <!-- 🔴 MEMORY -->
+        <!-- ========================= -->
+        <div *ngIf="jeu.type === 'memory'">
+          <input [(ngModel)]="jeu.cartes" name="cartes"
+            placeholder='JSON cartes'
+            class="w-full border p-2 rounded">
+        </div>
+  
+        <!-- BUTTON -->
+        <button type="submit"
+          [disabled]="loading"
+          class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-semibold">
+  
+          <span *ngIf="!loading">Créer le jeu 🚀</span>
+          <span *ngIf="loading">Génération...</span>
+  
+        </button>
+  
+      </form>
+  
+    </div>
+</section>

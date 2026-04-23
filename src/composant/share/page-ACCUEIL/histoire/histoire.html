@@ -1,0 +1,63 @@
+<section class="h-auto py-10 px-10"
+         aria-labelledby="histoire-title">
+
+  <div class="flex flex-col lg:flex-row items-center scroll-smooth relative z-10 gap-10">
+
+    <!-- BLOC IMAGE GAUCHE - collé bordure -->
+    <div class="w-full lg:w-1/2 flex justify-start">
+      <img src="assets/BgLogin2.jpg" 
+           alt="Illustration enfants apprenant avec joie" 
+           class="w-full h-auto lg:h-[600px] xl:h-[700px] object-cover rounded-2xl shadow-xl"
+           [ngStyle]="{'border-right': '2px solid ' + themeService.primary}"
+           loading="lazy">
+    </div>
+
+    <!-- BLOC TEXTE DROIT - collé bordure -->
+    <div class="w-full lg:w-1/2 flex flex-col gap-6 justify-center">
+
+      <!-- Header -->
+      <header>
+        <h1 id="histoire-title"
+            class="text-4xl md:text-5xl font-bold mb-4 flex items-center gap-3"
+            [ngStyle]="{'color': themeService.Textprincipal}">
+          <i class="fa-solid fa-seedling" [ngStyle]="{'color': themeService.secondary}"></i>
+          <span>L'histoire d'UniDys</span>
+        </h1>
+      </header>
+
+      <!-- Corps -->
+      <div class="flex flex-col gap-6 leading-relaxed text-lg md:text-xl">
+
+        <p [ngStyle]="{'color': themeService.Textprincipal}">
+          <i class="fa-solid fa-heart mr-2" [ngStyle]="{'color': themeService.primary}"></i>
+          UniDys est né d'une idée <strong [ngStyle]="{'color': themeService.primary}">simple mais essentielle</strong>&nbsp;:
+          <strong [ngStyle]="{'color': themeService.primaryHover}">chaque enfant mérite d'apprendre à son rythme</strong>, sans être mis de côté.
+        </p>
+
+        <p [ngStyle]="{'color': themeService.Textprincipal}">
+          <i class="fa-solid fa-child-reaching mr-2" [ngStyle]="{'color': themeService.secondary}"></i>
+          Pendant longtemps, les élèves <strong [ngStyle]="{'color': themeService.primary}">DYS</strong> ont dû s'adapter à des méthodes qui
+          n'étaient pas pensées pour eux. Résultat&nbsp;: <span [ngStyle]="{'color': themeService.primaryHover}">difficultés, fatigue, perte de confiance, décrochage</span>…
+          alors qu'ils possèdent souvent une <strong [ngStyle]="{'color': themeService.secondary}">créativité et une intelligence uniques</strong>.
+        </p>
+
+        <p [ngStyle]="{'color': themeService.Textprincipal}">
+          <i class="fa-solid fa-hand-holding-heart mr-2" [ngStyle]="{'color': themeService.primary}"></i>
+          UniDys a été créé pour offrir une plateforme <strong [ngStyle]="{'color': themeService.secondary}">douce, adaptée et accessible</strong>,
+          qui permet d'apprendre autrement. Nous accompagnons les élèves, les parents et les enseignants.
+        </p>
+
+        <!-- Citation -->
+        <blockquote class="mt-4 flex items-center justify-between gap-4 rounded-2xl p-6 italic text-lg md:text-xl"
+                    [ngStyle]="{'background-color': themeService.Backgroundcards, 'color': themeService.Textprincipal, 'border': themeService.Bordernormal}">
+          <i class="fa-solid fa-quote-left text-3xl md:text-4xl shrink-0" [ngStyle]="{'color': themeService.primary}"></i>
+          <p class="flex-1 text-center sm:text-left">« Parce que chaque élève mérite de comprendre et d'apprendre à son rythme. »</p>
+          <i class="fa-solid fa-quote-right text-3xl md:text-4xl shrink-0" [ngStyle]="{'color': themeService.primary}"></i>
+        </blockquote>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>

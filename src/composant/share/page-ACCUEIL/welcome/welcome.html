@@ -1,0 +1,191 @@
+<section class="mt-16 px-10 py-10 relative overflow-hidden">
+
+
+
+    <div class="relative flex flex-col lg:flex-row w-full justify-between gap-10 lg:gap-16">
+
+        <!-- ===================== -->
+        <!-- BLOC GAUCHE -->
+        <!-- ===================== -->
+        <div
+            class="flex flex-col items-center lg:items-start text-center lg:text-left gap-6 sm:gap-8 justify-center w-full lg:w-1/2">
+
+            <!-- Badge -->
+            <div [ngStyle]="{
+          'background': 'linear-gradient(135deg, ' + themeService.primary + '22, ' + themeService.secondary + '22)',
+          'border': '1px solid ' + themeService.primary,
+          'color': themeService.Textprincipal
+        }" class="inline-flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-md text-sm font-semibold shadow-lg">
+                <i class="fa-solid fa-graduation-cap" [ngStyle]="{'color': themeService.primary}"></i>
+                <span>Plateforme éducative inclusive</span>
+            </div>
+
+            <!-- Titre -->
+            <div class="space-y-3">
+                <h1 class="font-black leading-tight text-5xl sm:text-6xl lg:text-7xl" [ngStyle]="{
+            'background': 'linear-gradient(90deg, ' + themeService.primary + ', ' + themeService.secondary + ')',
+            '-webkit-background-clip': 'text',
+            '-webkit-text-fill-color': 'transparent'
+          }">
+                    UniDys
+                </h1>
+
+                <p class="font-medium text-lg sm:text-xl" [ngStyle]="{'color': themeService.Textsecondaire}">
+                    L'apprentissage adapté à chaque élève
+                </p>
+            </div>
+
+            <!-- Description -->
+            <div class="space-y-4 max-w-xl p-6 rounded-2xl backdrop-blur-md shadow-xl" [ngStyle]="{
+          'background': themeService.Backgroundcards,
+          'border': themeService.Bordernormal
+        }">
+                <p class="leading-relaxed font-medium text-base sm:text-lg"
+                    [ngStyle]="{'color': themeService.Textprincipal}">
+                    Une plateforme pensée pour accompagner les élèves DYS dans leur apprentissage quotidien.
+                    Nous proposons des outils adaptés, accessibles et modernes pour faciliter la lecture,
+                    l'écriture et la concentration.
+                </p>
+
+                <p class="text-sm sm:text-base" [ngStyle]="{'color': themeService.Textsecondaire}">
+                    Dyslexie, dyspraxie, TDAH ou dyscalculie : UniDys s’adapte à chaque besoin.
+                </p>
+            </div>
+
+            <!-- Boutons -->
+            <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+
+                <button
+                    class="w-full sm:w-auto px-6 py-3 rounded-xl font-bold shadow-lg transition-all hover:scale-105 hover:shadow-2xl"
+                    [ngStyle]="{
+            'background': 'linear-gradient(135deg, ' + themeService.primary + ', ' + themeService.primaryHover + ')',
+            'color': '#fff'
+          }">
+                    <i class="fa-solid fa-book-open mr-2"></i>
+                    Voir les Cours
+                </button>
+
+                <button class="w-full sm:w-auto px-6 py-3 rounded-xl font-bold transition-all hover:scale-105"
+                    [ngStyle]="{
+            'border': '1px solid ' + themeService.primary,
+            'background': themeService.Backgroundcards,
+            'color': themeService.Textprincipal
+          }">
+                    <i class="fa-solid fa-pen-nib mr-2"></i>
+                    Voir les Exercices
+                </button>
+
+            </div>
+        </div>
+
+        <!-- ===================== -->
+        <!-- BLOC DROIT -->
+        <!-- ===================== -->
+        <div class="flex flex-col justify-center w-full lg:w-1/2">
+
+            <div class="rounded-3xl p-6 sm:p-8 backdrop-blur-lg" [ngStyle]="{
+          'background': themeService.Backgroundcards,
+          'border': themeService.Bordernormal
+        }">
+
+                <h2 class="font-bold text-2xl sm:text-3xl mb-6" [ngStyle]="{'color': themeService.Textprincipal}">
+                    Pourquoi choisir UniDys ?
+                </h2>
+
+                <div class="space-y-5">
+
+                    <!-- ITEM -->
+                    <div class="flex items-start gap-4 p-4 rounded-2xl transition-all hover:scale-[1.02]" [ngStyle]="{
+                 'background': themeService.Cardhover,
+                 'border': themeService.Bordernormal
+               }">
+
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center" [ngStyle]="{
+                   'background': 'linear-gradient(135deg, ' + themeService.primary + ', ' + themeService.secondary + ')'
+                 }">
+                            <i class="fa-solid fa-font text-white"></i>
+                        </div>
+
+                        <div>
+                            <h3 class="font-bold" [ngStyle]="{'color': themeService.Textprincipal}">
+                                Police adaptée
+                            </h3>
+                            <p class="text-sm" [ngStyle]="{'color': themeService.Textsecondaire}">
+                                Une typographie pensée pour faciliter la lecture.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- ITEM -->
+                    <div class="flex items-start gap-4 p-4 rounded-2xl transition-all hover:scale-[1.02]" [ngStyle]="{
+                 'background': themeService.Cardhover,
+                 'border': themeService.Bordernormal
+               }">
+
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center" [ngStyle]="{
+                   'background': 'linear-gradient(135deg, ' + themeService.secondary + ', ' + themeService.primary + ')'
+                 }">
+                            <i class="fa-solid fa-palette text-white"></i>
+                        </div>
+
+                        <div>
+                            <h3 class="font-bold" [ngStyle]="{'color': themeService.Textprincipal}">
+                                Contraste optimisé
+                            </h3>
+                            <p class="text-sm" [ngStyle]="{'color': themeService.Textsecondaire}">
+                                Des couleurs adaptées pour une meilleure lisibilité.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- ITEM -->
+                    <div class="flex items-start gap-4 p-4 rounded-2xl transition-all hover:scale-[1.02]" [ngStyle]="{
+                 'background': themeService.Cardhover,
+                 'border': themeService.Bordernormal
+               }">
+
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center" [ngStyle]="{
+                   'background': 'linear-gradient(135deg, ' + themeService.primary + ', ' + themeService.secondary + ')'
+                 }">
+                            <i class="fa-solid fa-bolt text-white"></i>
+                        </div>
+
+                        <div>
+                            <h3 class="font-bold" [ngStyle]="{'color': themeService.Textprincipal}">
+                                Outils interactifs
+                            </h3>
+                            <p class="text-sm" [ngStyle]="{'color': themeService.Textsecondaire}">
+                                Apprentissage dynamique et engageant.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- ITEM -->
+                    <div class="flex items-start gap-4 p-4 rounded-2xl transition-all hover:scale-[1.02]" [ngStyle]="{
+                 'background': themeService.Cardhover,
+                 'border': themeService.Bordernormal
+               }">
+
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center" [ngStyle]="{
+                   'background': 'linear-gradient(135deg, ' + themeService.secondary + ', ' + themeService.primary + ')'
+                 }">
+                            <i class="fa-solid fa-volume-high text-white"></i>
+                        </div>
+
+                        <div>
+                            <h3 class="font-bold" [ngStyle]="{'color': themeService.Textprincipal}">
+                                Lecture audio
+                            </h3>
+                            <p class="text-sm" [ngStyle]="{'color': themeService.Textsecondaire}">
+                                Compréhension facilitée grâce à l’audio.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</section>

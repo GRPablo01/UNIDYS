@@ -1,0 +1,44 @@
+<app-icon></app-icon>
+
+<section class=" h-auto px-10 py-30">
+
+  <div class="max-w-4xl mx-auto flex flex-col items-center">
+
+    <!-- Titre -->
+    <h2 id="pourquoi-title"
+        class="text-3xl md:text-4xl font-extrabold mb-6 leading-tight flex items-center justify-center gap-3"
+        [ngStyle]="{'color': themeService.Textprincipal}">
+      <i class="fa-solid fa-star" [ngStyle]="{'color': themeService.primary}"></i>
+      Pourquoi <span [ngStyle]="{'color': themeService.secondary}">UniDys</span> ?
+    </h2>
+
+    <!-- Texte -->
+    <div class="space-y-6 text-lg md:text-xl">
+
+      <p [ngStyle]="{'color': themeService.Textprincipal}">
+        <i class="fa-solid fa-people-group mr-2" [ngStyle]="{'color': themeService.secondary}"></i>
+        UniDys est une plateforme 
+        <span class="font-semibold" [ngStyle]="{'color': themeService.secondary}">
+          créée par des personnes DYS, pour des personnes DYS
+        </span>.
+        Chaque outil et chaque cours ont été pensés pour rendre l'apprentissage plus
+        <span class="font-semibold" [ngStyle]="{'color': themeService.primary}">accessible</span>
+        et
+        <span class="font-semibold" [ngStyle]="{'color': themeService.primaryHover}">motivant</span>.
+      </p>
+
+      <p [ngStyle]="{'color': themeService.Textprincipal}">
+        <i class="fa-solid fa-hand-holding-heart mr-2" [ngStyle]="{'color': themeService.primary}"></i>
+        Nous comprenons les défis uniques des élèves DYS et proposons des contenus adaptés
+        pour favoriser la réussite scolaire et la confiance en soi,
+        que vous soyez 
+        <span class="font-semibold" [ngStyle]="{'color': themeService.secondary}">
+          élève, parent ou enseignant.
+        </span>
+      </p>
+
+    </div>
+
+  </div>
+
+</section>

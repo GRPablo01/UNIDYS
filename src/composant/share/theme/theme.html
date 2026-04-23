@@ -1,0 +1,95 @@
+<!-- ============================================
+     BOUTON THÈME - VERSION AMÉLIORÉE
+     ============================================ -->
+     <button 
+     type="button" 
+     (click)="toggleTheme()" 
+     (mouseenter)="hover = true" 
+     (mouseleave)="hover = false"
+     (focus)="hover = true"
+     (blur)="hover = false"
+     class="group relative w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ease-out hover:scale-110 active:scale-95"
+     [ngStyle]="{ 'focus-ring-color': themeservice.primary }"
+     [attr.aria-label]="themeservice.isDarkMode ? 'Activer le mode clair' : 'Activer le mode sombre'"
+     [attr.aria-pressed]="themeservice.isDarkMode"
+     aria-live="polite"
+   >
+     <!-- Cercle de fond avec effet morphing -->
+      <span 
+      class="absolute inset-0 rounded-full transition-all duration-300 ease-out"
+      [ngClass]="{ 
+        'scale-100 opacity-100': hover, 
+        'scale-0 opacity-0': !hover 
+      }"
+      [ngStyle]="{
+        'background': 'linear-gradient(135deg, ' + themeservice.primaryHover + ' 0%, ' + themeservice.secondaryHover + ' 100%)',
+        'box-shadow': hover 
+          ? '0 4px 20px ' + themeservice.primary + '40'
+          : 'none'
+      }"
+      ></span>
+   
+     <!-- Conteneur d'icônes avec animation -->
+     <span 
+       class="relative z-10 w-6 h-6 flex items-center justify-center"
+       [ngStyle]="{ 
+         'transform': hover ? 'scale(1.1)' : 'scale(1)',
+         'transition': 'transform 0.3s ease-out'
+       }"
+     >
+       <!-- Icône Soleil -->
+       <i 
+         class="fa-solid fa-sun text-xl absolute transition-all duration-500 ease-out"
+         [ngClass]="{ 
+           'rotate-0 opacity-100 scale-100': themeservice.isDarkMode,
+           'rotate-180 opacity-0 scale-0': !themeservice.isDarkMode
+         }"
+         [ngStyle]="{ 
+           'color': hover ? '#ffffff' : (themeservice.isDarkMode ? themeservice.Textprincipal : themeservice.Iconnormal)
+         }"
+       ></i>
+       
+       <!-- Icône Lune -->
+       <i 
+         class="fa-solid fa-moon text-xl absolute transition-all duration-500 ease-out"
+         [ngClass]="{ 
+           'rotate-0 opacity-100 scale-100': !themeservice.isDarkMode,
+           '-rotate-180 opacity-0 scale-0': themeservice.isDarkMode
+         }"
+         [ngStyle]="{ 
+           'color': hover ? '#ffffff' : themeservice.Iconnormal
+         }"
+       ></i>
+     </span>
+   
+     <!-- Tooltip -->
+     <!-- <span 
+       class="absolute top-full mt-2 px-2.5 py-1.5 rounded-lg text-[11px] font-medium whitespace-nowrap opacity-0 translate-y-[-5px] transition-all duration-200 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 z-50"
+       [ngStyle]="{ 
+         'background-color': themeservice.Backgroundcards,
+         'color': themeservice.Textprincipal,
+         'box-shadow': '0 4px 12px rgba(0,0,0,0.15)',
+         'border': '1px solid ' + themeservice.Bordernormal
+       }"
+     >
+       {{ themeservice.isDarkMode ? 'Mode clair' : 'Mode sombre' }}
+     </span> -->
+   </button>
+   
+   <!-- ============================================
+        STYLES CSS (À AJOUTER DANS LE COMPONENT)
+        ============================================ -->
+   <style>
+     /* Rotation fluide des icônes */
+     .rotate-0 {
+       transform: rotate(0deg);
+     }
+     
+     .rotate-180 {
+       transform: rotate(180deg);
+     }
+     
+     .-rotate-180 {
+       transform: rotate(-180deg);
+     }
+   </style>

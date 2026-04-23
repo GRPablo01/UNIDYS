@@ -1,0 +1,199 @@
+<!-- ========================================= -->
+<!-- COMPOSANT KEY UNIQUE - VERSION DESKTOP/TABLETTE -->
+<!-- ========================================= -->
+
+<!-- VERSION DESKTOP - Visible à 1351px et plus -->
+<div
+     class="desktop-only group relative flex items-center gap-5 px-2 w-auto backdrop-blur-xl rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 ease-out overflow-hidden"
+     [ngStyle]="{'background':themeService.Backgroundcards,'color':themeService.Textprincipal,'border':themeService.Bordernormal}">
+
+  <!-- Effet de fond subtil au hover -->
+  <div class="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+       [ngStyle]="{'background': 'linear-gradient(to bottom right, ' + themeService.primarySoft + '20, ' + themeService.secondarySoft + '20)'}"></div>
+
+  <!-- Section Gauche : Icône Key stylisée -->
+  <div class="relative flex flex-col items-center gap-2 min-w-[70px] z-10">
+    <div class="relative w-14 h-14 flex items-center justify-center rounded-xl shadow-lg group-hover:scale-105 transition-all duration-300"
+         [ngStyle]="{
+           'background': 'linear-gradient(to bottom right, ' + themeService.primary + ', ' + themeService.secondary + ')',
+           'box-shadow': '0 10px 20px rgba(0,0,0,0.3)'
+         }">
+      <i class="fas fa-key text-2xl text-white transform group-hover:rotate-12 transition-transform duration-300"></i>
+      <div class="absolute inset-0 rounded-xl bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+    </div>
+    <span class="text-[10px] font-bold uppercase tracking-widest text-center" [ngStyle]="{'color': themeService.Textprincipal}">
+      Key Unique
+    </span>
+  </div>
+
+  <!-- Séparateur vertical -->
+  <div class="w-px h-16 bg-gradient-to-b from-transparent via-gray-300 to-transparent z-10"></div>
+
+  <!-- Section Centre : Contenu principal -->
+  <div class="flex flex-col gap-3 min-w-[200px] z-10">
+    <!-- Label clé -->
+    <div class="flex items-center gap-2">
+      <i class="fas fa-fingerprint text-xs" [ngStyle]="{'color': themeService.accent}"></i>
+      <span class="text-sm font-bold" [ngStyle]="{'color': themeService.Textprincipal}">
+        Ma Key
+      </span>
+    </div>
+
+    <!-- Valeur clé -->
+    <div class="flex items-center gap-2 px-3 py-2 rounded-lg border backdrop-blur-sm"
+         [ngStyle]="{'background': themeService.Fondboutonsecondaire,'border': themeService.Bordernormal}">
+      <span class="font-mono font-bold text-sm tracking-wider truncate" [ngStyle]="{'color': themeService.Textprincipal}">
+        {{ user?.key || 'Non disponible' }}
+      </span>
+    </div>
+
+    <!-- Indication -->
+    <div class="flex items-center gap-1 text-[10px]" [ngStyle]="{'color': themeService.Textsecondaire}">
+      <i class="fas fa-info-circle text-[8px]"></i>
+      <span>Partagez cette clé pour vous connecter</span>
+    </div>
+  </div>
+
+  <!-- Séparateur vertical -->
+  <div class="w-px h-16 bg-gradient-to-b from-transparent via-gray-300 to-transparent z-10"></div>
+
+  <!-- Section Droite : Actions -->
+  <div class="flex flex-col gap-2 min-w-[50px] z-10">
+    <!-- Copier -->
+    <button (click)="copyToClipboard(user?.key!)"
+            class="relative w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 overflow-hidden group/btn"
+            [ngStyle]="{'background': 'linear-gradient(to bottom right, ' + themeService.primary + ', ' + themeService.secondary + ')','box-shadow': '0 4px 10px ' + themeService.primary + '40'}"
+            title="Copier la clé">
+      <i class="fas text-white transition-all duration-300"
+         [class.fa-copy]="!isCopied"
+         [class.fa-check]="isCopied"
+         [class.scale-0]="isCopied"
+         [class.scale-100]="!isCopied">
+      </i>
+      <i class="fas fa-check text-white absolute transition-all duration-300"
+         [class.scale-0]="!isCopied"
+         [class.scale-100]="isCopied"></i>
+      <div class="absolute inset-0 rounded-xl bg-white/30 scale-0 group-active/btn:scale-100 transition-transform duration-200"></div>
+    </button>
+
+    <!-- QR Code -->
+    <button (click)="openQR()"
+            class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 border"
+            [ngStyle]="{'background': themeService.Fondboutonsecondaire,'border': themeService.Bordernormal,'color': themeService.Textprincipal}"
+            title="Afficher le QR Code">
+      <i class="fas fa-qrcode text-sm transition-transform duration-300 group-hover:rotate-90"></i>
+    </button>
+  </div>
+</div>
+
+<!-- VERSION TABLETTE - Visible entre 933px et 1350px -->
+<div
+     class="tablet-only group relative flex items-center gap-3 w-auto px-2 py-1 backdrop-blur-xl rounded-xl shadow-md hover:shadow-lg transition-all duration-300 ease-out overflow-hidden"
+     [ngStyle]="{'background':themeService.Backgroundcards,'color':themeService.Textprincipal,'border':themeService.Bordernormal}">
+
+  <div class="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+       [ngStyle]="{'background': 'linear-gradient(to bottom right, ' + themeService.primarySoft + '20, ' + themeService.secondarySoft + '20)'}"></div>
+
+  <div class="relative flex items-center justify-center min-w-[45px] z-10">
+    <div class="relative w-11 h-11 flex items-center justify-center rounded-lg shadow-md group-hover:scale-105 transition-all duration-300"
+         [ngStyle]="{'background': 'linear-gradient(to bottom right, ' + themeService.primary + ', ' + themeService.secondary + ')'}">
+      <i class="fas fa-key text-lg text-white"></i>
+      <div class="absolute inset-0 rounded-lg bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-2 min-w-[140px] flex-1 z-10">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-1.5">
+        <i class="fas fa-fingerprint text-xs" [ngStyle]="{'color': themeService.accent}"></i>
+        <span class="text-xs font-bold" [ngStyle]="{'color': themeService.Textprincipal}">
+          Ma Key
+        </span>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2 px-2 py-1.5 rounded-lg border backdrop-blur-sm"
+         [ngStyle]="{'background': themeService.Fondboutonsecondaire,'border': themeService.Bordernormal}">
+      <span class="font-mono font-bold text-[11px] truncate" [ngStyle]="{'color': themeService.Textprincipal}">
+        {{ user?.key || 'Non disponible' }}
+      </span>
+    </div>
+  </div>
+
+  <!-- QR Code bouton tablette -->
+  <button (click)="openQR()"
+          class="w-8 h-8 rounded-lg flex items-center justify-center border"
+          [ngStyle]="{'background': themeService.Fondboutonsecondaire,'border': themeService.Bordernormal,'color': themeService.Textprincipal}"
+          title="Afficher le QR Code">
+    <i class="fas fa-qrcode text-xs transition-transform duration-300 group-hover:rotate-90"></i>
+  </button>
+</div>
+
+<!-- ========================================= -->
+<!-- POP-UP QR CODE -->
+<!-- ========================================= -->
+  <!-- POPUP QR CODE -->
+  <div *ngIf="showQR" class="fixed inset-0 flex items-center justify-center bg-black/60 z-50">
+
+    <div
+      class="p-6 rounded-2xl shadow-xl flex flex-col items-center gap-4"
+      [ngStyle]="{ background: themeService.Backgroundcards }"
+    >
+  
+      <h3 class="text-lg font-semibold">
+        QR Code utilisateur
+      </h3>
+  
+      <!-- QR CONTAINER -->
+      <div class="relative flex items-center justify-center w-[220px] h-[220px]">
+  
+        <!-- QR CODE -->
+        <qrcode
+        [qrdata]="'http://192.168.0.20:4200/QRCode/' + user?.key"
+        [width]="220"
+        [errorCorrectionLevel]="'H'"
+        [colorDark]="themeService.Textprincipal"
+        [colorLight]="themeService.Backgroundcards"
+        >
+        </qrcode>
+  
+        <!-- ZONE VIDE POUR LE LOGO -->
+        <div
+          class="absolute w-12 h-12 rounded-lg flex items-center justify-center z-10"
+          [ngStyle]="{ background: themeService.Backgroundcards }"
+        >
+  
+          <!-- LOGO -->
+            <img
+            [src]="themeService.ThemeImage"
+            class="w-16 h-16 object-contain"
+            style="filter: grayscale(100%) contrast(200%);"
+            />
+  
+        </div>
+  
+      </div>
+  
+      <span class="text-xs opacity-70">
+        Scanner pour accéder au profil
+      </span>
+  
+      <button
+        (click)="showQR = false"
+        class="px-4 py-2 rounded-lg text-sm"
+        [ngStyle]="{ background: themeService.Fondboutonsecondaire }"
+      >
+        Fermer
+      </button>
+  
+    </div>
+  
+  </div>
+
+<!-- Styles Media Queries identiques à DYS -->
+<style>
+  .desktop-only, .tablet-only { display: none !important; }
+  @media screen and (min-width: 1351px) { .desktop-only { display: flex !important; } .tablet-only { display: none !important; } }
+  @media screen and (min-width: 933px) and (max-width: 1350px) { .tablet-only { display: flex !important; } .desktop-only { display: none !important; } }
+  @media screen and (max-width: 932px) { .desktop-only, .tablet-only { display: none !important; } }
+</style>

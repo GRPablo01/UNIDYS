@@ -1,0 +1,14 @@
+/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+
+/* 🌞 Mode clair par défaut */
+:root {
+  
+    --test: #81ff90;
+    --test2: #5f0374;
+    --test1: #fcfbfb;
+  
+  
+    
+  }

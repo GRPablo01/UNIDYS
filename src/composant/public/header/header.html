@@ -1,0 +1,46 @@
+<app-icon></app-icon>
+
+<!-- HEADER -->
+<header class="fixed top-0 flex items-center justify-between z-[2147483642] h-16 pl-2 pr-4 w-full" 
+  [ngStyle]="{
+    'background': themeService.Backgroundprincipal,
+    'color': themeService.Textprincipal,
+    'box-shadow': '0 1px 5px ' + themeService.primary + ', 0 -2px 10px rgba(0,0,0,0.05)'
+  }">
+
+  <!-- ===================== -->
+  <!-- BLOC GAUCHE (Logo + Icon2) -->
+  <!-- ===================== -->
+  <div class="flex items-center gap-[10px] flex-shrink-0 -ml-1">
+    <app-logo class="flex-shrink-0"></app-logo>
+    
+    <!-- séparateur -->
+    <div
+      class="hidden min-[1243px]:block h-6 w-px opacity-30 mx-3"
+      [ngStyle]="{'background': themeService.Textprincipal}"
+    ></div>
+
+    <!-- visible à partir de 526px -->
+    <app-icon2 class="flex-shrink-0 hidden min-[526px]:block"></app-icon2>
+  </div>
+
+  <!-- ===================== -->
+  <!-- BLOC DROIT (Nav + Profil) -->
+  <!-- ===================== -->
+  <div class="flex items-center gap-0 flex-shrink-0">
+    
+    <!-- NAV - visible à partir de sm (640px) -->
+    <app-nav></app-nav>
+
+    <!-- séparateur -->
+    <div
+      class="hidden min-[1243px]:block h-6 w-px opacity-30 mx-3"
+      [ngStyle]="{'background': themeService.Textprincipal}"
+    ></div>
+
+    <!-- PROFIL - collé directement à Nav -->
+    <app-profil class="flex-shrink-0"></app-profil>
+
+  </div>
+
+</header>

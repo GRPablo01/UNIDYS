@@ -1,0 +1,256 @@
+<!-- VERSION DESKTOP - Visible à 1351px et plus -->
+<div *ngIf="role === 'eleve'"
+    class="desktop-only group relative flex items-center gap-5 w-auto p-1 py-2 backdrop-blur-xl rounded-2xl shadow-lg hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500 ease-out overflow-hidden"
+    [ngStyle]="{'background':themeService.Backgroundcards,'color':themeService.Textprincipal,'border':themeService.Bordernormal}">
+
+    <!-- Effet de fond subtil au hover -->
+    <div class="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+    </div>
+
+    <!-- Section Gauche : Icône DYS -->
+    <div class="relative flex flex-col items-center gap-2 min-w-[70px] z-10">
+        <div class="relative w-14 h-14 flex items-center justify-center rounded-xl shadow-lg group-hover:scale-105 transition-all duration-300"
+            [ngStyle]="{
+                'background': 'linear-gradient(to bottom right, ' + themeService.primary + ', ' + themeService.secondary + ')',
+                'box-shadow': '0 10px 20px rgba(0,0,0,0.3)'
+            }">
+            <i class="fas fa-brain text-2xl text-white transform group-hover:rotate-6 transition-transform duration-300"></i>
+            
+            <!-- Effet de brillance -->
+            <div class="absolute inset-0 rounded-xl bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            </div>
+        </div>
+        
+        <span class="text-[10px] font-bold uppercase tracking-widest text-center" [ngStyle]="{
+                'color':themeService.Textprincipal
+            }">
+            DYS
+        </span>
+    </div>
+
+    <!-- Séparateur vertical avec dégradé -->
+    <div class="w-px h-16 bg-gradient-to-b from-transparent via-gray-300 to-transparent z-10"></div>
+
+    <!-- Section Centre : Contenu principal -->
+    <div class="flex flex-col gap-3 min-w-[200px] z-10">
+        
+        <!-- Titre avec compteur -->
+        <div class="flex items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-notes-medical text-sm" [ngStyle]="{
+                        'color': themeService.accent
+                    }"></i>
+                <span class="text-sm font-bold" [ngStyle]="{
+                        'color': themeService.Textprincipal
+                    }">
+                    Mes troubles DYS
+                </span>
+            </div>
+            
+            <!-- Badge compteur -->
+            <div *ngIf="dysListe.length > 0" 
+                 class="flex items-center justify-center w-6 h-6 rounded-full shadow-md transform group-hover:scale-110 transition-transform duration-300"
+                 [ngStyle]="{
+                     'background': 'linear-gradient(to bottom right, ' + themeService.primary + ', ' + themeService.secondary + ')'
+                 }">
+                <span class="text-[10px] font-bold text-white">
+                    {{ dysListe.length }}
+                </span>
+            </div>
+        </div>
+
+        <!-- Liste des troubles avec badges animés -->
+        <div *ngIf="dysListe.length > 0; else aucunDys" 
+             class="flex flex-wrap gap-2 max-w-[280px]">
+            <span 
+                *ngFor="let dys of dysListe; let i = index"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold rounded-full border hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 cursor-default animate-slideUp"
+                [style.animation-delay.ms]="i * 75"
+                [ngStyle]="{
+                    'background': 'linear-gradient(to right, ' + themeService.primarySoft + ', ' + themeService.secondarySoft + ')',
+                    'border': themeService.Bordernormal,
+                    'color': themeService.Textprincipal
+                }">
+                <i class="fas fa-check-circle text-[10px]" [ngStyle]="{
+                        'color': themeService.accent
+                    }"></i>
+                {{ dys }}
+            </span>
+        </div>
+
+        <!-- État vide -->
+        <ng-template #aucunDys>
+            <div class="flex items-center gap-3 px-4 py-3 rounded-xl border border-dashed transition-colors duration-300"
+                 [ngStyle]="{
+                     'background': themeService.Backgroundcards,
+                     'border': themeService.Bordernormal
+                 }">
+                <div class="w-8 h-8 flex items-center justify-center rounded-full"
+                     [ngStyle]="{
+                         'background': themeService.Fondboutonsecondaire,
+                         'color': themeService.Textsecondaire
+                     }">
+                    <i class="fas fa-clipboard-list text-sm"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xs font-medium" [ngStyle]="{
+                            'color': themeService.Textsecondaire
+                        }">
+                        Aucun trouble enregistré
+                    </span>
+                    <span class="text-[10px]" [ngStyle]="{
+                            'color': themeService.Textsecondaire
+                        }">
+                        Contactez votre référent
+                    </span>
+                </div>
+            </div>
+        </ng-template>
+
+    </div>
+
+    <!-- Indicateur visuel optionnel -->
+    <div class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <i class="fas fa-info-circle text-xs" [ngStyle]="{
+                'color': themeService.Textsecondaire
+            }"></i>
+    </div>
+
+</div>
+
+<!-- VERSION TABLETTE - Visible entre 933px et 1350px -->
+<div *ngIf="role === 'eleve'"
+    class="tablet-only group relative flex items-center gap-3 w-auto p-2 backdrop-blur-xl rounded-xl shadow-md hover:shadow-lg transition-all duration-300 ease-out overflow-hidden"
+    [ngStyle]="{'background':themeService.Backgroundcards,'color':themeService.Textprincipal,'border':themeService.Bordernormal}">
+
+    <!-- Effet de fond subtil -->
+    <div class="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+    <!-- Section Gauche : Icône compacte -->
+    <div class="relative flex items-center justify-center min-w-[45px] z-10">
+        <div class="relative w-11 h-11 flex items-center justify-center rounded-lg shadow-md group-hover:scale-105 transition-all duration-300"
+            [ngStyle]="{
+                'background': 'linear-gradient(to bottom right, ' + themeService.primary + ', ' + themeService.secondary + ')'
+            }">
+            <i class="fas fa-brain text-lg text-white"></i>
+            <div class="absolute inset-0 rounded-lg bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        </div>
+        
+        <!-- Badge compteur intégré à l'icône -->
+        <div *ngIf="dysListe.length > 0" 
+             class="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 rounded-full shadow-sm"
+             [ngStyle]="{
+                 'background': themeService.accent,
+                 'color': 'white'
+             }">
+            <span class="text-[9px] font-bold">{{ dysListe.length }}</span>
+        </div>
+    </div>
+
+    <!-- Section Droite : Contenu compact -->
+    <div class="flex flex-col gap-2 min-w-[140px] flex-1 z-10">
+        
+        <!-- Header avec titre court -->
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+                <i class="fas fa-notes-medical text-xs" [ngStyle]="{'color': themeService.accent}"></i>
+                <span class="text-xs font-bold" [ngStyle]="{'color': themeService.Textprincipal}">
+                    Troubles DYS
+                </span>
+            </div>
+        </div>
+
+        <!-- Liste compacte des troubles (chips plus petits) -->
+        <div *ngIf="dysListe.length > 0; else aucunDysTablet" 
+             class="flex flex-wrap gap-1.5 max-w-[220px]">
+            <span 
+                *ngFor="let dys of dysListe; let i = index"
+                class="inline-flex items-center gap-1 px-2 py-0.5 text-[9px] font-medium rounded-md border transition-all duration-200"
+                [ngStyle]="{
+                    'background': themeService.primarySoft,
+                    'border': themeService.Bordernormal,
+                    'color': themeService.Textprincipal
+                }">
+                <i class="fas fa-check text-[8px]" [ngStyle]="{'color': themeService.accent}"></i>
+                {{ dys }}
+            </span>
+        </div>
+
+        <!-- État vide version tablette -->
+        <ng-template #aucunDysTablet>
+            <div class="flex items-center gap-2 px-2 py-1.5 rounded-lg border border-dashed"
+                 [ngStyle]="{
+                     'background': themeService.Backgroundcards,
+                     'border': themeService.Bordernormal
+                 }">
+                <i class="fas fa-clipboard-list text-xs" [ngStyle]="{'color': themeService.Textsecondaire}"></i>
+                <span class="text-[9px]" [ngStyle]="{'color': themeService.Textsecondaire}">
+                    Aucun trouble
+                </span>
+            </div>
+        </ng-template>
+
+    </div>
+
+</div>
+
+<!-- Styles avec Media Queries -->
+<style>
+    /* Par défaut, tout est caché */
+    .desktop-only,
+    .tablet-only {
+        display: none !important;
+    }
+
+    /* Desktop : 1351px et plus */
+    @media screen and (min-width: 1351px) {
+        .desktop-only {
+            display: flex !important;
+        }
+        .tablet-only {
+            display: none !important;
+        }
+    }
+
+    /* Tablette : entre 933px et 1350px */
+    @media screen and (min-width: 933px) and (max-width: 1350px) {
+        .tablet-only {
+            display: flex !important;
+        }
+        .desktop-only {
+            display: none !important;
+        }
+    }
+
+    /* Mobile : moins de 933px */
+    @media screen and (max-width: 932px) {
+        .desktop-only,
+        .tablet-only {
+            display: none !important;
+        }
+    }
+
+    @keyframes slideUp {
+        from { 
+            opacity: 0; 
+            transform: translateY(8px) scale(0.95); 
+        }
+        to { 
+            opacity: 1; 
+            transform: translateY(0) scale(1); 
+        }
+    }
+    
+    .animate-slideUp {
+        animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        opacity: 0;
+    }
+
+    /* Accessibilité */
+    @media (prefers-reduced-motion: reduce) {
+        .animate-slideUp {
+            animation: none;
+            opacity: 1;
+        }
+    }
+</style>

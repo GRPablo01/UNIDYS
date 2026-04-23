@@ -1,0 +1,236 @@
+<section class="mt-16 px-4 sm:px-8">
+
+    <!-- ================= HEADER ================= -->
+    <header
+      class="rounded-3xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6 shadow-xl relative overflow-hidden backdrop-blur-md"
+      [ngStyle]="{
+        'background': themeService.Backgroundcards,
+        'border': '1px solid ' + themeService.Bordernormal
+      }"
+    >
+  
+      <!-- Glow -->
+      <div class="absolute inset-0 opacity-10 blur-2xl"
+           [ngStyle]="{'background': themeService.primary}">
+      </div>
+  
+      <!-- LEFT -->
+      <div class="flex items-center gap-4 relative z-10">
+  
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-lg"
+             [ngStyle]="{
+               'background': themeService.primary + '20',
+               'color': themeService.primary
+             }">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+  
+        <div>
+          <h1 class="text-2xl font-bold flex items-center gap-2"
+              [ngStyle]="{'color': themeService.Textprincipal}">
+            Créer un cours
+          </h1>
+  
+          <p class="text-sm flex items-center gap-2"
+             [ngStyle]="{'color': themeService.Textsecondaire}">
+            <i class="fa-solid fa-layer-group text-xs"></i>
+            Étape {{ etape }} / {{ totalEtapes }}
+          </p>
+        </div>
+      </div>
+  
+      <!-- PROGRESS -->
+      <div class="relative z-10 w-full md:w-72">
+  
+        <div class="flex justify-between text-xs mb-1">
+          <span [ngStyle]="{'color': themeService.Textsecondaire}">
+            Progression
+          </span>
+  
+          <span class="font-bold flex items-center gap-1"
+                [ngStyle]="{'color': themeService.primary}">
+            <i class="fa-solid fa-chart-line text-xs"></i>
+            {{ getProgressPercent() | number:'1.0-0' }}%
+          </span>
+        </div>
+  
+        <div class="w-full h-2 rounded-full overflow-hidden"
+             [ngStyle]="{'background': themeService.Backgroundprincipal}">
+          <div class="h-full transition-all duration-500 rounded-full"
+               [ngStyle]="{
+                 'width': getProgressPercent() + '%',
+                 'background': themeService.primary
+               }">
+          </div>
+        </div>
+  
+      </div>
+  
+    </header>
+  
+    <!-- ================= CARD ================= -->
+    <div class="flex justify-center py-10">
+  
+      <div class="w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden transition-all duration-300 hover:shadow-3xl"
+           [ngStyle]="{
+             'background': themeService.Backgroundcards,
+             'border': '1px solid ' + themeService.Bordernormal
+           }">
+  
+        <!-- IMAGE -->
+        <div class="relative h-40">
+          <img [src]="getStepImage()" class="w-full h-full object-cover"/>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60"></div>
+  
+          <div class="absolute bottom-4 left-6 text-white">
+            <p class="text-xs opacity-80 flex items-center gap-1">
+              <i class="fa-solid fa-flag"></i> Étape {{ etape }}
+            </p>
+            <h3 class="font-bold text-lg">{{ getStepTitle() }}</h3>
+          </div>
+        </div>
+  
+        <!-- CONTENT -->
+        <div class="p-8 space-y-6 animate-fade-in">
+  
+          <!-- ================= STEP 1 ================= -->
+          <ng-container *ngIf="etape === 1">
+  
+            <div class="grid sm:grid-cols-2 gap-5">
+  
+              <div class="input-group">
+                <label><i class="fa-solid fa-user"></i> Nom</label>
+                <input [(ngModel)]="nom" placeholder="Dupont"
+                       (blur)="validerChamp('nom')"
+                       [class.error]="erreurs['nom']"/>
+                <small *ngIf="erreurs['nom']">{{ erreurs['nom'] }}</small>
+              </div>
+  
+              <div class="input-group">
+                <label><i class="fa-solid fa-user"></i> Prénom</label>
+                <input [(ngModel)]="prenom" placeholder="Jean"
+                       (blur)="validerChamp('prenom')"
+                       [class.error]="erreurs['prenom']"/>
+                <small *ngIf="erreurs['prenom']">{{ erreurs['prenom'] }}</small>
+              </div>
+  
+            </div>
+  
+          </ng-container>
+  
+          <!-- ================= STEP 2 ================= -->
+          <ng-container *ngIf="etape === 2">
+  
+            <div class="input-group">
+              <label><i class="fa-solid fa-heading"></i> Titre</label>
+              <input [(ngModel)]="titre" maxlength="120"
+                     (input)="validerChamp('titre')"/>
+              <small>{{ titre?.length || 0 }}/120</small>
+            </div>
+  
+            <div class="input-group">
+              <label><i class="fa-solid fa-align-left"></i> Description</label>
+              <textarea [(ngModel)]="description" rows="4"></textarea>
+            </div>
+  
+            <div class="input-group">
+              <label><i class="fa-solid fa-clock"></i> Durée</label>
+              <input type="number" [(ngModel)]="duree"/>
+            </div>
+  
+          </ng-container>
+  
+          <!-- ================= STEP 3 ================= -->
+          <ng-container *ngIf="etape === 3">
+  
+            <div>
+              <p class="mb-2 text-sm flex items-center gap-2">
+                <i class="fa-solid fa-book"></i> Matière
+              </p>
+  
+              <div class="grid grid-cols-2 gap-3">
+                <button *ngFor="let m of matieres"
+                        (click)="selectionnerMatiere(m.code)"
+                        class="choice"
+                        [class.active]="matiere === m.code">
+                  <i class="fa-solid fa-book-open"></i>
+                  {{ m.label }}
+                </button>
+              </div>
+            </div>
+  
+            <div>
+              <p class="mb-2 text-sm flex items-center gap-2">
+                <i class="fa-solid fa-layer-group"></i> Niveau
+              </p>
+  
+              <div class="grid grid-cols-3 gap-3">
+                <button *ngFor="let n of niveaux"
+                        (click)="selectionnerNiveau(n.code)"
+                        class="choice"
+                        [class.active]="niveau === n.code">
+                  <i class="fa-solid fa-signal"></i>
+                  {{ n.label }}
+                </button>
+              </div>
+            </div>
+  
+          </ng-container>
+  
+          <!-- ================= STEP 4 ================= -->
+          <ng-container *ngIf="etape === 4">
+  
+            <div class="input-group">
+              <label><i class="fa-solid fa-file-pdf"></i> PDF</label>
+              <input type="file" (change)="onFileSelected($event)"/>
+            </div>
+  
+            <div class="input-group">
+              <label><i class="fa-solid fa-video"></i> Vidéo</label>
+              <input [(ngModel)]="videoUrl" placeholder="https://..."/>
+            </div>
+  
+          </ng-container>
+  
+          <!-- ================= STEP 5 ================= -->
+          <ng-container *ngIf="etape === 5">
+  
+            <div class="space-y-3 text-sm">
+  
+              <p><i class="fa-solid fa-user"></i> <b>Auteur :</b> {{ prenom }} {{ nom }}</p>
+              <p><i class="fa-solid fa-heading"></i> <b>Titre :</b> {{ titre }}</p>
+              <p><i class="fa-solid fa-book"></i> <b>Matière :</b> {{ getMatiereLabel(matiere) }}</p>
+              <p><i class="fa-solid fa-layer-group"></i> <b>Niveau :</b> {{ getNiveauLabel(niveau) }}</p>
+  
+            </div>
+  
+          </ng-container>
+  
+          <!-- ================= NAV ================= -->
+          <div class="flex justify-between pt-6">
+  
+            <button *ngIf="etape > 1"
+                (click)="etape = etape - 1"
+                    class="btn-secondary flex items-center gap-2">
+              <i class="fa-solid fa-arrow-left"></i> Retour
+            </button>
+  
+            <button *ngIf="etape < totalEtapes"
+            (click)="etape = etape + 1"
+                    class="btn-primary flex items-center gap-2">
+              Suivant <i class="fa-solid fa-arrow-right"></i>
+            </button>
+  
+            <button *ngIf="etape === totalEtapes"
+                    (click)="creerCours()"
+                    class="btn-primary flex items-center gap-2">
+              <i class="fa-solid fa-rocket"></i> Publier
+            </button>
+  
+          </div>
+  
+        </div>
+  
+      </div>
+    </div>
+</section>

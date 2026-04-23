@@ -1,0 +1,61 @@
+/* ============================= */
+/* DESKTOP : scroll désactivé */
+/* ============================= */
+@media (min-width: 1024px) {
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;           /* ⛔ scroll bloqué */
+    overscroll-behavior: none;  /* ⛔ aucun rebond */
+  }
+
+  :host {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  .actus-container {
+    flex: 1 1 auto;
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+}
+
+/* ============================= */
+/* TABLETTE + MOBILE : scroll autorisé */
+/* ============================= */
+@media (max-width: 1023px) {
+  html, body {
+    height: auto;
+    overflow: auto;             
+    overscroll-behavior: none;  /* ⛔ stop rebond haut/bas */
+  }
+
+  :host {
+    height: auto;
+    overflow: visible;
+    overscroll-behavior: none;
+  }
+
+  .actus-container {
+    height: auto;
+    overflow-y: auto;           
+    overscroll-behavior-y: none; /* ⛔ stop scroll en bout */
+    -webkit-overflow-scrolling: touch; /* scroll fluide iOS */
+  }
+}
+
+/* ============================= */
+/* Mobile – hauteur écran exacte */
+/* ============================= */
+@media (max-width: 640px) {
+  :host,
+  .actus-container {
+    min-height: 100dvh;
+  }
+}

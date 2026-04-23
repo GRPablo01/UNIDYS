@@ -1,0 +1,402 @@
+<!-- VERSION DESKTOP - Visible uniquement à 1351px et plus -->
+<div [ngStyle]="{'background':themeService.Backgroundcards,'color':themeService.Textprincipal,'border':themeService.Bordernormal}"
+    *ngIf="role === 'eleve'"
+    class="desktop-only group relative flex items-center gap-5 w-auto p-1 backdrop-blur-xl rounded-2xl shadow-lg hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500 ease-out overflow-hidden">
+
+    <!-- Effet de fond subtil au hover -->
+    <div class="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+    </div>
+
+    <!-- Section Gauche : Icône Palier Actuel -->
+    <div class="relative flex flex-col items-center gap-2 min-w-[70px] z-10">
+
+        <div class="relative w-14 h-14 flex items-center justify-center rounded-xl shadow-lg group-hover:scale-105 transition-all duration-300"
+            [ngStyle]="{
+                'background': 'linear-gradient(to bottom right, ' + themeService.primary + ', ' + themeService.secondary + ')',
+                'box-shadow': '0 10px 20px rgba(0,0,0,0.3)'
+            }">
+            <i
+                [class]="'fas ' + iconeActuelle + ' text-2xl text-white transform group-hover:rotate-6 transition-transform duration-300'"></i>
+
+            <!-- Effet de brillance -->
+            <div
+                class="absolute inset-0 rounded-xl bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            </div>
+        </div>
+
+        <span class="text-[10px] font-bold uppercase tracking-widest text-center" [ngStyle]="{
+                'color':themeService.Textprincipal
+            }">
+            {{ palierActuel?.nom }}
+        </span>
+
+    </div>
+
+    <!-- Séparateur vertical avec dégradé -->
+    <div class="w-px h-16 bg-gradient-to-b from-transparent via-gray-300 to-transparent z-10"></div>
+
+    <!-- Section Centre : XP et Progression -->
+    <div class="flex flex-col gap-3 min-w-[160px] z-10">
+        <!-- Ligne XP et Niveau -->
+        <div class="flex items-center justify-between">
+
+            <!-- XP -->
+            <div class="flex items-center gap-2">
+                <i class="fas fa-bolt text-sm" [ngStyle]="{
+                        'color': themeService.accent
+                    }"></i>
+
+                <span class="text-sm font-bold" [ngStyle]="{
+                        'color': themeService.Textprincipal
+                    }">
+                    {{ xp | number }} XP
+                </span>
+            </div>
+
+            <!-- Niveau -->
+            <div class="flex items-center gap-1 px-2.5 py-1 rounded-full shadow-md" [ngStyle]="{
+                    'background': 'linear-gradient(to bottom right, ' + themeService.primary + ', ' + themeService.secondary + ')'
+                }">
+                <i class="fas fa-star text-[8px]" [ngStyle]="{
+                        'color': themeService.accent
+                    }"></i>
+
+                <span class="text-[10px] font-bold text-white">
+                    Niv. {{ niveau }}
+                </span>
+            </div>
+
+        </div>
+
+        <!-- Barre de progression principale -->
+        <div class="relative w-full rounded-full h-3 overflow-hidden shadow-inner transition-shadow duration-300"
+            [ngStyle]="{
+        'background': themeService.Backgroundcards,
+        'box-shadow': themeService.Shadow
+    }">
+
+            <!-- Barre de progression -->
+            <div class="absolute top-0 left-0 h-full rounded-full transition-all duration-700 ease-out"
+                [style.width.%]="progression" [ngStyle]="{
+            'background': 'linear-gradient(to right, ' + themeService.primary + ', ' + themeService.secondary + ')',
+            'box-shadow': '0 0 8px ' + themeService.primary
+        }">
+
+                <!-- ✨ Effet shine -->
+                <div class="absolute inset-0 overflow-hidden">
+                    <div class="absolute inset-0 -skew-x-12" [ngStyle]="{
+                    'background': 'linear-gradient(to right, transparent, rgba(255,255,255,0.5), transparent)'
+                }"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info progression détaillée -->
+        <div class="flex justify-between items-center text-[10px]">
+            <div class="flex items-center gap-1">
+                <i class="fas fa-chart-line text-[8px]"></i>
+                <span>{{ progression | number:'1.0-0' }}%</span>
+            </div>
+            <div class="flex items-center gap-1">
+                <i class="fas fa-hourglass-half text-[8px]"></i>
+                <span>{{ xpRestants | number }} XP restants</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Séparateur vertical (visible seulement si prochain palier) -->
+    <div *ngIf="prochainPalier" class="w-px h-16 bg-gradient-to-b from-transparent via-gray-300 to-transparent z-10">
+    </div>
+
+    <!-- Section Droite : Prochain Palier -->
+    <div *ngIf="prochainPalier" class="flex flex-col gap-2 min-w-[140px] z-10">
+        <!-- prochpalier.component.html -->
+        <div class="flex items-center gap-3">
+
+            <!-- Icône du prochain palier -->
+            <div class="w-10 h-10 flex items-center justify-center rounded-lg transition-all duration-500 group-hover:scale-105"
+                [ngStyle]="{
+                'background': 'linear-gradient(' + themeService.primary + ', ' + themeService.secondary + ')',
+                'border': themeService.Bordernormal,
+            }">
+                <i [class]="'fas ' + prochainPalier.icone + ' text-lg'" [ngStyle]="{
+                'color': themeService.Textprincipal
+                }"></i>
+            </div>
+
+            <!-- Texte -->
+            <div class="flex flex-col">
+
+                <!-- Label "Prochain" -->
+                <div class="flex items-center gap-1">
+                    <i class="fas fa-arrow-up text-[8px]" [ngStyle]="{
+                    'color': themeService.Textsecondaire
+                }"></i>
+
+                    <span class="text-[10px] font-bold uppercase tracking-wider" [ngStyle]="{
+                    'color': themeService.Textsecondaire
+                }">
+                        Prochain
+                    </span>
+                </div>
+
+                <!-- Nom du palier -->
+                <span class="text-xs font-bold" [ngStyle]="{
+                'background': 'linear-gradient(to right, ' + themeService.primary + ', ' + themeService.secondary + ')',
+                '-webkit-background-clip': 'text',
+                '-webkit-text-fill-color': 'transparent'
+                }">
+                    {{ prochainPalier.nom }}
+                </span>
+
+            </div>
+
+        </div>
+
+        <!-- Mini barre de progression vers palier -->
+        <div class="relative w-full rounded-full h-2 overflow-hidden transition-shadow duration-300"
+        [ngStyle]="{
+            'background': themeService.Backgroundcards,
+            'box-shadow': themeService.Shadow
+        }">
+
+        <!-- Barre de progression -->
+        <div class="absolute top-0 left-0 h-full rounded-full opacity-70 transition-all duration-1000 ease-out"
+        [style.width.%]="progressionVersPalier"
+        [ngStyle]="{
+            'background': 'linear-gradient(to right, ' + themeService.primary + ', ' + themeService.secondary + ')',
+            'box-shadow': '0 0 8px ' + themeService.primary
+        }">
+
+        <!-- ✨ Effet shine -->
+        <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute inset-0 -skew-x-12"
+            [ngStyle]="{
+                'background': 'linear-gradient(to right, transparent, rgba(255,255,255,0.5), transparent)'
+            }">
+        </div>
+        </div>
+
+        </div>
+        </div>
+        <!-- Bonus du prochain palier agrandi -->
+        <div *ngIf="prochainPalier.bonus"
+            class="flex items-center gap-2 px-3 py-1 rounded-lg text-[10px] font-medium transition-all duration-300 cursor-default group"
+            [ngStyle]="{
+  'background': themeService.Fondboutonsecondaire,
+  'border': themeService.Bordernormal,
+  'color': themeService.Textprincipal,
+  'box-shadow': '0 2px 4px rgba(0,0,0,0.15)'
+}" [class.group-hover:bg-opacity-80]="true">
+            <!-- Icône cadeau un peu plus grande -->
+            <i class="fas fa-gift text-[12px] animate-bounce" [ngStyle]="{
+    'color': themeService.accent
+  }"></i>
+
+            <!-- Texte -->
+            <span class="truncate max-w-[110px]" [title]="prochainPalier.bonus" [ngStyle]="{
+    'color': themeService.Textprincipal
+  }">
+                {{ prochainPalier.bonus }}
+            </span>
+        </div>
+    </div>
+
+    <!-- Badge Niveau Max -->
+    <div *ngIf="!prochainPalier" class="flex items-center gap-2 px-4 py-2.5 rounded-full shadow-md animate-pulse-slow"
+        [ngStyle]="{
+    'background': 'linear-gradient(to right, ' + themeService.primarySoft + ', ' + themeService.secondarySoft + ')',
+    'border': themeService.Bordernormal,
+    'color': themeService.Textprincipal
+  }">
+        <!-- Icône couronne -->
+        <i class="fas fa-crown text-lg" [ngStyle]="{
+      'color': themeService.accent
+    }"></i>
+
+        <!-- Texte -->
+        <div class="flex flex-col">
+            <span class="text-[10px] font-bold uppercase tracking-wide" [ngStyle]="{
+        'color': themeService.Textsecondaire
+      }">
+                Niveau
+            </span>
+            <span class="text-xs font-black" [ngStyle]="{
+        'color': themeService.Textprincipal
+      }">
+                MAX
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- VERSION TABLETTE - Visible entre 933px et 1350px -->
+<div [ngStyle]="{'background':themeService.Backgroundcards,'color':themeService.Textprincipal,'border':themeService.Bordernormal}"
+    *ngIf="role === 'eleve'"
+    class="tablet-only group relative flex items-center gap-3 w-auto p-2 backdrop-blur-xl rounded-xl shadow-md hover:shadow-lg transition-all duration-300 ease-out overflow-hidden">
+
+    <!-- Effet de fond subtil -->
+    <div class="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+    <!-- Section Gauche : Icône Palier (Compact) -->
+    <div class="relative flex items-center justify-center min-w-[50px] z-10">
+        <div class="relative w-12 h-12 flex items-center justify-center rounded-lg shadow-md group-hover:scale-105 transition-all duration-300"
+            [ngStyle]="{
+                'background': 'linear-gradient(to bottom right, ' + themeService.primary + ', ' + themeService.secondary + ')'
+            }">
+            <i [class]="'fas ' + iconeActuelle + ' text-xl text-white'"></i>
+            <div class="absolute inset-0 rounded-lg bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        </div>
+    </div>
+
+    <!-- Section Centre : XP & Progression (Ultra-compact) -->
+    <div class="flex flex-col gap-1.5 min-w-[120px] flex-1 z-10">
+        
+        <!-- Ligne XP + Niveau -->
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+                <i class="fas fa-bolt text-xs" [ngStyle]="{'color': themeService.accent}"></i>
+                <span class="text-xs font-bold" [ngStyle]="{'color': themeService.Textprincipal}">
+                    {{ xp | number }}
+                </span>
+            </div>
+            
+            <div class="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold text-white"
+                [ngStyle]="{'background': themeService.primary}">
+                <i class="fas fa-star text-[8px]"></i>
+                {{ niveau }}
+            </div>
+        </div>
+
+        <!-- Barre de progression fine -->
+        <div class="relative w-full rounded-full h-2 overflow-hidden shadow-inner"
+            [ngStyle]="{'background': themeService.Backgroundcards}">
+            <div class="absolute top-0 left-0 h-full rounded-full transition-all duration-700 ease-out"
+                [style.width.%]="progression"
+                [ngStyle]="{
+                    'background': 'linear-gradient(to right, ' + themeService.primary + ', ' + themeService.secondary + ')'
+                }">
+                <div class="absolute inset-0 overflow-hidden">
+                    <div class="absolute inset-0 -skew-x-12 animate-shine" 
+                        [ngStyle]="{'background': 'linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent)'}">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mini info XP restants (juste nombre) -->
+        <div class="flex justify-end">
+            <span class="text-[9px] opacity-70" [ngStyle]="{'color': themeService.Textsecondaire}">
+                {{ xpRestants | number }} XP
+            </span>
+        </div>
+    </div>
+
+    <!-- Séparateur fin -->
+    <div *ngIf="prochainPalier" class="w-px h-10 bg-gradient-to-b from-transparent via-gray-400 to-transparent opacity-30 z-10"></div>
+
+    <!-- Section Droite : Prochain Palier (Compact) -->
+    <div *ngIf="prochainPalier" class="flex items-center gap-2 min-w-[100px] z-10">
+        
+        <!-- Icône prochain palier -->
+        <div class="w-8 h-8 flex items-center justify-center rounded-md"
+            [ngStyle]="{
+                'background': themeService.primary,
+                'opacity': '0.8'
+            }">
+            <i [class]="'fas ' + prochainPalier.icone + ' text-sm text-white'"></i>
+        </div>
+
+        <!-- Info minimale -->
+        <div class="flex flex-col gap-0.5">
+            <span class="text-[9px] font-bold uppercase tracking-wider opacity-60" 
+                [ngStyle]="{'color': themeService.Textsecondaire}">
+                Next
+            </span>
+            <span class="text-[10px] font-bold truncate max-w-[60px]" [ngStyle]="{'color': themeService.Textprincipal}">
+                {{ prochainPalier.nom }}
+            </span>
+            
+            <!-- Mini barre progression vers palier -->
+            <div class="w-full rounded-full h-1 overflow-hidden mt-0.5"
+                [ngStyle]="{'background': themeService.Backgroundcards}">
+                <div class="h-full rounded-full transition-all duration-1000"
+                    [style.width.%]="progressionVersPalier"
+                    [ngStyle]="{'background': themeService.secondary, 'opacity': '0.6'}">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Badge Niveau Max (Compact) -->
+    <div *ngIf="!prochainPalier" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full animate-pulse-slow"
+        [ngStyle]="{
+            'background': themeService.primarySoft,
+            'border': themeService.Bordernormal
+        }">
+        <i class="fas fa-crown text-sm" [ngStyle]="{'color': themeService.accent}"></i>
+        <span class="text-[10px] font-black" [ngStyle]="{'color': themeService.Textprincipal}">MAX</span>
+    </div>
+</div>
+
+<!-- Styles avec Media Queries personnalisées -->
+<style>
+    /* Par défaut, tout est caché */
+    .desktop-only,
+    .tablet-only {
+        display: none !important;
+    }
+
+    /* Desktop : 1351px et plus */
+    @media screen and (min-width: 1351px) {
+        .desktop-only {
+            display: flex !important;
+        }
+        .tablet-only {
+            display: none !important;
+        }
+    }
+
+    /* Tablette : entre 933px et 1350px */
+    @media screen and (min-width: 933px) and (max-width: 1350px) {
+        .tablet-only {
+            display: flex !important;
+        }
+        .desktop-only {
+            display: none !important;
+        }
+    }
+
+    /* Mobile : moins de 933px - par défaut tout caché, à toi de gérer si besoin */
+    @media screen and (max-width: 932px) {
+        .desktop-only,
+        .tablet-only {
+            display: none !important;
+        }
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(200%); }
+    }
+
+    .animate-shine {
+        animation: shine 2s infinite linear;
+    }
+
+    @keyframes pulse-slow {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.85; transform: scale(1.02); }
+    }
+
+    .animate-pulse-slow {
+        animation: pulse-slow 2s ease-in-out infinite;
+    }
+
+    /* Réduction des animations pour accessibilité */
+    @media (prefers-reduced-motion: reduce) {
+        .animate-shine, .animate-pulse-slow {
+            animation: none;
+        }
+    }
+</style>

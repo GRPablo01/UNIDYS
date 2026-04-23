@@ -1,0 +1,25 @@
+<!-- barre.html -->
+
+<app-icon></app-icon>
+
+<!-- Bloc principal des barres -->
+<div 
+  *ngIf="showBars"
+  [ngStyle]="{'background': themeService.Backgroundcards}" 
+  class="flex flex-nowrap justify-center items-center gap-4 p-4 h-150vh overflow-x-auto"
+>
+    <!-- XP Barre -->
+    <app-xp-barre class="flex-shrink-0"></app-xp-barre>
+
+    <!-- Séparateur -->
+    <div class="w-px bg-gradient-to-b from-transparent via-gray-300 to-transparent h-20 flex-shrink-0"></div>
+
+    <!-- DYS Barre -->
+    <app-dys-barre class="flex-shrink-0"></app-dys-barre>
+
+    <!-- Séparateur -->
+    <div class="w-px bg-gradient-to-b from-transparent via-gray-300 to-transparent h-20 flex-shrink-0"></div>
+
+    <!-- Relation Barre -->
+    <app-relation-barre class="flex-shrink-0"></app-relation-barre>
+</div>

@@ -1,0 +1,413 @@
+<app-icon></app-icon>
+<section class="mt-16 h-auto py-10 px-10" [ngStyle]="{ 'color': themeService.Textprincipal }">
+
+    <div class="w-full">
+
+        <!-- TITRE AVEC SOUS-TITRE -->
+        <div class="text-center mb-14 px-4">
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-3">
+                <i class="fa-solid fa-pen-nib mr-3 text-indigo-500"></i>
+                Création
+            </h1>
+            <p class="text-lg opacity-70 max-w-2xl mx-auto" [ngStyle]="{'color': themeService.Textsecondaire}">
+                Conçois et partage tes ressources pédagogiques avec tes élèves en quelques clics.
+            </p>
+        </div>
+    
+        <!-- CONTAINER CARTES PRINCIPALES (plein écran) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full mb-16">
+    
+            <!-- CARTE 1 : COURS -->
+            <div class="rounded-3xl shadow-xl overflow-hidden group hover:-translate-y-3 transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-indigo-400 relative"
+                [ngStyle]="{'background': themeService.Backgroundcards}" routerLink="/creercours">
+    
+                <div class="h-48 overflow-hidden relative" [ngStyle]="{'background': themeService.Backgroundprincipal}">
+                    <img src="assets/ImageCours.png"
+                        class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                        alt="Créer un cours" loading="lazy" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                </div>
+    
+                <div class="p-6">
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center">
+                            <i class="fa-solid fa-book-open text-indigo-600"></i>
+                        </div>
+                        <h2 class="text-xl font-bold" [ngStyle]="{'color': themeService.Textprincipal}">
+                            Créer un cours
+                        </h2>
+                    </div>
+    
+                    <p class="text-sm mb-5 leading-relaxed" [ngStyle]="{'color': themeService.Textsecondaire}">
+                        Ajoute des supports pédagogiques en PDF, images, vidéos et contenus structurés avec éditeur riche.
+                    </p>
+    
+                    <ul class="text-xs space-y-2 mb-5 opacity-70">
+                        <li class="flex items-center gap-2">
+                            <i class="fa-solid fa-check text-emerald-500"></i>
+                            Éditeur WYSIWYG
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fa-solid fa-check text-emerald-500"></i>
+                            Import PDF & images
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fa-solid fa-check text-emerald-500"></i>
+                            Partage classe
+                        </li>
+                    </ul>
+    
+                    <button class="w-full py-3 rounded-xl font-semibold transition-all hover:scale-105 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+                        [ngStyle]="{
+                            'background': themeService.Fondboutonprincipal,
+                            'color': '#FFFFFF'
+                        }">
+                        <i class="fa-solid fa-plus"></i>
+                        Créer un cours
+                    </button>
+                </div>
+            </div>
+    
+            <!-- CARTE 2 -->
+            <div class="rounded-3xl shadow-xl overflow-hidden group hover:-translate-y-3 transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-emerald-400 relative"
+                [ngStyle]="{'background': themeService.Backgroundcards}" routerLink="/creerqcm">
+    
+                <div class="h-48 overflow-hidden relative" [ngStyle]="{'background': themeService.Backgroundprincipal}">
+                    <img src="assets/ImageExercice.png"
+                        class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="Créer QCM"
+                        loading="lazy" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                </div>
+    
+                <div class="p-6">
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
+                            <i class="fa-solid fa-clipboard-question text-emerald-600"></i>
+                        </div>
+                        <h2 class="text-xl font-bold" [ngStyle]="{'color': themeService.Textprincipal}">
+                            Créer un QCM / Exercice
+                        </h2>
+                    </div>
+    
+                    <p class="text-sm mb-5 leading-relaxed" [ngStyle]="{'color': themeService.Textsecondaire}">
+                        Conçois des évaluations interactives avec correction auto, chronomètre et analyse des résultats.
+                    </p>
+    
+                    <ul class="text-xs space-y-2 mb-5 opacity-70">
+                        <li class="flex items-center gap-2">
+                            <i class="fa-solid fa-check text-emerald-500"></i>
+                            Correction automatique
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fa-solid fa-check text-emerald-500"></i>
+                            Types variés
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fa-solid fa-check text-emerald-500"></i>
+                            Stats élèves
+                        </li>
+                    </ul>
+    
+                    <button class="w-full py-3 rounded-xl font-semibold transition-all hover:scale-105 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+                        [ngStyle]="{
+                            'background': themeService.Fondboutonprincipal,
+                            'color': '#FFFFFF'
+                        }">
+                        <i class="fa-solid fa-plus"></i>
+                        Créer un QCM
+                    </button>
+                </div>
+            </div>
+    
+            <!-- CARTE 3 -->
+            <div class="rounded-3xl shadow-xl overflow-hidden group hover:-translate-y-3 transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-amber-400 relative"
+                [ngStyle]="{'background': themeService.Backgroundcards}" routerLink="/creerjeux">
+    
+                <div class="h-48 overflow-hidden relative" [ngStyle]="{'background': themeService.Backgroundprincipal}">
+                    <img src="assets/ImageJeux.png"
+                        class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                        alt="Créer un jeu" loading="lazy" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                </div>
+    
+                <div class="p-6">
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">
+                            <i class="fa-solid fa-gamepad text-amber-600"></i>
+                        </div>
+                        <h2 class="text-xl font-bold" [ngStyle]="{'color': themeService.Textprincipal}">
+                            Créer un jeu
+                        </h2>
+                    </div>
+    
+                    <p class="text-sm mb-5 leading-relaxed" [ngStyle]="{'color': themeService.Textsecondaire}">
+                        Ajoute des jeux éducatifs avec images, quiz interactifs et classements en temps réel.
+                    </p>
+    
+                    <ul class="text-xs space-y-2 mb-5 opacity-70">
+                        <li class="flex items-center gap-2">
+                            <i class="fa-solid fa-check text-emerald-500"></i>
+                            Mode live
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fa-solid fa-check text-emerald-500"></i>
+                            Badges
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fa-solid fa-check text-emerald-500"></i>
+                            Équipe ou solo
+                        </li>
+                    </ul>
+    
+                    <button class="w-full py-3 rounded-xl font-semibold transition-all hover:scale-105 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+                        [ngStyle]="{
+                            'background': themeService.Fondboutonprincipal,
+                            'color': '#FFFFFF'
+                        }">
+                        <i class="fa-solid fa-plus"></i>
+                        Créer un jeu
+                    </button>
+                </div>
+            </div>
+    
+        </div>
+    
+        <!-- SECTION CONSEIL (plein écran aussi) -->
+        <div class="w-full">
+            <div class="rounded-3xl p-8 md:p-10 shadow-xl relative overflow-hidden"
+                [ngStyle]="{'background': themeService.Backgroundcards}">
+    
+                <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+    
+                <div class="relative z-10 flex flex-col md:flex-row items-center gap-8">
+    
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-bold mb-3 flex items-center gap-2"
+                            [ngStyle]="{'color': themeService.Textprincipal}">
+                            <i class="fa-solid fa-lightbulb text-amber-500"></i>
+                            Astuce du jour
+                        </h2>
+    
+                        <p class="text-base leading-relaxed mb-4 opacity-80"
+                            [ngStyle]="{'color': themeService.Textsecondaire}">
+                            Utilise les tags et catégories pour organiser tes cours efficacement.
+                        </p>
+    
+                        <button (click)="openGuideModal()"
+                            class="px-6 py-2.5 rounded-xl font-semibold text-sm transition hover:scale-105"
+                            [ngStyle]="{
+                                'background': themeService.Fondboutonprincipal,
+                                'color': '#FFFFFF'
+                            }">
+                            <i class="fa-solid fa-book-open mr-2"></i>
+                            Voir le guide complet
+                        </button>
+                    </div>
+    
+                    <div class="w-24 h-24 rounded-2xl bg-indigo-100 flex items-center justify-center flex-shrink-0">
+                        <i class="fa-solid fa-graduation-cap text-indigo-600 text-4xl"></i>
+                    </div>
+    
+                </div>
+            </div>
+        </div>
+    
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- POPUP MODALE : GUIDE DE CRÉATION             -->
+<!-- ============================================ -->
+
+<!-- Overlay -->
+<div *ngIf="isGuideModalOpen"
+    class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+    (click)="closeGuideModal()">
+
+    <!-- Contenu de la modale -->
+    <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl max-w-2xl w-full max-h-[85vh] overflow-y-auto relative animate-modal-in"
+        (click)="$event.stopPropagation()" [ngStyle]="{'background': themeService.Backgroundcards}">
+
+        <!-- Bouton fermer -->
+        <button (click)="closeGuideModal()"
+            class="absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center hover:bg-gray-200 transition-colors z-10">
+            <i class="fa-solid fa-xmark text-gray-600 dark:text-gray-300"></i>
+        </button>
+
+        <!-- Header -->
+        <div class="p-8 pb-4">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center">
+                    <i class="fa-solid fa-book-open-reader text-indigo-600 text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold" [ngStyle]="{'color': themeService.Textprincipal}">
+                        Guide de création
+                    </h3>
+                    <p class="text-sm opacity-60" [ngStyle]="{'color': themeService.Textsecondaire}">
+                        Tout ce qu'il faut savoir pour bien démarrer
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Corps -->
+        <div class="px-8 pb-8 space-y-6">
+
+            <!-- Étape 1 : Cours -->
+            <div
+                class="rounded-2xl p-5 border border-indigo-100 dark:border-indigo-900/30 bg-indigo-50/50 dark:bg-indigo-900/10">
+                <div class="flex items-start gap-4">
+                    <div
+                        class="w-8 h-8 rounded-full bg-indigo-500 text-white flex items-center justify-center font-bold text-sm flex-shrink-0 mt-0.5">
+                        1</div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-1 flex items-center gap-2"
+                            [ngStyle]="{'color': themeService.Textprincipal}">
+                            <i class="fa-solid fa-book-open text-indigo-500"></i>
+                            Créer un cours
+                        </h4>
+                        <ul class="text-sm space-y-1.5 opacity-80" [ngStyle]="{'color': themeService.Textsecondaire}">
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-chevron-right text-indigo-400 text-xs mt-1.5"></i>
+                                <span>Clique sur <strong>"Créer un cours"</strong> et donne-lui un titre clair.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-chevron-right text-indigo-400 text-xs mt-1.5"></i>
+                                <span>Utilise l'éditeur WYSIWYG pour structurer ton contenu (titres, paragraphes,
+                                    listes).</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-chevron-right text-indigo-400 text-xs mt-1.5"></i>
+                                <span>Importe tes PDF, images ou vidéos en glisser-déposer.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-chevron-right text-indigo-400 text-xs mt-1.5"></i>
+                                <span>Ajoute des <strong>tags</strong> (ex: Mathématiques, 3ème, Géométrie) pour
+                                    l'organisation.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Étape 2 : QCM / Exercices -->
+            <div
+                class="rounded-2xl p-5 border border-emerald-100 dark:border-emerald-900/30 bg-emerald-50/50 dark:bg-emerald-900/10">
+                <div class="flex items-start gap-4">
+                    <div
+                        class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-sm flex-shrink-0 mt-0.5">
+                        2</div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-1 flex items-center gap-2"
+                            [ngStyle]="{'color': themeService.Textprincipal}">
+                            <i class="fa-solid fa-clipboard-question text-emerald-500"></i>
+                            Créer un QCM / Exercice
+                        </h4>
+                        <ul class="text-sm space-y-1.5 opacity-80" [ngStyle]="{'color': themeService.Textsecondaire}">
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-chevron-right text-emerald-400 text-xs mt-1.5"></i>
+                                <span>Choisis le type de question : <strong>QCM, Vrai/Faux</strong> ou <strong>question
+                                        ouverte</strong>.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-chevron-right text-emerald-400 text-xs mt-1.5"></i>
+                                <span>Définis la bonne réponse et les points pour chaque question.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-chevron-right text-emerald-400 text-xs mt-1.5"></i>
+                                <span>Active le <strong>chronomètre</strong> pour limiter le temps de réponse.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-chevron-right text-emerald-400 text-xs mt-1.5"></i>
+                                <span>Consulte les <strong>statistiques</strong> après correction pour identifier les
+                                    difficultés.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Étape 3 : Jeux -->
+            <div
+                class="rounded-2xl p-5 border border-amber-100 dark:border-amber-900/30 bg-amber-50/50 dark:bg-amber-900/10">
+                <div class="flex items-start gap-4">
+                    <div
+                        class="w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold text-sm flex-shrink-0 mt-0.5">
+                        3</div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-1 flex items-center gap-2"
+                            [ngStyle]="{'color': themeService.Textprincipal}">
+                            <i class="fa-solid fa-gamepad text-amber-500"></i>
+                            Créer un jeu
+                        </h4>
+                        <ul class="text-sm space-y-1.5 opacity-80" [ngStyle]="{'color': themeService.Textsecondaire}">
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-chevron-right text-amber-400 text-xs mt-1.5"></i>
+                                <span>Sélectionne un <strong>template</strong> (Kahoot-style, quiz rapide, défis par
+                                    équipe).</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-chevron-right text-amber-400 text-xs mt-1.5"></i>
+                                <span>Ajoute des images, icônes et couleurs pour rendre le jeu attractif.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-chevron-right text-amber-400 text-xs mt-1.5"></i>
+                                <span>Configure le <strong>classement en temps réel</strong> et les badges à
+                                    gagner.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-chevron-right text-amber-400 text-xs mt-1.5"></i>
+                                <span>Lance le jeu en <strong>mode live</strong> avec tes élèves ou en mode solo.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Astuce finale -->
+            <div class="rounded-2xl p-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-wand-magic-sparkles text-2xl"></i>
+                    <div>
+                        <p class="font-bold">💡 Conseil pro</p>
+                        <p class="text-sm opacity-90">Commence toujours par structurer ton contenu avant de l'enrichir.
+                            Un bon plan = un cours réussi !</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="px-8 pb-6 flex justify-end">
+            <button (click)="closeGuideModal()"
+                class="px-6 py-2.5 rounded-xl font-semibold text-sm transition hover:scale-105" [ngStyle]="{
+                'background': themeService.Fondboutonprincipal,
+                'color': '#FFFFFF'
+              }">
+                <i class="fa-solid fa-check mr-2"></i>
+                J'ai compris
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    @keyframes modal-in {
+        from {
+            opacity: 0;
+            transform: scale(0.95) translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    .animate-modal-in {
+        animation: modal-in 0.3s ease-out forwards;
+    }
+</style>

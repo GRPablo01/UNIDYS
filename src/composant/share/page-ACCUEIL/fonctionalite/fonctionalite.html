@@ -1,0 +1,130 @@
+<app-icon></app-icon>
+
+<!-- SECTION COMMENT ÇA MARCHE -->
+<section class="h-auto px-10 py-10">
+
+
+  <div class="w-full relative overflow-hidden pb-5">
+
+    <div class="max-w-7xl mx-auto relative z-10">
+
+      <!-- TITRE -->
+      <h1 id="histoire-title"
+        class="text-3xl md:text-5xl font-bold mb-16 flex items-center justify-center gap-3 animate-fade-in-up text-center"
+        [ngStyle]="{'color': themeService.Textprincipal}">
+        <i class="fa-solid fa-cogs" [ngStyle]="{'color': themeService.secondary}"></i>
+        <span [ngStyle]="{'color': themeService.primary}">Comment ça marche</span>
+      </h1>
+
+      <!-- ÉTAPES -->
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+
+        <div *ngFor="let step of steps"
+          class="step-card group relative rounded-3xl p-6 md:p-8 transition-all duration-500 cursor-pointer transform hover:-translate-y-2 animate-fade-in-up"
+          [ngStyle]="{
+            'background': themeService.Backgroundcards,
+            'border': '3px solid ' + themeService.primary,
+            'color': themeService.Textprincipal
+          }"
+          (click)="!step.link && onStepClick(step, $event)">
+
+          <!-- ICÔNE -->
+          <div class="relative mb-6 flex justify-center">
+            <div class="icon-container w-16 h-16 md:w-20 md:h-20 rounded-3xl flex items-center justify-center transition-transform duration-300"
+              [ngStyle]="{
+                'background': 'linear-gradient(135deg, ' + themeService.primary + ', ' + themeService.secondary + ')'
+              }">
+              <i class="{{ step.icon }} text-2xl md:text-3xl" [ngStyle]="{'color': '#FFFFFF'}"></i>
+            </div>
+          </div>
+
+          <!-- TITRE ÉTAPE -->
+          <h3 class="text-xl md:text-2xl font-bold mb-3 flex items-center gap-2 text-center justify-center"
+            [ngStyle]="{'color': themeService.Textprincipal}">
+            <i class="fa-solid fa-star" [ngStyle]="{'color': themeService.primary}"></i>
+            {{ step.title }}
+          </h3>
+
+          <!-- DESCRIPTION -->
+          <p class="mb-6 leading-relaxed flex items-start gap-2 text-center justify-center"
+            [ngStyle]="{'color': themeService.Textsecondaire}">
+            <i class="fa-solid fa-circle-info pt-1" [ngStyle]="{'color': themeService.secondary}"></i>
+            {{ step.description }}
+          </p>
+
+          <!-- BOUTON -->
+          <ng-container *ngIf="step.link; else noLinkButton">
+            <a [routerLink]="step.link"
+               class="w-full inline-block text-center px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center gap-3"
+               [ngStyle]="{
+                 'background': themeService.Fondboutonprincipal,
+                 'color': '#FFFFFF'
+               }">
+              <i class="fa-solid fa-arrow-right"></i>
+              {{ step.cta }}
+            </a>
+          </ng-container>
+
+          <ng-template #noLinkButton>
+            <button
+              class="w-full px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center gap-3"
+              [ngStyle]="{
+                'background': themeService.Fondboutonsecondaire,
+                'color': themeService.Textprincipal,
+                'border': themeService.Bordernormal
+              }"
+              (click)="onStepClick(step, $event)">
+              <i class="fa-solid fa-arrow-right" [ngStyle]="{'color': themeService.primary}"></i>
+              {{ step.cta }}
+            </button>
+          </ng-template>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* ---------- DÉCORATIONS LATÉRALES ---------- */
+  .deco-side {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 180px;
+    pointer-events: none;
+    user-select: none;
+    z-index: 5;
+  }
+  .deco-left { left: -20px; }
+  .deco-right { right: -20px; }
+
+  @media (min-width: 1500px) {
+    .deco-side { width: 250px; }
+  }
+
+  /* ---------- ANIMATIONS ---------- */
+  @keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s cubic-bezier(.16,1,.3,1) forwards;
+  }
+  .animate-fade-in {
+    animation: fade-in 1.2s ease-in forwards;
+  }
+
+  /* ---------- CARDS ---------- */
+  .step-card { transition: all 0.3s ease; }
+  .step-card.clicked { transform: scale(0.97); }
+
+</style>
