@@ -1,0 +1,285 @@
+<section class="mt-16 h-auto py-10 px-10">
+
+  <div class="flex gap-10">
+    <!-- SIDEBAR FILTRES (GAUCHE) -->
+    <aside class="lg:w-72 flex-shrink-0">
+      <div class="top-24 space-y-6">
+        
+        <!-- Carte Filtres -->
+        <div class="rounded-2xl border-2 p-6 space-y-6"
+              [style.background]="themeService.Backgroundcards"
+              [ngStyle]="{'border': '3px solid' + themeService.primary}">
+          
+          <div class="flex items-center gap-3 pb-4 border-b-2"
+                [style.border-color]="themeService.Bordernormal">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center"
+                  [style.background]="themeService.Textprincipal + '20'">
+              <i class="fa-solid fa-filter" [style.color]="themeService.Textprincipal"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg" [style.color]="themeService.Textprincipal">Filtres</h3>
+              <p class="text-xs opacity-60" [style.color]="themeService.Textsecondaire">Affinez votre recherche</p>
+            </div>
+          </div>
+
+          <!-- Recherche -->
+          <div class="space-y-2">
+            <label class="text-sm font-semibold" [style.color]="themeService.Textprincipal">
+              <i class="fa-solid fa-search mr-2 opacity-50"></i>Rechercher
+            </label>
+            <div class="relative">
+              <input 
+                type="text" 
+                [(ngModel)]="searchQuery"
+                placeholder="Nom du jeu..."
+                class="w-full pl-4 pr-10 py-3 rounded-xl border-2 outline-none transition-all focus:ring-2 text-sm"
+                [style.background]="themeService.Backgroundcards"
+                [style.border-color]="themeService.Bordernormal"
+                [style.color]="themeService.Textprincipal">
+              <i *ngIf="searchQuery" 
+                  (click)="searchQuery = ''"
+                  class="fa-solid fa-times absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer opacity-50 hover:opacity-100"></i>
+            </div>
+          </div>
+
+          <!-- Types de jeux -->
+          <div class="space-y-3">
+            <label class="text-sm font-semibold" [style.color]="themeService.Textprincipal">
+              <i class="fa-solid fa-tags mr-2 opacity-50"></i>Type de jeu
+            </label>
+            <div class="space-y-2">
+              <button 
+                *ngFor="let type of typesJeu"
+                (click)="toggleType(type)"
+                class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all border-2"
+                [class.ring-2]="selectedTypes.includes(type)"
+                [class.ring-offset-2]="selectedTypes.includes(type)"
+                [style.background]="selectedTypes.includes(type) ? getHeaderColor(type) : themeService.Backgroundcards"
+                [style.color]="selectedTypes.includes(type) ? 'white' : themeService.Textprincipal"
+                [style.border-color]="selectedTypes.includes(type) ? getHeaderColor(type) : themeService.Bordernormal"
+                [style.ring-color]="getHeaderColor(type)">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center text-sm"
+                      [style.background]="selectedTypes.includes(type) ? 'white/20' : getHeaderColor(type) + '20'">
+                  <i [class]="getTypeIcon(type)" [style.color]="selectedTypes.includes(type) ? 'white' : getHeaderColor(type)"></i>
+                </div>
+                <span class="flex-1 text-left">{{ type | titlecase }}</span>
+                <span *ngIf="getCountByType(type) > 0" 
+                      class="text-xs px-2 py-0.5 rounded-full font-bold"
+                      [style.background]="selectedTypes.includes(type) ? 'white/20' : getHeaderColor(type) + '20'"
+                      [style.color]="selectedTypes.includes(type) ? 'white' : getHeaderColor(type)">
+                  {{ getCountByType(type) }}
+                </span>
+                <i *ngIf="selectedTypes.includes(type)" class="fa-solid fa-check text-xs"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Difficulté -->
+          <div class="space-y-3">
+            <label class="text-sm font-semibold" [style.color]="themeService.Textprincipal">
+              <i class="fa-solid fa-layer-group mr-2 opacity-50"></i>Difficulté
+            </label>
+            <div class="space-y-2">
+              <button 
+                *ngFor="let diff of difficultes"
+                (click)="toggleDifficulte(diff)"
+                class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all border"
+                [style.background]="selectedDifficultes.includes(diff) ? getDifficulteBg(diff) : themeService.Backgroundcards"
+                [style.color]="selectedDifficultes.includes(diff) ? getDifficulteText(diff) : themeService.Textprincipal"
+                [style.border-color]="selectedDifficultes.includes(diff) ? getDifficulteBorder(diff) : themeService.Bordernormal">
+                <i [class]="getDifficulteIcon(diff)"></i>
+                <span class="flex-1 text-left">{{ diff | titlecase }}</span>
+                <i *ngIf="selectedDifficultes.includes(diff)" class="fa-solid fa-check text-xs"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Reset -->
+          <button *ngIf="hasActiveFilters()"
+                  (click)="resetFilters()"
+                  class="w-full py-3 rounded-xl font-semibold text-sm transition-all hover:scale-[1.02] active:scale-95 border-2"
+                  [style.background]="themeService.Backgroundcards"
+                  [style.color]="themeService.Textprincipal"
+                  [style.border-color]="themeService.Bordernormal">
+            <i class="fa-solid fa-rotate-left mr-2"></i>Réinitialiser
+          </button>
+        </div>
+
+      </div>
+    </aside> 
+
+    <!-- GRILLE JEUX (DROITE) - 4 PAR LIGNE -->
+    <main class="flex-1 min-w-0">
+
+      <header [ngStyle]="{'background':themeService.Backgroundprincipal ,'color':themeService.Textprincipal ,'border': '3px solid' + themeService.primary}" class="flex justify-between items-center px-3 py-2 rounded-2xl mb-5">
+
+        <!-- BLOC 1 Titre avec icône -->
+        <div class="flex items-center gap-4">
+          <div [ngStyle]="{'background':themeService.Backgroundcards,'border': '3px solid' + themeService.primary}" class="p-3 rounded-2xl backdrop-blur-sm">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">
+              Jeux
+            </h1>
+            <p [ngStyle]="{'color':themeService.Textprincipal}" class="text-sm mt-1 font-medium">
+              Collection de jeux disponibles
+            </p>
+          </div>
+        </div>
+
+        <!-- BLOC 2 Compteur de jeux -->
+        <div [ngStyle]="{'background':themeService.Backgroundprincipal ,'color':themeService.Textprincipal ,'border': '3px solid' + themeService.primary}" class="flex items-center gap-3 backdrop-blur-md rounded-2xl px-6 py-3 border shadow-lg">
+          <div class="flex flex-col items-end">
+            <span [ngStyle]="{'color':themeService.Textprincipal}" class="text-xs font-semibold uppercase tracking-wider">Total</span>
+            <span [ngStyle]="{'color':themeService.Textprincipal}" class="text-3xl font-bold tabular-nums">
+              {{ jeux.length }}
+            </span>
+          </div>
+          <div [ngStyle]="{'background':themeService.Backgroundcards}" class="w-px h-10"></div>
+          <span [ngStyle]="{'color':themeService.primary}" class="text-sm font-medium">
+            jeux<br/>disponibles
+          </span>
+        </div>
+
+      </header>
+
+      
+      <!-- ÉTAT VIDE -->
+      <div *ngIf="filteredJeux.length === 0"
+           class="rounded-3xl border-2 border-dashed p-20 text-center space-y-6"
+           [style.background]="themeService.Backgroundcards"
+           [style.border-color]="themeService.Bordernormal">
+        <i class="fa-solid fa-gamepad text-7xl opacity-30"></i>
+        <div>
+          <p class="text-2xl font-bold" [style.color]="themeService.Textprincipal">Aucun résultat</p>
+          <p class="mt-2 opacity-60" [style.color]="themeService.Textsecondaire">Modifiez vos filtres pour voir plus de jeux</p>
+        </div>
+        <button (click)="resetFilters()"
+                class="px-6 py-3 rounded-xl font-semibold text-white transition-all hover:scale-105"
+                [style.background]="themeService.Textprincipal">
+          <i class="fa-solid fa-rotate-left mr-2"></i>Réinitialiser
+        </button>
+      </div>
+
+      <!-- GRILLE 4 COLONNES -->
+      <div *ngIf="filteredJeux.length > 0"
+           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+
+        <article *ngFor="let jeu of paginatedJeux; let i = index"
+                 class="group relative rounded-2xl overflow-hidden border-2 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl flex flex-col"
+                 [style.background]="themeService.Backgroundcards"
+                 [style.border-color]="hoverCard === jeu._id ? getHeaderColor(jeu.type) : themeService.Bordernormal"
+                 (mouseenter)="hoverCard = jeu._id"
+                 (mouseleave)="hoverCard = null">
+
+          <!-- HEADER -->
+          <div class="px-4 py-4 flex items-center gap-3"
+               [style.background]="getHeaderColor(jeu.type)">
+            <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-white text-lg shrink-0">
+              <i [class]="getTypeIcon(jeu.type)"></i>
+            </div>
+            <div class="min-w-0">
+              <h2 class="text-white text-sm font-bold truncate">{{ jeu.nom }}</h2>
+              <p class="text-white/70 text-[10px] uppercase tracking-wider">{{ jeu.type }}</p>
+            </div>
+          </div>
+
+          <!-- IMAGE -->
+          <div class="h-40 overflow-hidden bg-black/5 relative group">
+
+            <img [src]="getJeuImage(jeu)"
+                [alt]="'Jeu ' + jeu.nom"
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                loading="lazy"
+                (error)="jeu.image = ''">
+
+            <!-- Overlay hover -->
+            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+              <span [ngStyle]="{'color':themeService.Iconnormal}"
+                    class="text-xs font-semibold px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-sm">
+                <i class="fa-solid fa-eye mr-1"></i>Voir
+              </span>
+            </div>
+
+          </div>
+
+          <!-- CONTENU -->
+          <div class="p-4 flex flex-col flex-1 space-y-3">
+            
+            <p class="text-xs leading-relaxed line-clamp-2"
+               [style.color]="themeService.Textsecondaire"
+               [title]="jeu.description">
+              {{ jeu.description || 'Un jeu éducatif interactif.' }}
+            </p>
+
+            <!-- DIFFICULTÉ -->
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-semibold w-fit"
+                  [style.background]="getDifficulteBg(jeu.difficulte)"
+                  [style.color]="getDifficulteText(jeu.difficulte)"
+                  [style.border-color]="getDifficulteBorder(jeu.difficulte)">
+              <i [class]="getDifficulteIcon(jeu.difficulte)" class="text-[10px]"></i>
+              {{ jeu.difficulte || 'Standard' }}
+            </span>
+
+            <!-- INFOS -->
+            <div class="flex items-center gap-4 text-xs" [style.color]="themeService.Textsecondaire">
+              <span class="flex items-center gap-1">
+                <i class="fa-regular fa-clock text-[10px]"></i>
+                {{ jeu.temps || '5 min' }}
+              </span>
+              <span class="flex items-center gap-1">
+                <i class="fa-solid fa-users text-[10px]"></i>
+                {{ jeu.niveau || 'Tous' }}
+              </span>
+            </div>
+
+            <!-- BOUTON -->
+            <div class="mt-auto pt-3">
+              <button (click)="lancerJeu(jeu)"
+                      class="w-full py-3 rounded-xl font-bold text-white text-sm transition-all hover:scale-[1.02] active:scale-95 shadow-md flex items-center justify-center gap-2"
+                      [style.background]="getButtonColor(jeu.type)">
+                <i [class]="getButtonIcon(jeu.type)"></i>
+                {{ getLabel(jeu.type) }}
+              </button>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- PAGINATION -->
+      <div *ngIf="totalPages > 1" class="mt-10 flex justify-center">
+        <div class="flex items-center gap-2 p-2 rounded-2xl border" 
+             [style.background]="themeService.Backgroundcards"
+             [style.border-color]="themeService.Bordernormal">
+          <button (click)="prevPage()"
+                  [disabled]="currentPage === 1"
+                  class="w-9 h-9 rounded-xl flex items-center justify-center transition-all hover:scale-110 disabled:opacity-30"
+                  [style.color]="themeService.Textprincipal">
+            <i class="fa-solid fa-chevron-left text-sm"></i>
+          </button>
+          
+          <button *ngFor="let page of getPages()"
+                  (click)="goToPage(page)"
+                  class="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-semibold transition-all"
+                  [class.scale-110]="currentPage === page"
+                  [style.background]="currentPage === page ? themeService.Textprincipal : 'transparent'"
+                  [style.color]="currentPage === page ? themeService.Backgroundcards : themeService.Textprincipal">
+            {{ page }}
+          </button>
+          
+          <button (click)="nextPage()"
+                  [disabled]="currentPage === totalPages"
+                  class="w-9 h-9 rounded-xl flex items-center justify-center transition-all hover:scale-110 disabled:opacity-30"
+                  [style.color]="themeService.Textprincipal">
+            <i class="fa-solid fa-chevron-right text-sm"></i>
+          </button>
+        </div>
+      </div>
+    </main>
+
+  </div>
+</section>

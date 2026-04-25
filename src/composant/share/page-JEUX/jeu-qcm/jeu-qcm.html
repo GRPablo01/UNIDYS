@@ -1,0 +1,201 @@
+<!-- ================= PAGE QCM STYLE MODERNE ================= -->
+<section *ngIf="jeu; else loading"
+  class="flex flex-col xl:flex-row gap-20 mt-16 items-center justify-center py-10 px-10">
+
+  <!-- ===================================================== -->
+  <!-- FEUILLE A4 A GAUCHE -->
+  <!-- ===================================================== -->
+  <div class="w-full max-w-4xl">
+
+    <div class="bg-white shadow-2xl rounded-2xl border border-gray-200 overflow-hidden">
+
+      <!-- HEADER -->
+      <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-6">
+
+        <h1 class="text-3xl font-bold flex items-center gap-3">
+          <i class="fa-solid fa-brain"></i>
+          {{ jeu.titre }}
+        </h1>
+
+        <div class="flex flex-wrap gap-3 mt-4 text-sm">
+
+          <span class="bg-white/20 px-3 py-1 rounded-full flex items-center gap-2">
+            <i class="fa-solid fa-layer-group"></i>
+            {{ jeu.type }}
+          </span>
+
+          <span class="bg-white/20 px-3 py-1 rounded-full flex items-center gap-2">
+            <i class="fa-solid fa-graduation-cap"></i>
+            Niveau {{ jeu.niveau }}
+          </span>
+
+          <span *ngIf="jeu.difficulte"
+            class="bg-white/20 px-3 py-1 rounded-full flex items-center gap-2">
+            <i class="fa-solid fa-fire"></i>
+            {{ jeu.difficulte }}
+          </span>
+
+        </div>
+
+      </div>
+
+      <!-- CONTENU -->
+      <div class="p-8">
+
+        <!-- CONSIGNE -->
+        <div class="mb-8 bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded-r-xl">
+          <p class="font-semibold text-gray-800 flex items-center gap-2">
+            <i class="fa-solid fa-circle-info text-indigo-600"></i>
+            {{ jeu.consigne }}
+          </p>
+        </div>
+
+        <!-- ================= QCM ================= -->
+        <div *ngIf="jeu.type === 'qcm'">
+
+          <h2 class="font-bold text-lg mb-6 text-gray-700 flex items-center gap-2">
+            <i class="fa-solid fa-list-check"></i>
+            Choisis la bonne réponse
+          </h2>
+
+          <div class="space-y-4">
+
+            <button
+              *ngFor="let rep of jeu.reponses"
+              (click)="selectionnerQcm(rep)"
+              class="w-full text-left p-5 rounded-2xl border-2 font-semibold transition-all duration-200 hover:scale-[1.02] hover:shadow-lg"
+
+              [ngClass]="{
+                'border-gray-200 bg-white hover:border-blue-400 text-gray-800': reponseChoisie !== rep,
+                'border-blue-500 bg-blue-50 text-blue-700 shadow-md': reponseChoisie === rep
+              }">
+
+              <div class="flex items-center justify-between">
+
+                <span>{{ rep }}</span>
+
+                <i *ngIf="reponseChoisie === rep"
+                  class="fa-solid fa-circle-check text-blue-600"></i>
+
+              </div>
+
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- Mauvais type -->
+        <div *ngIf="jeu.type !== 'qcm'" class="text-center py-10">
+
+          <i class="fa-solid fa-triangle-exclamation text-5xl text-orange-500 mb-4"></i>
+
+          <p class="text-xl font-bold text-gray-700">
+            Ce jeu n'est pas un QCM
+          </p>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- RESULTAT A DROITE -->
+  <!-- ===================================================== -->
+  <div class="w-full max-w-md">
+
+    <div class="bg-white rounded-2xl shadow-2xl border border-gray-200 p-6 min-h-[500px]">
+
+      <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+        <i class="fa-solid fa-chart-line text-indigo-600"></i>
+        Résultat
+      </h2>
+
+      <!-- Aucun résultat -->
+      <div *ngIf="!qcmResultat" class="text-center text-gray-400 mt-20">
+
+        <i class="fa-solid fa-hourglass-half text-5xl mb-4"></i>
+
+        <p class="font-medium">
+          Sélectionne une réponse
+        </p>
+
+      </div>
+
+      <!-- BON -->
+      <div *ngIf="qcmResultat === 'bon'" class="text-center">
+
+        <div class="text-green-600 text-6xl mb-4 animate-bounce">
+          <i class="fa-solid fa-trophy"></i>
+        </div>
+
+        <h3 class="text-3xl font-bold text-green-700 mb-2">
+          Bravo !
+        </h3>
+
+        <p class="text-green-600 mb-5">
+          Bonne réponse 🎉
+        </p>
+
+        <!-- XP -->
+        <div *ngIf="jeu.difficulte === 'facile'"
+          class="bg-gradient-to-r from-yellow-300 to-amber-400 rounded-2xl p-4 text-2xl font-bold text-yellow-900 shadow-xl">
+          <i class="fa-solid fa-star mr-2"></i> +20 XP
+        </div>
+
+        <div *ngIf="jeu.difficulte === 'moyen'"
+          class="bg-gradient-to-r from-orange-300 to-orange-500 rounded-2xl p-4 text-2xl font-bold text-orange-950 shadow-xl">
+          <i class="fa-solid fa-bolt mr-2"></i> +45 XP
+        </div>
+
+        <div *ngIf="jeu.difficulte === 'difficile'"
+          class="bg-gradient-to-r from-red-400 to-rose-600 rounded-2xl p-4 text-2xl font-bold text-white shadow-xl">
+          <i class="fa-solid fa-crown mr-2"></i> +75 XP
+        </div>
+
+      </div>
+
+      <!-- FAUX -->
+      <div *ngIf="qcmResultat === 'faux'" class="text-center">
+
+        <div class="text-red-600 text-6xl mb-4">
+          <i class="fa-solid fa-circle-xmark"></i>
+        </div>
+
+        <h3 class="text-3xl font-bold text-red-700 mb-2">
+          Mauvaise réponse
+        </h3>
+
+        <p class="text-red-600 mb-6">
+          Essaie encore 💪
+        </p>
+
+        <div class="bg-red-50 border border-red-200 rounded-xl p-4 font-semibold text-red-600">
+          <i class="fa-solid fa-face-frown mr-2"></i>
+          Aucun XP gagné
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</section>
+
+<!-- ================= LOADING ================= -->
+<ng-template #loading>
+  <div class="min-h-screen flex items-center justify-center bg-gray-100">
+
+    <div class="bg-white px-8 py-6 rounded-2xl shadow-xl text-center">
+
+      <i class="fa-solid fa-spinner fa-spin text-3xl text-indigo-600 mb-3"></i>
+
+      <p class="text-gray-600 font-medium">
+        Chargement...
+      </p>
+
+    </div>
+
+  </div>
+</ng-template>

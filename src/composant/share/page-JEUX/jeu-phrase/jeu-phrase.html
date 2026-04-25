@@ -1,0 +1,215 @@
+<!-- ================= PAGE JEUX PHRASE ================= -->
+<section class="flex gap-20 mt-16 items-center justify-center py-10 px-10">
+  <!-- ===================================================== -->
+  <!-- FEUILLE A4 A GAUCHE -->
+  <!-- ===================================================== -->
+  <div class="xl:col-span-2">
+
+    <div class="bg-white shadow-2xl rounded-2xl border border-gray-200 overflow-hidden">
+
+      <!-- HEADER -->
+      <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-6">
+        <h1 class="text-3xl font-bold flex items-center gap-3">
+          <i class="fa-solid fa-book-open"></i>
+          {{ jeu.titre }}
+        </h1>
+
+        <div class="flex flex-wrap gap-3 mt-4 text-sm">
+
+          <span class="bg-white/20 px-3 py-1 rounded-full flex items-center gap-2">
+            <i class="fa-solid fa-layer-group"></i>
+            {{ jeu.type }}
+          </span>
+
+          <span class="bg-white/20 px-3 py-1 rounded-full flex items-center gap-2">
+            <i class="fa-solid fa-graduation-cap"></i>
+            Niveau {{ jeu.niveau }}
+          </span>
+
+          <span *ngIf="jeu.difficulte" class="bg-white/20 px-3 py-1 rounded-full flex items-center gap-2">
+            <i class="fa-solid fa-fire"></i>
+            {{ jeu.difficulte }}
+          </span>
+
+        </div>
+      </div>
+
+      <!-- CONTENU -->
+      <div class="p-8">
+
+        <!-- CONSIGNE -->
+        <div class="mb-8 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-xl">
+          <p class="font-semibold text-gray-800 flex items-center gap-2">
+            <i class="fa-solid fa-circle-info text-blue-600"></i>
+            {{ jeu.consigne }}
+          </p>
+        </div>
+
+        <!-- PHRASE -->
+        <div class="mb-8">
+
+          <h2 class="font-bold text-lg mb-3 flex items-center gap-2 text-gray-700">
+            <i class="fa-solid fa-pen"></i>
+            Ma phrase
+          </h2>
+
+          <div
+            class="min-h-[140px] border-2 border-dashed border-gray-300 rounded-2xl p-5 bg-gray-50 flex flex-wrap gap-2 items-start">
+
+            <span *ngFor="let mot of phraseConstruite" class="px-4 py-2 bg-indigo-600 text-white rounded-xl shadow-md">
+              {{ mot }}
+            </span>
+
+            <span *ngIf="phraseConstruite.length === 0" class="text-gray-400 italic text-center w-full mt-10">
+              <i class="fa-solid fa-hand-pointer mr-2"></i>
+              Clique sur les mots pour construire la phrase
+            </span>
+
+          </div>
+
+        </div>
+
+        <!-- MOTS -->
+        <div class="mb-8">
+
+          <h2 class="font-bold text-lg mb-4 flex items-center gap-2 text-gray-700">
+            <i class="fa-solid fa-puzzle-piece"></i>
+            Mots disponibles
+          </h2>
+
+          <div class="flex flex-wrap gap-3 justify-center">
+
+            <button *ngFor="let mot of motsDisponibles; let i = index" (click)="ajouterMot(mot, i)"
+              [disabled]="mot.utilise"
+              class="px-5 py-3 rounded-xl shadow-md border font-medium transition-all duration-200 hover:scale-105 hover:shadow-lg"
+              [class.opacity-40]="mot.utilise" [class.bg-white]="!mot.utilise" [class.bg-gray-200]="mot.utilise">
+
+              {{ getMotClean(mot) }}
+
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="flex flex-wrap justify-center gap-4">
+
+          <button (click)="verifierPhrase()"
+            class="px-8 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl shadow-lg font-semibold transition">
+
+            <i class="fa-solid fa-circle-check mr-2"></i>
+            Vérifier
+
+          </button>
+
+          <button (click)="resetPhrase()"
+            class="px-8 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-xl shadow-lg font-semibold transition">
+
+            <i class="fa-solid fa-rotate-right mr-2"></i>
+            Reset
+
+          </button>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- RESULTAT A DROITE -->
+  <!-- ===================================================== -->
+  <div class="">
+
+    <div class="bg-white rounded-2xl shadow-2xl border border-gray-200 p-6 min-h-[500px]">
+
+      <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+        <i class="fa-solid fa-chart-line text-indigo-600"></i>
+        Résultat
+      </h2>
+
+      <!-- AUCUN RESULTAT -->
+      <div *ngIf="!phraseResultat" class="text-center text-gray-400 mt-20">
+
+        <i class="fa-solid fa-hourglass-half text-5xl mb-4"></i>
+
+        <p class="font-medium">
+          Clique sur Vérifier pour voir ton score
+        </p>
+
+      </div>
+
+      <!-- BON -->
+      <div *ngIf="phraseResultat === 'bon'" class="text-center">
+
+        <div class="text-green-600 text-6xl mb-4 animate-bounce">
+          <i class="fa-solid fa-trophy"></i>
+        </div>
+
+        <h3 class="text-3xl font-bold text-green-700 mb-2">
+          Bravo !
+        </h3>
+
+        <p class="text-green-600 mb-5">
+          Phrase correcte 🎉
+        </p>
+
+        <div class="bg-green-50 border border-green-200 rounded-xl p-4 mb-5 text-gray-700 font-medium">
+          {{ phraseOriginale }}
+        </div>
+
+        <!-- XP -->
+        <div *ngIf="jeu.difficulte === 'facile'"
+          class="bg-gradient-to-r from-yellow-300 to-amber-400 rounded-2xl p-4 text-2xl font-bold text-yellow-900 shadow-xl">
+          <i class="fa-solid fa-star mr-2"></i> +20 XP
+        </div>
+
+        <div *ngIf="jeu.difficulte === 'moyen'"
+          class="bg-gradient-to-r from-orange-300 to-orange-500 rounded-2xl p-4 text-2xl font-bold text-orange-950 shadow-xl">
+          <i class="fa-solid fa-bolt mr-2"></i> +45 XP
+        </div>
+
+        <div *ngIf="jeu.difficulte === 'difficile'"
+          class="bg-gradient-to-r from-red-400 to-rose-600 rounded-2xl p-4 text-2xl font-bold text-white shadow-xl">
+          <i class="fa-solid fa-crown mr-2"></i> +75 XP
+        </div>
+
+      </div>
+
+      <!-- FAUX -->
+      <div *ngIf="phraseResultat === 'faux'" class="text-center">
+
+        <div class="text-red-600 text-6xl mb-4">
+          <i class="fa-solid fa-circle-xmark"></i>
+        </div>
+
+        <h3 class="text-3xl font-bold text-red-700 mb-2">
+          Mauvaise réponse
+        </h3>
+
+        <p class="text-red-600 mb-6">
+          Essaie encore 💪
+        </p>
+
+        <div class="bg-red-50 border border-red-200 rounded-xl p-4 font-semibold text-red-600">
+          <i class="fa-solid fa-face-frown mr-2"></i>
+          Aucun XP gagné
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- LOADING -->
+<ng-template #loading>
+  <div class="min-h-screen flex items-center justify-center bg-gray-100">
+    <div class="bg-white px-8 py-6 rounded-2xl shadow-xl text-center">
+      <i class="fa-solid fa-spinner fa-spin text-3xl text-blue-600 mb-3"></i>
+      <p class="text-gray-600 font-medium">Chargement...</p>
+    </div>
+  </div>
+</ng-template>

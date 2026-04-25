@@ -1,138 +1,1108 @@
-<section class="min-h-screen flex items-center justify-center px-4 py-10 bg-gradient-to-br from-indigo-100 to-purple-100">
+<!-- Composant Angular : create-game.component.html -->
+<!-- Version améliorée UI/UX -->
 
-    <div class="w-full max-w-2xl bg-white shadow-xl rounded-2xl p-8 space-y-6">
-  
-      <!-- HEADER -->
-      <div class="text-center">
-        <h1 class="text-2xl font-bold text-gray-800">Créer un jeu éducatif 🎮</h1>
-        <p class="text-sm text-gray-500">Génère un jeu intelligent pour tes élèves</p>
-      </div>
-  
-      <!-- SUCCESS -->
-      <div *ngIf="successMessage" class="bg-green-100 text-green-700 p-3 rounded-lg text-center">
-        {{ successMessage }}
-      </div>
-  
-      <!-- ERROR -->
-      <div *ngIf="errorMessage" class="bg-red-100 text-red-700 p-3 rounded-lg text-center">
-        {{ errorMessage }}
-      </div>
-  
-      <!-- FORM -->
-      <form (ngSubmit)="creerJeu()" class="space-y-5">
-  
-        <!-- TITRE -->
-        <div>
-          <label class="text-sm font-semibold">Titre du jeu</label>
-          <input type="text"
-            [(ngModel)]="jeu.titre"
-            name="titre"
-            required
-            class="w-full mt-1 px-4 py-2 rounded-xl border focus:ring-2 focus:ring-indigo-400 outline-none">
+<section class="h-auto mt-16 py-10 px-10">
+
+    <div class="flex gap-10">
+
+        <!-- CARD Gauche - Info & Progression -->
+        <div class="lg:w-80 flex-shrink-0">
+            <div class="sticky top-6 px-6 py-6 rounded-3xl backdrop-blur-sm transition-all duration-300"
+                [ngStyle]="{
+                    'background': themeService.Backgroundcards,
+                    'border-color': themeService.Bordernormal
+                }">
+
+                <!-- Header -->
+                <div class="text-center mb-6 space-y-3">
+                    <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-2"
+                        [ngStyle]="{
+                            'background': themeService.primary,
+                            'box-shadow': '0 8px 20px ' + themeService.primary + '30'
+                        }">
+                        <i class="fa-solid fa-gamepad text-2xl text-white"></i>
+                    </div>
+
+                    <h1 class="text-2xl font-extrabold tracking-tight leading-tight"
+                        [ngStyle]="{'color': themeService.Textprincipal}">
+                        Création de jeu éducatif
+                    </h1>
+
+                    <p class="text-sm max-w-xs mx-auto leading-relaxed"
+                        [ngStyle]="{'color': themeService.Textsecondaire}">
+                        Construis des exercices interactifs adaptés à tes élèves
+                    </p>
+                </div>
+
+                <!-- Progression verticale -->
+                <div class="space-y-0 mb-8">
+                    <div class="flex items-center gap-3 py-3 transition-colors"
+                        [ngStyle]="{'color': step >= 1 ? themeService.primary : themeService.Textsecondaire}">
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 transition-all"
+                            [ngStyle]="step >= 1 ? {
+                                'background': themeService.primary,
+                                'color': '#FFFFFF'
+                            } : {
+                                'background': themeService.Backgroundprincipal,
+                                'border': '2px solid ' + themeService.Bordernormal
+                            }">
+                            <span *ngIf="step > 1">✓</span>
+                            <span *ngIf="step === 1">1</span>
+                            <span *ngIf="step < 1">1</span>
+                        </div>
+                        <div class="flex-1">
+                            <span class="text-sm font-semibold">Paramètres</span>
+                            <p class="text-xs opacity-70">Configure les bases</p>
+                        </div>
+                    </div>
+
+                    <div class="ml-4 w-0.5 h-6"
+                        [ngStyle]="{'background': step >= 2 ? themeService.primary : themeService.Bordernormal}"></div>
+
+                    <div class="flex items-center gap-3 py-3 transition-colors"
+                        [ngStyle]="{'color': step >= 2 ? themeService.primary : themeService.Textsecondaire}">
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 transition-all"
+                            [ngStyle]="step >= 2 ? {
+                                'background': themeService.primary,
+                                'color': '#FFFFFF'
+                            } : {
+                                'background': themeService.Backgroundprincipal,
+                                'border': '2px solid ' + themeService.Bordernormal
+                            }">
+                            <span *ngIf="step > 2">✓</span>
+                            <span *ngIf="step <= 2">2</span>
+                        </div>
+                        <div class="flex-1">
+                            <span class="text-sm font-semibold">Contenu</span>
+                            <p class="text-xs opacity-70">Ajoute les questions</p>
+                        </div>
+                    </div>
+
+                    <div class="ml-4 w-0.5 h-6"
+                        [ngStyle]="{'background': step >= 3 ? themeService.primary : themeService.Bordernormal}"></div>
+
+                    <div class="flex items-center gap-3 py-3 transition-colors"
+                        [ngStyle]="{'color': step >= 3 ? themeService.primary : themeService.Textsecondaire}">
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 transition-all"
+                            [ngStyle]="step >= 3 ? {
+                                'background': themeService.primary,
+                                'color': '#FFFFFF'
+                            } : {
+                                'background': themeService.Backgroundprincipal,
+                                'border': '2px solid ' + themeService.Bordernormal
+                            }">
+                            3
+                        </div>
+                        <div class="flex-1">
+                            <span class="text-sm font-semibold">Validation</span>
+                            <p class="text-xs opacity-70">Vérifie et crée</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Barre de progression -->
+                <div class="mb-6">
+                    <div class="flex justify-between text-xs mb-1.5 font-medium"
+                        [ngStyle]="{'color': themeService.Textsecondaire}">
+                        <span>Progression</span>
+                        <span>{{ (step / 3) * 100 | number:'1.0-0' }}%</span>
+                    </div>
+                    <div class="h-2 rounded-full overflow-hidden"
+                        [ngStyle]="{
+                            'background': themeService.Backgroundprincipal,
+                            'border': '1px solid ' + themeService.Bordernormal
+                        }">
+                        <div class="h-full rounded-full transition-all duration-700 ease-out"
+                            [ngStyle]="{
+                                'width.%': (step / 3) * 100,
+                                'background': themeService.primary
+                            }">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info cards -->
+                <div class="space-y-3">
+                    <div class="rounded-xl p-3 text-center border transition hover:scale-[1.02] duration-200"
+                        [ngStyle]="{
+                            'background': themeService.Backgroundprincipal,
+                            'border-color': themeService.Bordernormal
+                        }">
+                        <i class="fa-solid fa-bolt text-lg mb-1"
+                            [ngStyle]="{'color': themeService.primary}"></i>
+                        <p class="text-xs font-semibold" [ngStyle]="{'color': themeService.Textprincipal}">Rapide</p>
+                        <p class="text-xs mt-0.5" [ngStyle]="{'color': themeService.Textsecondaire}">Quelques minutes</p>
+                    </div>
+
+                    <div class="rounded-xl p-3 text-center border transition hover:scale-[1.02] duration-200"
+                        [ngStyle]="{
+                            'background': themeService.Backgroundprincipal,
+                            'border-color': themeService.Bordernormal
+                        }">
+                        <i class="fa-solid fa-user-graduate text-lg mb-1"
+                            [ngStyle]="{'color': themeService.primary}"></i>
+                        <p class="text-xs font-semibold" [ngStyle]="{'color': themeService.Textprincipal}">Pédagogique</p>
+                        <p class="text-xs mt-0.5" [ngStyle]="{'color': themeService.Textsecondaire}">Adapté DYS</p>
+                    </div>
+
+                    <div class="rounded-xl p-3 text-center border transition hover:scale-[1.02] duration-200"
+                        [ngStyle]="{
+                            'background': themeService.Backgroundprincipal,
+                            'border-color': themeService.Bordernormal
+                        }">
+                        <i class="fa-solid fa-chart-line text-lg mb-1"
+                            [ngStyle]="{'color': themeService.primary}"></i>
+                        <p class="text-xs font-semibold" [ngStyle]="{'color': themeService.Textprincipal}">Suivi</p>
+                        <p class="text-xs mt-0.5" [ngStyle]="{'color': themeService.Textsecondaire}">Analyse résultats</p>
+                    </div>
+                </div>
+            </div>
         </div>
-  
-        <!-- TYPE -->
-        <div>
-          <label class="text-sm font-semibold">Type de jeu</label>
-          <select [(ngModel)]="jeu.type" name="type" required
-            class="w-full mt-1 px-4 py-2 rounded-xl border">
-            <option value="">Choisir...</option>
-            <option *ngFor="let t of typesJeux">{{ t }}</option>
-          </select>
+
+        <!-- CARD Droite - Formulaire principal -->
+        <div class="flex-1 min-w-0">
+            <div class="rounded-3xl overflow-hidden" [ngStyle]="{
+                'background': themeService.Backgroundcards,
+                'border': themeService.Bordernormal
+            }">
+
+                <!-- Alerts -->
+                <div *ngIf="successMessage" class="mx-6 mt-6">
+                    <div class="flex items-center gap-3 px-5 py-4 rounded-xl" [ngStyle]="{
+                            'background': themeService.primary + '15',
+                            'border': '1px solid ' + themeService.primary + '30',
+                            'color': themeService.primary
+                        }">
+                        <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center"
+                            [ngStyle]="{'background': themeService.primary + '25'}">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-sm">Succès</p>
+                            <p class="text-sm" [ngStyle]="{'opacity': '0.8'}">{{ successMessage }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="errorMessage" class="mx-6 mt-6">
+                    <div class="flex items-center gap-3 px-5 py-4 rounded-xl" [ngStyle]="{
+                             'background': themeService.secondary + '15',
+                             'border': '1px solid ' + themeService.secondary + '30',
+                             'color': themeService.secondary
+                         }">
+                        <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center"
+                            [ngStyle]="{'background': themeService.secondary + '25'}">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-sm">Erreur</p>
+                            <p class="text-sm" [ngStyle]="{'opacity': '0.8'}">{{ errorMessage }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <form (ngSubmit)="step === 3 ? creerJeu() : nextStep()" class="p-6 sm:p-8 space-y-27.5">
+
+                    <!-- ÉTAPE 1 : Paramètres du jeu -->
+                    <div *ngIf="step === 1" class="space-y-6 animate-fade-in">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="w-10 h-10 rounded-xl flex items-center justify-center"
+                                [ngStyle]="{'background': themeService.primary + '15', 'color': themeService.primary}">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold" [ngStyle]="{'color': themeService.Textprincipal}">Paramètres du jeu</h2>
+                                <p class="text-sm" [ngStyle]="{'color': themeService.Textsecondaire}">Configure les bases de ton exercice</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-5">
+                            <!-- Titre -->
+                            <div class="space-y-2">
+                                <label for="titre" class="block text-sm font-semibold"
+                                    [ngStyle]="{'color': themeService.Textprincipal}">
+                                    Titre du jeu <span [ngStyle]="{'color': themeService.secondary}">*</span>
+                                </label>
+                                <input id="titre" [(ngModel)]="jeu.titre" name="titre" type="text" required
+                                    placeholder="Ex: Les animaux de la ferme"
+                                    class="w-full px-4 py-3.5 rounded-xl border transition-all duration-200 outline-none text-base focus:ring-2"
+                                    [ngStyle]="{
+                                        'background': themeService.Backgroundprincipal,
+                                        'border-color': themeService.Bordernormal,
+                                        'color': themeService.Textprincipal,
+                                        '--tw-ring-color': themeService.primary + '40'
+                                    }" (focus)="setFocusStyle($event)" (blur)="removeFocusStyle($event)">
+                            </div>
+
+                            <!-- Type de jeu -->
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold"
+                                    [ngStyle]="{'color': themeService.Textprincipal}">
+                                    Type de jeu <span [ngStyle]="{'color': themeService.secondary}">*</span>
+                                </label>
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                    <button type="button" (click)="jeu.type = 'qcm'"
+                                        class="relative flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all duration-200 group hover:-translate-y-0.5"
+                                        [ngStyle]="{
+                                            'background': jeu.type === 'qcm' ? themeService.primary + '15' : themeService.Backgroundprincipal,
+                                            'border-color': jeu.type === 'qcm' ? themeService.primary : themeService.Bordernormal,
+                                            'color': jeu.type === 'qcm' ? themeService.primary : themeService.Textprincipal
+                                        }">
+                                        <span class="text-2xl group-hover:scale-110 transition-transform">🔵</span>
+                                        <span class="text-sm font-medium">QCM</span>
+                                        <div *ngIf="jeu.type === 'qcm'"
+                                            class="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center"
+                                            [ngStyle]="{'background': themeService.primary}">
+                                            <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                        </div>
+                                    </button>
+
+                                    <button type="button" (click)="jeu.type = 'puzzle'"
+                                        class="relative flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all duration-200 group hover:-translate-y-0.5"
+                                        [ngStyle]="{
+                                            'background': jeu.type === 'puzzle' ? themeService.primary + '15' : themeService.Backgroundprincipal,
+                                            'border-color': jeu.type === 'puzzle' ? themeService.primary : themeService.Bordernormal,
+                                            'color': jeu.type === 'puzzle' ? themeService.primary : themeService.Textprincipal
+                                        }">
+                                        <span class="text-2xl group-hover:scale-110 transition-transform">🟡</span>
+                                        <span class="text-sm font-medium">Puzzle</span>
+                                        <div *ngIf="jeu.type === 'puzzle'"
+                                            class="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center"
+                                            [ngStyle]="{'background': themeService.primary}">
+                                            <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                        </div>
+                                    </button>
+
+                                    <button type="button" (click)="jeu.type = 'phrasejeux'"
+                                        class="relative flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all duration-200 group hover:-translate-y-0.5"
+                                        [ngStyle]="{
+                                            'background': jeu.type === 'phrasejeux' ? themeService.primary + '15' : themeService.Backgroundprincipal,
+                                            'border-color': jeu.type === 'phrasejeux' ? themeService.primary : themeService.Bordernormal,
+                                            'color': jeu.type === 'phrasejeux' ? themeService.primary : themeService.Textprincipal
+                                        }">
+                                        <span class="text-2xl group-hover:scale-110 transition-transform">🟢</span>
+                                        <span class="text-sm font-medium">Phrase</span>
+                                        <div *ngIf="jeu.type === 'phrasejeux'"
+                                            class="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center"
+                                            [ngStyle]="{'background': themeService.primary}">
+                                            <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                        </div>
+                                    </button>
+
+                                    <button type="button" (click)="jeu.type = 'memory'"
+                                        class="relative flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all duration-200 group hover:-translate-y-0.5"
+                                        [ngStyle]="{
+                                            'background': jeu.type === 'memory' ? themeService.primary + '15' : themeService.Backgroundprincipal,
+                                            'border-color': jeu.type === 'memory' ? themeService.primary : themeService.Bordernormal,
+                                            'color': jeu.type === 'memory' ? themeService.primary : themeService.Textprincipal
+                                        }">
+                                        <span class="text-2xl group-hover:scale-110 transition-transform">🔴</span>
+                                        <span class="text-sm font-medium">Memory</span>
+                                        <div *ngIf="jeu.type === 'memory'"
+                                            class="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center"
+                                            [ngStyle]="{'background': themeService.primary}">
+                                            <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Niveau et difficulté -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="space-y-2">
+                                    <label for="niveau" class="block text-sm font-semibold"
+                                        [ngStyle]="{'color': themeService.Textprincipal}">Niveau scolaire</label>
+                                    <div class="relative">
+                                        <select id="niveau" [(ngModel)]="jeu.niveau" name="niveau"
+                                            class="w-full px-4 py-3.5 rounded-xl border transition-all duration-200 outline-none appearance-none text-base cursor-pointer"
+                                            [ngStyle]="{
+                                                'background': themeService.Backgroundprincipal,
+                                                'border-color': themeService.Bordernormal,
+                                                'color': themeService.Textprincipal
+                                            }">
+                                            <option value="" disabled>Sélectionner...</option>
+                                            <option *ngFor="let n of niveaux" [value]="n">{{ n }}</option>
+                                        </select>
+                                        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"
+                                            [ngStyle]="{'color': themeService.Textsecondaire}">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-2">
+                                    <label for="difficulte" class="block text-sm font-semibold"
+                                        [ngStyle]="{'color': themeService.Textprincipal}">Difficulté</label>
+                                    <div class="relative">
+                                        <select id="difficulte" [(ngModel)]="jeu.difficulte" name="difficulte"
+                                            class="w-full px-4 py-3.5 rounded-xl border transition-all duration-200 outline-none appearance-none text-base cursor-pointer"
+                                            [ngStyle]="{
+                                                'background': themeService.Backgroundprincipal,
+                                                'border-color': themeService.Bordernormal,
+                                                'color': themeService.Textprincipal
+                                            }">
+                                            <option value="facile">🟢 Facile</option>
+                                            <option value="moyen">🟠 Moyen</option>
+                                            <option value="difficile">🔴 Difficile</option>
+                                        </select>
+                                        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"
+                                            [ngStyle]="{'color': themeService.Textsecondaire}">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Consigne -->
+                            <div class="space-y-2">
+                                <label for="consigne" class="block text-sm font-semibold"
+                                    [ngStyle]="{'color': themeService.Textprincipal}">
+                                    Consigne pour les élèves <span [ngStyle]="{'color': themeService.secondary}">*</span>
+                                </label>
+                                <textarea id="consigne" [(ngModel)]="jeu.consigne" name="consigne" rows="3"
+                                    placeholder="Décris ce que l'élève doit faire..."
+                                    class="w-full px-4 py-3.5 rounded-xl border transition-all duration-200 outline-none resize-none text-base"
+                                    [ngStyle]="{
+                                        'background': themeService.Backgroundprincipal,
+                                        'border-color': themeService.Bordernormal,
+                                        'color': themeService.Textprincipal
+                                    }"></textarea>
+                                <p class="text-xs flex items-center gap-1"
+                                    [ngStyle]="{'color': themeService.Textsecondaire}">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    Cette consigne sera affichée aux élèves avant de commencer
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ÉTAPE 2 : Contenu du jeu -->
+                    <div *ngIf="step === 2" class="space-y-6 animate-fade-in">
+
+                        <!-- QCM -->
+                        <div *ngIf="jeu.type === 'qcm'" class="space-y-22">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-10 h-10 rounded-xl flex items-center justify-center"
+                                    [ngStyle]="{'background': themeService.primary + '15', 'color': themeService.primary}">
+                                    <span class="text-xl">🔵</span>
+                                </div>
+                                <div>
+                                    <h2 class="text-xl font-bold" [ngStyle]="{'color': themeService.Textprincipal}">Configuration QCM</h2>
+                                    <p class="text-sm" [ngStyle]="{'color': themeService.Textsecondaire}">Crée une question à choix multiples</p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold"
+                                    [ngStyle]="{'color': themeService.Textprincipal}">Question</label>
+                                <input type="text" [(ngModel)]="jeu.question" name="question"
+                                    placeholder="Quelle est la capitale de la France ?"
+                                    class="w-full px-4 py-3.5 rounded-xl border transition-all outline-none text-base"
+                                    [ngStyle]="{
+                                        'background': themeService.Backgroundprincipal,
+                                        'border-color': themeService.Bordernormal,
+                                        'color': themeService.Textprincipal
+                                    }" />
+                            </div>
+
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold"
+                                    [ngStyle]="{'color': themeService.Textprincipal}">Options de réponse</label>
+                                <div class="space-y-3">
+                                    <div *ngFor="let opt of qcmOptions; let i = index; trackBy: trackByIndex"
+                                        class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0"
+                                            [ngStyle]="{'background': themeService.primary + '15', 'color': themeService.primary}">
+                                            {{ ['A','B','C','D'][i] }}
+                                        </div>
+                                        <input type="text" [(ngModel)]="qcmOptions[i]" [name]="'option' + i"
+                                            placeholder="Option {{ ['A','B','C','D'][i] }}"
+                                            class="flex-1 px-4 py-3 rounded-xl border transition-all outline-none text-base"
+                                            [ngStyle]="{
+                                                'background': themeService.Backgroundprincipal,
+                                                'border-color': themeService.Bordernormal,
+                                                'color': themeService.Textprincipal
+                                            }" />
+                                        <button type="button" (click)="removeQcmOption(i)" *ngIf="qcmOptions.length > 2"
+                                            class="p-2 rounded-lg transition hover:bg-red-50"
+                                            [ngStyle]="{'color': themeService.Textsecondaire}">
+                                            ✕
+                                        </button>
+                                    </div>
+                                </div>
+                                <button type="button" (click)="addQcmOption()" *ngIf="qcmOptions.length < 4"
+                                    class="flex items-center gap-2 text-sm font-medium mt-2 px-3 py-2 rounded-lg transition hover:bg-opacity-80"
+                                    [ngStyle]="{'color': themeService.primary}">
+                                    + Ajouter une option
+                                </button>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold"
+                                    [ngStyle]="{'color': themeService.Textprincipal}">Bonne réponse</label>
+                                <select [(ngModel)]="jeu.reponse" name="reponse"
+                                    class="w-full px-4 py-3.5 rounded-xl border transition-all outline-none appearance-none text-base cursor-pointer"
+                                    [ngStyle]="{
+                                        'background': themeService.Backgroundprincipal,
+                                        'border-color': themeService.Bordernormal,
+                                        'color': themeService.Textprincipal
+                                    }">
+                                    <option value="" disabled>Sélectionner la bonne réponse...</option>
+                                    <option *ngFor="let opt of qcmOptions; let i = index; trackBy: trackByIndex"
+                                        [value]="opt" [disabled]="!opt">
+                                        {{ ['A','B','C','D'][i] }} - {{ opt || '(vide)' }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Puzzle -->
+                        <div *ngIf="jeu.type === 'puzzle'" class="space-y-5">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-10 h-10 rounded-xl flex items-center justify-center"
+                                    [ngStyle]="{'background': themeService.primary + '15', 'color': themeService.primary}">
+                                    <span class="text-xl">🟡</span>
+                                </div>
+                                <div>
+                                    <h2 class="text-xl font-bold" [ngStyle]="{'color': themeService.Textprincipal}">Configuration Puzzle</h2>
+                                    <p class="text-sm" [ngStyle]="{'color': themeService.Textsecondaire}">Crée un mot à compléter</p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label for="mot" class="block text-sm font-semibold"
+                                    [ngStyle]="{'color': themeService.Textprincipal}">Mot complet</label>
+                                <input id="mot" [(ngModel)]="jeu.mot" name="mot" type="text" placeholder="ex: BONJOUR"
+                                    (input)="generatePuzzleFromWord()"
+                                    class="w-full px-4 py-3.5 rounded-xl border transition-all duration-200 outline-none text-base uppercase tracking-widest font-mono"
+                                    [ngStyle]="{
+                                        'background': themeService.Backgroundprincipal,
+                                        'border-color': themeService.Bordernormal,
+                                        'color': themeService.Textprincipal
+                                    }">
+                            </div>
+
+                            <div *ngIf="jeu.mot" class="p-6 rounded-2xl border-2 space-y-4" [ngStyle]="{
+                                     'background': themeService.primary + '08',
+                                     'border-color': themeService.primary + '20'
+                                 }">
+                                <p class="text-sm font-semibold mb-3" [ngStyle]="{'color': themeService.primary}">Aperçu du puzzle :</p>
+                                <div class="flex flex-wrap gap-2 justify-center">
+                                    <div *ngFor="let char of jeu.mot.split(''); let i = index"
+                                        class="w-12 h-14 rounded-xl flex items-center justify-center text-xl font-bold border-2 transition-all duration-300"
+                                        [ngStyle]="!isHidden(i) ? {
+                                            'border-color': themeService.primary + '30',
+                                            'background': themeService.Backgroundcards,
+                                            'color': themeService.Textprincipal
+                                        } : {
+                                            'border-style': 'dashed',
+                                            'border-color': themeService.primary + '40',
+                                            'background': themeService.primary + '08',
+                                            'color': themeService.primary
+                                        }">
+                                        {{ isHidden(i) ? '?' : char }}
+                                    </div>
+                                </div>
+                                <p class="text-xs text-center" [ngStyle]="{'color': themeService.Textsecondaire}">Clique sur les lettres à cacher ci-dessous</p>
+
+                                <div class="flex flex-wrap gap-2 justify-center pt-2">
+                                    <button *ngFor="let char of jeu.mot.split(''); let i = index" type="button"
+                                        (click)="toggleHiddenLetter(i)"
+                                        class="w-10 h-10 rounded-lg border-2 font-bold transition-all duration-200 hover:scale-105"
+                                        [ngStyle]="isHidden(i) ? {
+                                            'background': themeService.primary,
+                                            'color': '#FFFFFF',
+                                            'border-color': themeService.primary
+                                        } : {
+                                            'background': themeService.Backgroundcards,
+                                            'color': themeService.Textprincipal,
+                                            'border-color': themeService.primary + '30'
+                                        }">
+                                        {{ char }}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <input type="hidden" [(ngModel)]="jeu.motTroue" name="motTroue">
+                            <input type="hidden" [(ngModel)]="jeu.lettresManquantes" name="lettresManquantes">
+                            <input type="hidden" [(ngModel)]="jeu.positionsCachees" name="positionsCachees">
+                        </div>
+
+                        <!-- Phrase -->
+                        <div *ngIf="jeu.type === 'phrasejeux'" class="space-y-5">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-10 h-10 rounded-xl flex items-center justify-center"
+                                    [ngStyle]="{'background': themeService.primary + '15', 'color': themeService.primary}">
+                                    <span class="text-xl">🟢</span>
+                                </div>
+                                <div>
+                                    <h2 class="text-xl font-bold" [ngStyle]="{'color': themeService.Textprincipal}">Configuration Phrase mélangée</h2>
+                                    <p class="text-sm" [ngStyle]="{'color': themeService.Textsecondaire}">Crée une phrase à reconstruire</p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label for="phraseOriginale" class="block text-sm font-semibold"
+                                    [ngStyle]="{'color': themeService.Textprincipal}">Phrase correcte</label>
+                                <input id="phraseOriginale" [(ngModel)]="jeu.phraseOriginale" name="phraseOriginale"
+                                    type="text" placeholder="Le chat dort sur le tapis" (blur)="shufflePhrase()"
+                                    class="w-full px-4 py-3.5 rounded-xl border transition-all duration-200 outline-none text-base"
+                                    [ngStyle]="{
+                                        'background': themeService.Backgroundprincipal,
+                                        'border-color': themeService.Bordernormal,
+                                        'color': themeService.Textprincipal
+                                    }">
+                            </div>
+
+                            <div *ngIf="phrasePreview.length > 0" class="p-6 rounded-2xl border-2" [ngStyle]="{
+                                    'background': themeService.primary + '08',
+                                    'border-color': themeService.primary + '20'
+                                }">
+                                <p class="text-sm font-semibold mb-4" [ngStyle]="{'color': themeService.primary}">Aperçu du mélange :</p>
+                                <div class="flex flex-wrap gap-2 justify-center">
+                                    <div *ngFor="let mot of phrasePreview"
+                                        class="px-4 py-2 rounded-lg border shadow-sm font-medium transition hover:scale-105"
+                                        [ngStyle]="{
+                                            'background': themeService.Backgroundcards,
+                                            'border-color': themeService.Bordernormal,
+                                            'color': themeService.Textprincipal
+                                        }">
+                                        {{ mot.mot }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <input type="hidden" [(ngModel)]="jeu.motsMelanges" name="motsMelanges">
+                        </div>
+
+                        <!-- Memory -->
+                        <div *ngIf="jeu.type === 'memory'" class="space-y-22">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm"
+                                    [ngStyle]="{'background': themeService.primary, 'color': '#FFFFFF'}">
+                                    <span class="text-xl">🧠</span>
+                                </div>
+                                <div>
+                                    <h2 class="text-xl font-bold" [ngStyle]="{'color': themeService.Textprincipal}">Memory</h2>
+                                    <p class="text-sm" [ngStyle]="{'color': themeService.Textsecondaire}">Mémorisation interactive</p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label class="text-sm font-semibold"
+                                    [ngStyle]="{'color': themeService.Textprincipal}">Type</label>
+                                <select [(ngModel)]="jeu.memoryType" name="memoryType" (change)="onMemoryTypeChange()"
+                                    class="w-full px-4 py-3 rounded-xl border outline-none transition-colors cursor-pointer"
+                                    [ngStyle]="{
+                                        'background': themeService.Backgroundprincipal,
+                                        'border-color': themeService.Bordernormal,
+                                        'color': themeService.Textprincipal
+                                    }">
+                                    <option value="number">🔢 Nombres</option>
+                                    <option value="word">✍️ Mots</option>
+                                    <option value="animal">🐶 Animaux</option>
+                                </select>
+                            </div>
+
+                            <!-- Numbers -->
+                            <div *ngIf="jeu.memoryType === 'number'" class="space-y-4">
+                                <label class="text-sm font-semibold"
+                                    [ngStyle]="{'color': themeService.Textprincipal}">Banque</label>
+                                <div class="grid grid-cols-10 gap-2 max-h-60 overflow-y-auto p-3 rounded-xl border"
+                                    [ngStyle]="{
+                                         'background': themeService.Backgroundprincipal,
+                                         'border-color': themeService.Bordernormal
+                                     }">
+                                    <button *ngFor="let n of [].constructor(100); let i = index" type="button"
+                                        (click)="toggleNumber(i + 1)"
+                                        class="p-2 text-sm rounded-lg border transition-all active:scale-95 hover:shadow-md"
+                                        [ngStyle]="isNumberSelected(i + 1) ? {
+                                            'background': themeService.primary,
+                                            'color': '#FFFFFF',
+                                            'border-color': themeService.primary
+                                        } : {
+                                            'background': themeService.Backgroundcards,
+                                            'color': themeService.Textprincipal,
+                                            'border-color': themeService.Bordernormal
+                                        }">
+                                        {{ i + 1 }}
+                                    </button>
+                                </div>
+
+                                <label class="text-sm font-semibold"
+                                    [ngStyle]="{'color': themeService.Textprincipal}">Paires ({{ memoryCards.length }})</label>
+                                <div class="flex flex-wrap gap-2">
+                                    <div *ngIf="memoryCards.length === 0" class="text-sm italic py-2"
+                                        [ngStyle]="{'color': themeService.Textsecondaire}">
+                                        Aucune paire choisie
+                                    </div>
+                                    <div *ngFor="let card of memoryCards; let i = index"
+                                        class="flex items-center gap-2 pl-3 pr-2 py-1.5 rounded-full border transition-colors"
+                                        [ngStyle]="{
+                                            'background': themeService.primary + '10',
+                                            'border-color': themeService.primary + '25'
+                                        }">
+                                        <span class="text-xs font-medium" [ngStyle]="{'color': themeService.primary}">Paire {{ i + 1 }}</span>
+                                        <span class="w-7 h-7 flex items-center justify-center rounded-full text-white text-sm font-bold"
+                                            [ngStyle]="{'background': themeService.primary}">
+                                            {{ card.valeur }}
+                                        </span>
+                                        <button type="button" (click)="removeMemoryCard(i)"
+                                            class="w-5 h-5 flex items-center justify-center rounded-full transition-colors text-xs hover:bg-red-100"
+                                            [ngStyle]="{'color': themeService.Textsecondaire}">
+                                            ✕
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Words -->
+                            <div *ngIf="jeu.memoryType === 'word'" class="space-y-4">
+                                <label class="text-sm font-semibold"
+                                    [ngStyle]="{'color': themeService.Textprincipal}">Saisie</label>
+                                <div *ngFor="let card of memoryCards; let i = index"
+                                    class="flex items-center gap-3 p-4 rounded-xl border group transition hover:shadow-sm"
+                                    [ngStyle]="{
+                                        'background': themeService.Backgroundprincipal,
+                                        'border-color': themeService.Bordernormal
+                                    }">
+                                    <span class="font-bold w-6" [ngStyle]="{'color': themeService.primary}">{{ i + 1 }}.</span>
+                                    <input [(ngModel)]="card.valeur" [name]="'word' + i" type="text"
+                                        placeholder="Mot de la paire..."
+                                        class="flex-1 px-4 py-2.5 rounded-lg border outline-none transition-colors"
+                                        [ngStyle]="{
+                                            'background': themeService.Backgroundcards,
+                                            'border-color': themeService.Bordernormal,
+                                            'color': themeService.Textprincipal
+                                        }">
+                                    <button type="button" (click)="removeMemoryCard(i)" *ngIf="memoryCards.length > 2"
+                                        class="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-red-50 rounded"
+                                        [ngStyle]="{'color': themeService.Textsecondaire}">
+                                        ✕
+                                    </button>
+                                </div>
+                                <button type="button" (click)="addMemoryPair()"
+                                    class="w-full py-2.5 rounded-xl border-2 border-dashed font-medium transition-colors hover:bg-opacity-50"
+                                    [ngStyle]="{
+                                        'border-color': themeService.primary + '40',
+                                        'color': themeService.primary
+                                    }">
+                                    + Ajouter une paire
+                                </button>
+
+                                <label class="text-sm font-semibold"
+                                    [ngStyle]="{'color': themeService.Textprincipal}">Paires validées ({{ getValidWords().length }})</label>
+                                <div class="flex flex-wrap gap-2">
+                                    <div *ngIf="getValidWords().length === 0" class="text-sm italic py-2"
+                                        [ngStyle]="{'color': themeService.Textsecondaire}">
+                                        Aucune paire saisie
+                                    </div>
+                                    <div *ngFor="let word of getValidWords(); let i = index"
+                                        class="flex items-center gap-2 pl-3 pr-2 py-1.5 rounded-full border transition-colors"
+                                        [ngStyle]="{
+                                            'background': themeService.primary + '10',
+                                            'border-color': themeService.primary + '25'
+                                        }">
+                                        <span class="text-xs font-medium" [ngStyle]="{'color': themeService.primary}">Paire {{ i + 1 }}</span>
+                                        <span class="text-sm font-medium" [ngStyle]="{'color': themeService.Textprincipal}">{{ word.valeur }}</span>
+                                        <button type="button" (click)="removeWordByIndex(i)"
+                                            class="w-5 h-5 flex items-center justify-center rounded-full transition-colors text-xs hover:bg-red-100"
+                                            [ngStyle]="{'color': themeService.Textsecondaire}">
+                                            ✕
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Animals -->
+                            <div *ngIf="jeu.memoryType === 'animal'" class="space-y-4">
+                                <label class="text-sm font-semibold"
+                                    [ngStyle]="{'color': themeService.Textprincipal}">Banque</label>
+                                <div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
+                                    <button *ngFor="let animal of animalsBank" type="button" (click)="toggleAnimal(animal)"
+                                        class="relative p-3 rounded-2xl border-2 transition-all duration-200 flex flex-col items-center gap-2 group hover:-translate-y-1"
+                                        [ngStyle]="isSelected(animal) ? {
+                                            'border-color': themeService.primary,
+                                            'background': themeService.primary + '08',
+                                            'box-shadow': '0 4px 12px ' + themeService.primary + '15'
+                                        } : {
+                                            'border-color': themeService.Bordernormal,
+                                            'background': themeService.Backgroundcards
+                                        }">
+                                        <div *ngIf="isSelected(animal)"
+                                            class="absolute -top-2 -right-2 w-6 h-6 rounded-full flex items-center justify-center shadow-sm"
+                                            [ngStyle]="{'background': themeService.primary}">
+                                            <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        <div class="relative w-16 h-16 rounded-xl overflow-hidden">
+                                            <img [src]="animal.image"
+                                                class="w-full h-full object-cover transition-transform group-hover:scale-110" />
+                                        </div>
+                                        <span class="text-sm font-medium"
+                                            [ngStyle]="{'color': isSelected(animal) ? themeService.primary : themeService.Textprincipal}">
+                                            {{ animal.nom }}
+                                        </span>
+                                    </button>
+                                </div>
+
+                                <label class="text-sm font-semibold"
+                                    [ngStyle]="{'color': themeService.Textprincipal}">Paires ({{ memoryCards.length }})</label>
+                                <div class="flex flex-wrap gap-2">
+                                    <div *ngIf="memoryCards.length === 0" class="text-sm italic py-2"
+                                        [ngStyle]="{'color': themeService.Textsecondaire}">
+                                        Aucune paire choisie
+                                    </div>
+                                    <div *ngFor="let card of memoryCards; let i = index"
+                                        class="flex items-center gap-2 pl-1 pr-2 py-1 rounded-full border transition-colors"
+                                        [ngStyle]="{
+                                            'background': themeService.primary + '10',
+                                            'border-color': themeService.primary + '25'
+                                        }">
+                                        <img [src]="card.image" class="w-8 h-8 rounded-full object-cover border-2 shadow-sm"
+                                            [ngStyle]="{'border-color': themeService.Backgroundcards}" />
+                                        <div class="flex flex-col">
+                                            <span class="text-xs font-medium" [ngStyle]="{'color': themeService.primary}">Paire {{ i + 1 }}</span>
+                                            <span class="text-sm font-medium" [ngStyle]="{'color': themeService.Textprincipal}">{{ card.nom }}</span>
+                                        </div>
+                                        <button type="button" (click)="removeMemoryCard(i)"
+                                            class="ml-1 w-5 h-5 flex items-center justify-center rounded-full transition-colors text-xs hover:bg-red-100"
+                                            [ngStyle]="{'color': themeService.Textsecondaire}">
+                                            ✕
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Message si type non sélectionné -->
+                        <div *ngIf="!jeu.type" class="text-center py-12">
+                            <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+                                [ngStyle]="{'background': themeService.Backgroundprincipal, 'border': themeService.Bordernormal}">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    [ngStyle]="{'color': themeService.Textsecondaire}">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <p [ngStyle]="{'color': themeService.Textsecondaire}">Retourne à l'étape 1 pour choisir un type de jeu</p>
+                        </div>
+                    </div>
+
+                    <!-- ÉTAPE 3 : Récapitulatif -->
+                    <div *ngIf="step === 3" class="space-y-6 animate-fade-in">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-10 h-10 rounded-xl flex items-center justify-center"
+                                [ngStyle]="{'background': themeService.primary + '15', 'color': themeService.primary}">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold" [ngStyle]="{'color': themeService.Textprincipal}">Vérification</h2>
+                                <p class="text-sm" [ngStyle]="{'color': themeService.Textsecondaire}">Vérifie les informations avant de créer</p>
+                            </div>
+                        </div>
+
+                        <!-- Paramètres généraux -->
+                        <div class="rounded-2xl p-6 space-y-4 border" [ngStyle]="{
+                                 'background': themeService.Backgroundprincipal,
+                                 'border-color': themeService.Bordernormal
+                             }">
+                            <h3 class="text-sm font-bold uppercase tracking-wider mb-4"
+                                [ngStyle]="{'color': themeService.Textsecondaire}">Paramètres généraux</h3>
+
+                            <div class="flex justify-between items-center py-2 border-b"
+                                [ngStyle]="{'border-color': themeService.Bordernormal}">
+                                <span class="text-sm" [ngStyle]="{'color': themeService.Textsecondaire}">Titre</span>
+                                <span class="font-semibold" [ngStyle]="{'color': themeService.Textprincipal}">{{ jeu.titre || '-' }}</span>
+                            </div>
+                            <div class="flex justify-between items-center py-2 border-b"
+                                [ngStyle]="{'border-color': themeService.Bordernormal}">
+                                <span class="text-sm" [ngStyle]="{'color': themeService.Textsecondaire}">Type</span>
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium"
+                                    [ngStyle]="{'background': themeService.primary + '15', 'color': themeService.primary}">
+                                    <span *ngIf="jeu.type === 'qcm'">🔵</span>
+                                    <span *ngIf="jeu.type === 'puzzle'">🟡</span>
+                                    <span *ngIf="jeu.type === 'phrasejeux'">🟢</span>
+                                    <span *ngIf="jeu.type === 'memory'">🔴</span>
+                                    {{ jeu.type | titlecase }}
+                                </span>
+                            </div>
+                            <div class="flex justify-between items-center py-2 border-b"
+                                [ngStyle]="{'border-color': themeService.Bordernormal}">
+                                <span class="text-sm" [ngStyle]="{'color': themeService.Textsecondaire}">Niveau</span>
+                                <span class="font-semibold" [ngStyle]="{'color': themeService.Textprincipal}">{{ jeu.niveau || '-' }}</span>
+                            </div>
+                            <div class="flex justify-between items-center py-2 border-b"
+                                [ngStyle]="{'border-color': themeService.Bordernormal}">
+                                <span class="text-sm" [ngStyle]="{'color': themeService.Textsecondaire}">Difficulté</span>
+                                <span class="font-semibold" [ngStyle]="{'color': themeService.Textprincipal}">{{ jeu.difficulte | titlecase }}</span>
+                            </div>
+                            <div class="py-2">
+                                <span class="text-sm block mb-1" [ngStyle]="{'color': themeService.Textsecondaire}">Consigne</span>
+                                <p class="text-sm p-3 rounded-lg border" [ngStyle]="{
+                                       'color': themeService.Textprincipal,
+                                       'background': themeService.Backgroundcards,
+                                       'border-color': themeService.Bordernormal
+                                   }">{{ jeu.consigne || '-' }}</p>
+                            </div>
+                        </div>
+
+                        <!-- QCM -->
+                        <div *ngIf="jeu.type === 'qcm'" class="rounded-2xl p-6 space-y-4 border" [ngStyle]="{
+                                 'background': themeService.primary + '05',
+                                 'border-color': themeService.primary + '20'
+                             }">
+                            <h3 class="text-sm font-bold uppercase tracking-wider mb-4"
+                                [ngStyle]="{'color': themeService.primary}">Contenu QCM</h3>
+
+                            <div class="py-2 border-b" [ngStyle]="{'border-color': themeService.primary + '15'}">
+                                <span class="text-sm block mb-1" [ngStyle]="{'color': themeService.primary}">Question</span>
+                                <p class="font-semibold" [ngStyle]="{'color': themeService.Textprincipal}">{{ jeu.question || '-' }}</p>
+                            </div>
+
+                            <div class="py-2">
+                                <span class="text-sm block mb-2" [ngStyle]="{'color': themeService.primary}">Options</span>
+                                <div class="space-y-2">
+                                    <div *ngFor="let opt of qcmOptions; let i = index"
+                                        class="flex items-center gap-3 p-3 rounded-xl border transition" [ngStyle]="opt === jeu.reponse ? {
+                                            'border-color': themeService.primary,
+                                            'background': themeService.Backgroundcards,
+                                            'box-shadow': '0 0 0 2px ' + themeService.primary + '20'
+                                        } : {
+                                            'border-color': themeService.Bordernormal,
+                                            'background': themeService.Backgroundcards
+                                        }">
+                                        <div class="w-7 h-7 rounded-lg flex items-center justify-center text-sm font-bold"
+                                            [ngStyle]="opt === jeu.reponse ? {
+                                                 'background': themeService.primary,
+                                                 'color': '#FFFFFF'
+                                             } : {
+                                                 'background': themeService.primary + '15',
+                                                 'color': themeService.primary
+                                             }">
+                                            {{ ['A','B','C','D'][i] }}
+                                        </div>
+                                        <span [ngStyle]="{'color': themeService.Textprincipal}">{{ opt || '(vide)' }}</span>
+                                        <span *ngIf="opt === jeu.reponse"
+                                            class="ml-auto text-xs font-bold px-2 py-1 rounded-full" [ngStyle]="{
+                                                'color': themeService.primary,
+                                                'background': themeService.primary + '15'
+                                            }">
+                                            ✓ Bonne réponse
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Puzzle -->
+                        <div *ngIf="jeu.type === 'puzzle'" class="rounded-2xl p-6 space-y-4 border" [ngStyle]="{
+                                'background': themeService.primary + '05',
+                                'border-color': themeService.primary + '20'
+                            }">
+                            <h3 class="text-sm font-bold uppercase tracking-wider mb-4"
+                                [ngStyle]="{'color': themeService.primary}">Contenu Puzzle</h3>
+
+                            <div class="py-2 border-b" [ngStyle]="{'border-color': themeService.primary + '15'}">
+                                <span class="text-sm block mb-1" [ngStyle]="{'color': themeService.primary}">Mot complet</span>
+                                <p class="font-mono text-lg font-bold tracking-widest uppercase"
+                                    [ngStyle]="{'color': themeService.Textprincipal}">{{ jeu.mot || '-' }}</p>
+                            </div>
+
+                            <div class="py-2 border-b" [ngStyle]="{'border-color': themeService.primary + '15'}">
+                                <span class="text-sm block mb-1" [ngStyle]="{'color': themeService.primary}">Mot troué</span>
+                                <p class="font-mono text-lg font-bold tracking-widest"
+                                    [ngStyle]="{'color': themeService.primary}">{{ jeu.motTroue || '-' }}</p>
+                            </div>
+
+                            <div class="py-2">
+                                <span class="text-sm block mb-1" [ngStyle]="{'color': themeService.primary}">Lettres manquantes</span>
+                                <div class="flex flex-wrap gap-2 mt-1">
+                                    <span *ngFor="let lettre of jeu.lettresManquantes?.split(',')"
+                                        class="px-3 py-1 rounded-lg font-mono font-bold" [ngStyle]="{
+                                            'background': themeService.primary + '15',
+                                            'color': themeService.primary
+                                        }">
+                                        {{ lettre }}
+                                    </span>
+                                    <span *ngIf="!jeu.lettresManquantes"
+                                        [ngStyle]="{'color': themeService.Textsecondaire}">-</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Phrase -->
+                        <div *ngIf="jeu.type === 'phrasejeux'" class="rounded-2xl p-6 space-y-4 border" [ngStyle]="{
+                                'background': themeService.primary + '05',
+                                'border-color': themeService.primary + '20'
+                            }">
+                            <h3 class="text-sm font-bold uppercase tracking-wider mb-4"
+                                [ngStyle]="{'color': themeService.primary}">Contenu Phrase</h3>
+
+                            <div class="py-2 border-b" [ngStyle]="{'border-color': themeService.primary + '15'}">
+                                <span class="text-sm block mb-1" [ngStyle]="{'color': themeService.primary}">Phrase originale</span>
+                                <p class="font-semibold" [ngStyle]="{'color': themeService.Textprincipal}">{{ jeu.phraseOriginale || '-' }}</p>
+                            </div>
+
+                            <div class="py-2">
+                                <span class="text-sm block mb-2" [ngStyle]="{'color': themeService.primary}">Mots mélangés</span>
+                                <div class="flex flex-wrap gap-2">
+                                    <div *ngFor="let mot of phrasePreview"
+                                        class="px-4 py-2 rounded-lg border shadow-sm font-medium transition hover:scale-105"
+                                        [ngStyle]="{
+                                            'background': themeService.Backgroundcards,
+                                            'border-color': themeService.Bordernormal,
+                                            'color': themeService.Textprincipal
+                                        }">
+                                        {{ mot.mot }}
+                                    </div>
+                                    <span *ngIf="!phrasePreview.length"
+                                        [ngStyle]="{'color': themeService.Textsecondaire}">-</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Memory -->
+                        <div *ngIf="jeu.type === 'memory'" class="rounded-2xl p-6 space-y-4 border" [ngStyle]="{
+                                'background': themeService.primary + '05',
+                                'border-color': themeService.primary + '20'
+                            }">
+                            <h3 class="text-sm font-bold uppercase tracking-wider mb-4"
+                                [ngStyle]="{'color': themeService.primary}">Contenu Memory</h3>
+
+                            <div class="py-2 border-b" [ngStyle]="{'border-color': themeService.primary + '15'}">
+                                <span class="text-sm block mb-1" [ngStyle]="{'color': themeService.primary}">Type de memory</span>
+                                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium"
+                                    [ngStyle]="{
+                                          'background': themeService.primary + '15',
+                                          'color': themeService.primary
+                                      }">
+                                    <span *ngIf="jeu.memoryType === 'number'">🔢</span>
+                                    <span *ngIf="jeu.memoryType === 'word'">✍️</span>
+                                    <span *ngIf="jeu.memoryType === 'animal'">🐶</span>
+                                    {{ jeu.memoryType | titlecase }}
+                                </span>
+                            </div>
+
+                            <div class="py-2">
+                                <span class="text-sm block mb-2" [ngStyle]="{'color': themeService.primary}">Paires de cartes ({{ memoryCards.length }})</span>
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                    <div *ngFor="let card of memoryCards; let i = index"
+                                        class="p-4 rounded-xl border text-center transition hover:shadow-sm"
+                                        [ngStyle]="{
+                                            'background': themeService.Backgroundcards,
+                                            'border-color': themeService.Bordernormal
+                                        }">
+                                        <span class="text-xs block mb-1" [ngStyle]="{'color': themeService.primary}">Carte {{ i + 1 }}</span>
+                                        <span class="font-bold" *ngIf="jeu.memoryType === 'number'"
+                                            [ngStyle]="{'color': themeService.Textprincipal}">{{ card.valeur }}</span>
+                                        <span class="font-bold" *ngIf="jeu.memoryType === 'word'"
+                                            [ngStyle]="{'color': themeService.Textprincipal}">{{ card.valeur }}</span>
+                                        <div *ngIf="jeu.memoryType === 'animal'" class="flex flex-col items-center gap-1">
+                                            <img [src]="card.image" class="w-10 h-10 rounded-lg object-cover" />
+                                            <span class="text-xs font-medium" [ngStyle]="{'color': themeService.Textprincipal}">{{ card.nom }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation -->
+                    <div class="flex items-center justify-between pt-6 border-t"
+                        [ngStyle]="{'border-color': themeService.Bordernormal + '40'}">
+                        <button *ngIf="step > 1" type="button" (click)="prevStep()"
+                            class="flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-200 hover:-translate-x-0.5"
+                            [ngStyle]="{
+                                'color': themeService.Textprincipal,
+                                'background': themeService.Backgroundprincipal,
+                                'border': '1px solid ' + themeService.Bordernormal
+                            }">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                            Retour
+                        </button>
+
+                        <div class="flex-1"></div>
+
+                        <button *ngIf="step < 3" type="submit" [disabled]="!canProceed()"
+                            class="flex items-center gap-2 px-8 py-3.5 rounded-xl font-bold text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+                            [ngStyle]="{
+                                'background': themeService.primary,
+                                'box-shadow': '0 4px 14px ' + themeService.primary + '40'
+                            }">
+                            Continuer
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+
+                        <button *ngIf="step === 3" type="submit" [disabled]="loading"
+                            class="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-white disabled:opacity-50 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+                            [ngStyle]="{
+                                'background': themeService.primary,
+                                'box-shadow': '0 4px 14px ' + themeService.primary + '40'
+                            }">
+                            <span *ngIf="!loading" class="flex items-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Créer le jeu
+                            </span>
+                            <span *ngIf="loading" class="flex items-center gap-2">
+                                <svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Création en cours...
+                            </span>
+                        </button>
+                    </div>
+
+                </form>
+            </div>
         </div>
-  
-        <!-- NIVEAU -->
-        <div>
-          <label class="text-sm font-semibold">Niveau</label>
-          <select [(ngModel)]="jeu.niveau" name="niveau" required
-            class="w-full mt-1 px-4 py-2 rounded-xl border">
-            <option value="">Choisir...</option>
-            <option *ngFor="let n of niveaux">{{ n }}</option>
-          </select>
-        </div>
-  
-        <!-- DIFFICULTÉ -->
-        <div>
-          <label class="text-sm font-semibold">Difficulté</label>
-          <select [(ngModel)]="jeu.difficulte" name="difficulte"
-            class="w-full mt-1 px-4 py-2 rounded-xl border">
-            <option value="facile">Facile</option>
-            <option value="moyen">Moyen</option>
-            <option value="difficile">Difficile</option>
-          </select>
-        </div>
-  
-        <!-- CONSIGNE -->
-        <div>
-          <label class="text-sm font-semibold">Consigne</label>
-          <textarea [(ngModel)]="jeu.consigne"
-            name="consigne"
-            rows="3"
-            class="w-full mt-1 px-4 py-2 rounded-xl border"></textarea>
-        </div>
-  
-        <!-- ========================= -->
-        <!-- 🔵 QCM -->
-        <!-- ========================= -->
-        <div *ngIf="jeu.type === 'qcm'" class="space-y-3">
-          <input [(ngModel)]="jeu.question" name="question" placeholder="Question"
-            class="w-full border p-2 rounded">
-  
-          <input [(ngModel)]="jeu.options" name="options"
-            placeholder="Options (ex: A,B,C)"
-            class="w-full border p-2 rounded">
-  
-          <input [(ngModel)]="jeu.reponse" name="reponse"
-            placeholder="Bonne réponse"
-            class="w-full border p-2 rounded">
-        </div>
-  
-        <!-- ========================= -->
-        <!-- 🟡 PUZZLE -->
-        <!-- ========================= -->
-        <div *ngIf="jeu.type === 'puzzle'" class="space-y-3">
-          <input [(ngModel)]="jeu.mot" name="mot"
-            placeholder="Mot (ex: C_T)"
-            class="w-full border p-2 rounded">
-  
-          <input [(ngModel)]="jeu.lettresManquantes" name="lettresManquantes"
-            placeholder="Lettres (ex: A)"
-            class="w-full border p-2 rounded">
-        </div>
-  
-        <!-- ========================= -->
-        <!-- 🟢 TEXTE -->
-        <!-- ========================= -->
-        <div *ngIf="jeu.type === 'texte'" class="space-y-3">
-          <input [(ngModel)]="jeu.phrase" name="phrase"
-            placeholder="Phrase"
-            class="w-full border p-2 rounded">
-  
-          <input [(ngModel)]="jeu.trou" name="trou"
-            placeholder="Réponse"
-            class="w-full border p-2 rounded">
-        </div>
-  
-        <!-- ========================= -->
-        <!-- 🔴 MEMORY -->
-        <!-- ========================= -->
-        <div *ngIf="jeu.type === 'memory'">
-          <input [(ngModel)]="jeu.cartes" name="cartes"
-            placeholder='JSON cartes'
-            class="w-full border p-2 rounded">
-        </div>
-  
-        <!-- BUTTON -->
-        <button type="submit"
-          [disabled]="loading"
-          class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-semibold">
-  
-          <span *ngIf="!loading">Créer le jeu 🚀</span>
-          <span *ngIf="loading">Génération...</span>
-  
-        </button>
-  
-      </form>
-  
     </div>
+
 </section>
+
+<style>
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fade-in 0.3s ease-out;
+    }
+</style>

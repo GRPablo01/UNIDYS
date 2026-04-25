@@ -255,7 +255,7 @@ export class Nav implements OnInit {
             {
               label: 'Jeux',
               icon: 'fas fa-gamepad',
-              link: '/cours/jeux',
+              link: '/jeux',
               description: 'Apprendre en s’amusant avec des jeux éducatifs',
             }
           ],

@@ -11,7 +11,17 @@ export class JeuService {
 
   constructor(private http: HttpClient) {}
 
+  // ➕ Créer un jeu
   createJeu(jeu: any): Observable<any> {
     return this.http.post(this.apiUrl, jeu);
+  }
+
+  // 📥 Récupérer tous les jeux
+  getAllJeux(): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl);
+  }
+
+  getJeuById(id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
 }

@@ -51,6 +51,7 @@ export class ThemeService {
   Sidebarlienhover = '';
 
   ThemeImage: string = '';
+  ImageDos: string = '';
   BackgroundImage: string = '';
 
   BgOui: string = '';
@@ -89,119 +90,111 @@ export class ThemeService {
     this.setThemeColors(isDark);
   }
 
-  // 🎯 Couleurs selon thème (version alignée avec ton image)
+  // 🎯 Couleurs selon thème
   setThemeColors(isDark: boolean): void {
 
     if (isDark) {
 
       // 🌙 DARK MODE
-      this.Backgroundprincipal = '#0B0F3A';
-      this.Backgroundcards = '#11154D';
+      this.Backgroundprincipal = '#020118';
+      this.Backgroundcards = '#080630';
       this.ThemeImage = 'assets/IconBlanc.svg';
+      this.ImageDos = 'assets/CartesDosBlack.png';
 
-      this.Textprincipal = '#E6EDF3';
-      this.Textsecondaire = '#A0AEC0';
+      this.Textprincipal = '#E0E6E9';
+      this.Textsecondaire = '#A0B0B8';
 
-      this.Shadow = 'inset 0 2px 4px rgba(255,255,255,0.05), 0 4px 10px rgba(0,0,0,0.4)';
+      this.Shadow = 'inset 0 2px 4px rgba(240,250,255,0.7), 0 4px 6px rgba(0,0,0,0.2)';
 
-      // 🔥 PRIMARY (orange corail)
-      this.primary = '#FF5A3C';
-      this.primaryHover = '#E14A2E';
-      this.primarySoft = '#FFE5E0';
+      // 🟢 PRIMARY
+      this.primary = '#7C3AED';
+      this.primaryHover = '#6D28D9';
+      this.primarySoft = '#EDE9FE';
 
-      // 🌿 SECONDARY (vert)
-      this.secondary = '#1FBF8F';
-      this.secondaryHover = '#159A72';
-      this.secondarySoft = '#D1FAE5';
-
-      // ⭐ ACCENT (jaune)
-      this.accent = '#F2C94C';
+      // 🔵 SECONDARY
+      this.secondary = '#2563EB';
+      this.secondaryHover = '#1D4ED8';
+      this.secondarySoft = '#DBEAFE';
 
       // ICONS
       this.Iconnormal = '#FFFFFF';
       this.Iconhover = this.secondary;
       this.Iconactive = this.primary;
 
-      // ✅ OUI (vert)
-      this.BgOui      = '#064E3B';
-      this.BorderOui  = '#1FBF8F';
-      this.BgOuiText  = '#ECFDF5';
+      this.BgOui      = '#14532d'; // vert foncé
+      this.BorderOui  = '#22c55e'; // vert vif
+      this.BgOuiText  = '#ffffff'; // blanc (lisible sur vert foncé)
 
-      // ❌ NON (orange/rouge)
-      this.BgNon      = '#7C2D12';
-      this.BgNonText  = '#FFF7ED';
-      this.BorderNon  = '#FF5A3C';
+      this.BgNon      = '#7f1d1d'; // rouge foncé
+      this.BgNonText  = '#ffffff'; // blanc (lisible sur rouge foncé)
+      this.BorderNon  = '#ef4444'; // rouge vif
 
-      // 🔵 INFO (bleu cohérent avec fond)
-      this.BgBleu     = '#1E3A8A';
-      this.BgBleuText = '#DBEAFE';
-      this.BorderBleu = '#3B82F6';
+      this.BgBleu     = '#1e3a8a'; // bleu foncé (corrigé)
+      this.BgBleuText = '#ffffff'; // blanc (lisible sur bleu foncé)
+      this.BorderBleu = '#3b82f6'; // bleu vif (corrigé)
 
       // UI
-      this.Bordernormal = '1px solid rgba(255,255,255,0.08)';
+      this.Bordernormal = '1px solid #E5E7EB';
       this.Borderfocus = `1px solid ${this.secondary}`;
-      this.Borderhover = '1px solid rgba(255,255,255,0.2)';
+      this.Borderhover = '1px solid #3A3F45';
 
       this.Fondboutonprincipal = this.primary;
       this.Fondboutonsecondaire = this.secondarySoft;
 
-      this.Cardhover = '#1A1F5C';
+      this.Cardhover = '#242A2E';
       this.Sidebarlienhover = this.primarySoft;
 
     } else {
 
       // ☀️ LIGHT MODE
       this.Backgroundprincipal = '#FFFFFF';
-      this.Backgroundcards = '#F8FAFC';
+      this.Backgroundcards = '#fcfbfb';
       this.ThemeImage = 'assets/IconBlack.svg';
+      this.ImageDos = 'assets/CartesDosBlanc.png';
 
       this.Textprincipal = '#1A1A1A';
-      this.Textsecondaire = '#5B6570';
+      this.Textsecondaire = '#555E66';
 
-      this.Shadow = 'inset 0 2px 4px rgba(0,0,0,0.04), 0 4px 6px rgba(0,0,0,0.08)';
+      this.Shadow = 'inset 0 2px 4px rgba(18,22,25,0.7), 0 4px 6px rgba(0,0,0,0.1)';
 
-      // 🔥 PRIMARY (orange)
-      this.primary = '#FF5A3C';
-      this.primaryHover = '#E14A2E';
-      this.primarySoft = '#FFE5E0';
+      // 🟢 PRIMARY
+      this.primary = '#7C3AED';
+      this.primaryHover = '#6D28D9';
+      this.primarySoft = '#EDE9FE';
 
-      // 🌿 SECONDARY (vert)
-      this.secondary = '#1FBF8F';
-      this.secondaryHover = '#159A72';
-      this.secondarySoft = '#D1FAE5';
-
-      // ⭐ ACCENT
-      this.accent = '#F2C94C';
+      // 🔵 SECONDARY
+      this.secondary = '#2563EB';
+      this.secondaryHover = '#1D4ED8';
+      this.secondarySoft = '#DBEAFE';
 
       // ICONS
-      this.Iconnormal = '#1A1A1A';
+      this.Iconnormal = '#000000';
       this.Iconhover = this.secondary;
       this.Iconactive = this.primary;
 
-      // ✅ OUI
-      this.BgOui      = '#D1FAE5';
-      this.BorderOui  = '#1FBF8F';
-      this.BgOuiText  = '#064E3B';
+      // 🔵 Validation Convo
+      this.BgOui      = '#dcfce7';     // vert très clair
+      this.BgNon      = '#fee2e2';     // rouge très clair
+      this.BorderOui  = '#22c55e';     // vert vif
+      this.BorderNon  = '#ef4444';     // rouge vif
 
-      // ❌ NON
-      this.BgNon      = '#FFE5E0';
-      this.BorderNon  = '#FF5A3C';
-      this.BgNonText  = '#7C2D12';
+      this.BgOuiText  = '#14532d';     // vert foncé (lisible sur vert très clair)
+      this.BgNonText  = '#7f1d1d';     // rouge foncé (lisible sur rouge très clair)
 
-      // 🔵 INFO
-      this.BgBleu     = '#DBEAFE';
-      this.BgBleuText = '#1E3A8A';
-      this.BorderBleu = '#3B82F6';
+      this.BgBleu     = '#dbeafe';     // bleu très clair (cohérent avec les autres)
+      this.BgBleuText = '#1e3a8a';     // bleu foncé (lisible sur bleu très clair)
+      this.BorderBleu = '#3b82f6';     // bleu vif
+
 
       // UI
-      this.Bordernormal = '1px solid #E2E8F0';
+      this.Bordernormal = '1px solid #2C2F33';
       this.Borderfocus = `1px solid ${this.secondary}`;
-      this.Borderhover = '1px solid #CBD5E1';
+      this.Borderhover = '1px solid #D1D5DB';
 
       this.Fondboutonprincipal = this.primary;
       this.Fondboutonsecondaire = this.primarySoft;
 
-      this.Cardhover = '#F1F5F9';
+      this.Cardhover = '#F3F6F9';
       this.Sidebarlienhover = this.primarySoft;
     }
   }
